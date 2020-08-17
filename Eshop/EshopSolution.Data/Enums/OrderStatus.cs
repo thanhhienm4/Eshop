@@ -4,9 +4,12 @@ using System.Text;
 
 namespace EshopSolution.Data.Entities
 {
-    public enum Status
+    public enum OrderStatus
     {
-        InActive,
-        Active
+        InProgress,
+        Confirmed,
+        Shipping,
+        Success,
+        Canceled
     }
 }

@@ -4,9 +4,10 @@ using System.Text;
 
 namespace EshopSolution.Data.Entities
 {
-    public enum Status
+    public class AppConfig
     {
-        InActive,
-        Active
+        public string Key { get; set; }
+
+        public string Value { get; set; }
     }
 }
