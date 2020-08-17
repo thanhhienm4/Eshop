@@ -1,13 +1,21 @@
-﻿using EshopSolution.Data.Entities ;
+﻿using  EshopSolution.Data.Configurations;
+using  EshopSolution.Data.Entities ;
 using Microsoft.EntityFrameworkCore;
 
-namespace EshopSolution.Data.EF
+namespace  EshopSolution.Data.EF
 {
     public class EshopDbContext :DbContext
     {
         public EshopDbContext(DbContextOptions options) : base (options)
         {
 
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new AppConfigConfigurarion());
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            base.OnModelCreating(modelBuilder);
         }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }

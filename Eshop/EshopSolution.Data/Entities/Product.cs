@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace EshopSolution.Data.Entities
+namespace  EshopSolution.Data.Entities
 {
     public class Product
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EshopSolution.Data.Entities
+namespace  EshopSolution.Data.Entities
 {
     public class OrderDetail
     {
