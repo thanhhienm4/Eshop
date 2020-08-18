@@ -1,5 +1,6 @@
 ﻿using  EshopSolution.Data.Configurations;
 using  EshopSolution.Data.Entities ;
+using EshopSolution.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace  EshopSolution.Data.EF
@@ -12,10 +13,7 @@ namespace  EshopSolution.Data.EF
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfiguration(new AppConfigConfigurarion());
-            //modelBuilder.ApplyConfiguration(new ProductConfiguration());
-            //modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            //base.OnModelCreating(modelBuilder);
+           
 
             modelBuilder.ApplyConfiguration(new CartConfiguration());
 
@@ -40,8 +38,8 @@ namespace  EshopSolution.Data.EF
            
 
             //Data seeding
-            //modelBuilder.Seed();
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Seed();
+            //base.OnModelCreating(modelBuilder);
         }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
