@@ -1,4 +1,5 @@
 ﻿using EshopSolution.Data.Entities;
+using Microsoft.AspNet.WebHooks.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -83,8 +84,40 @@ namespace EshopSolution.Data.Extensions
                 );
 
             // any guid
-           
-           
+            var RoleId = new Guid("9257FB08-0679-41EB-A0B4-926A5A10697B");
+            var AdminID = new Guid("C85F7C8E-462A-42D0-9D04-FA520F9C82D9");
+            modelBuilder.Entity<AppRole>().HasData(
+                new AppRole() {
+                    Id = RoleId,
+                    Name = "Admin", 
+                    NormalizedName = "Admin", 
+                    Description = "Administrator Role"
+                });
+            var hasher = new PasswordHasher<AppUser>();
+            modelBuilder.Entity<AppUser>().HasData(
+                new AppUser() {
+                    Id = AdminID,
+                    UserName = "Admin",
+                    NormalizedUserName = "Admin",
+                    Email = "Mistakem4@gmail.com",
+                    EmailConfirmed = true,
+                    PasswordHash = hasher.HashPassword(null, "123456"),
+                    FirstName = "Hien",
+                    SecurityStamp = "",
+                    LastName = "Nguyen Thanh",
+                    Dob = new DateTime(2000, 02, 04)
+
+                }) ;
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(
+                new IdentityUserRole<Guid>()
+                {
+                    RoleId = RoleId,
+                    UserId = AdminID
+                }) ;
+
+
+
+
         }
 
         
