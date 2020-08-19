@@ -1,4 +1,5 @@
 ﻿using EshopSolution.Data.Entities;
+using Microsoft.AspNet.WebHooks.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -83,8 +84,52 @@ namespace EshopSolution.Data.Extensions
                 );
 
             // any guid
-           
-           
+            var roleId = new Guid("8D04DCE2-969A-435D-BBA4-DF3F325983DC");
+            var adminId = new Guid("69BD714F-9576-45BA-B5B7-F00649BE00DE");
+            modelBuilder.Entity<AppRole>().HasData(new AppRole
+            {
+                Id = roleId,
+                Name = "admin",
+                NormalizedName = "admin",
+                Description = "Administrator role"
+            });
+
+            var hasher = new PasswordHasher<AppUser>();
+            modelBuilder.Entity<AppUser>().HasData(new AppUser
+            {
+                Id = adminId,
+                UserName = "admin",
+                NormalizedUserName = "admin",
+                Email = "Mistake4@gmail.com",
+                NormalizedEmail = "Mistakem4@gmail.com",
+                EmailConfirmed = true,
+                PasswordHash = hasher.HashPassword(null, "Abcd1234$"),
+                SecurityStamp = string.Empty,
+                ConcurrencyStamp = string.Empty ,
+
+                FirstName = "Hien",
+                LastName = "Nguyen Thanh",
+                Dob = new DateTime(2020, 01, 31),
+                PhoneNumber = "0912413908",
+                PhoneNumberConfirmed = true, 
+                LockoutEnabled = false, 
+                AccessFailedCount = 0,
+                TwoFactorEnabled = false,
+                LockoutEnd = new DateTimeOffset()
+
+
+
+            });
+
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+                RoleId = roleId,
+                UserId = adminId
+            });
+
+
+
+
         }
 
         

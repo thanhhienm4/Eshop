@@ -1,11 +1,14 @@
 ﻿using  EshopSolution.Data.Configurations;
 using  EshopSolution.Data.Entities ;
 using EshopSolution.Data.Extensions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace  EshopSolution.Data.EF
 {
-    public class EshopDbContext :DbContext
+    public class EshopDbContext :IdentityDbContext <AppUser,AppRole,Guid>
     {
         public EshopDbContext(DbContextOptions options) : base (options)
         {
@@ -35,7 +38,12 @@ namespace  EshopSolution.Data.EF
             modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
             modelBuilder.ApplyConfiguration(new ProductImageConfiguration());
 
-           
+            modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
+            modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => x.UserId);
+            modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogins").HasKey(x=> x.UserId);
+            modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("AppRoleClaims");
+            modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens").HasKey(x => x.UserId);
+
 
             //Data seeding
             modelBuilder.Seed();
