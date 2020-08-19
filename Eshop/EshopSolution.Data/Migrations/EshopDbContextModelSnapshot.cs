@@ -77,11 +77,11 @@ namespace EshopSolution.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9257fb08-0679-41eb-a0b4-926a5a10697b"),
-                            ConcurrencyStamp = "0094d104-c805-4e07-83aa-99d35fb0de2f",
-                            Description = "Administrator Role",
-                            Name = "Admin",
-                            NormalizedName = "Admin"
+                            Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
+                            ConcurrencyStamp = "2c238edb-3acd-40cd-847b-a407312b710e",
+                            Description = "Administrator role",
+                            Name = "admin",
+                            NormalizedName = "admin"
                         });
                 });
 
@@ -153,21 +153,24 @@ namespace EshopSolution.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c85f7c8e-462a-42d0-9d04-fa520f9c82d9"),
+                            Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f02f813c-8bb0-4850-bfea-355c51b54fb4",
-                            Dob = new DateTime(2000, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "Mistakem4@gmail.com",
+                            ConcurrencyStamp = "",
+                            Dob = new DateTime(2020, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "Mistake4@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Hien",
                             LastName = "Nguyen Thanh",
                             LockoutEnabled = false,
-                            NormalizedUserName = "Admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEE8JS7afaP9tA72c35oXnQN8ThtIHQR22KK9LCGmbPZbg5ty58CXs3smipK47Ihhtg==",
-                            PhoneNumberConfirmed = false,
+                            LockoutEnd = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            NormalizedEmail = "Mistakem4@gmail.com",
+                            NormalizedUserName = "admin",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDfDY4X6sVuO61QkFLXgOVBPiiSOu2DN+i6xtbJjxGy4sBOEXp+yn+CsSR6Lqrfc4A==",
+                            PhoneNumber = "0912413908",
+                            PhoneNumberConfirmed = true,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
-                            UserName = "Admin"
+                            UserName = "admin"
                         });
                 });
 
@@ -492,7 +495,7 @@ namespace EshopSolution.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2020, 8, 18, 17, 56, 55, 543, DateTimeKind.Local).AddTicks(3549),
+                            DateCreated = new DateTime(2020, 8, 18, 18, 57, 35, 654, DateTimeKind.Local).AddTicks(7078),
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,
@@ -738,9 +741,10 @@ namespace EshopSolution.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -748,10 +752,10 @@ namespace EshopSolution.Data.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.ToTable("AppUserClaims");
                 });
@@ -792,8 +796,8 @@ namespace EshopSolution.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("c85f7c8e-462a-42d0-9d04-fa520f9c82d9"),
-                            RoleId = new Guid("9257fb08-0679-41eb-a0b4-926a5a10697b")
+                            UserId = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
+                            RoleId = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc")
                         });
                 });
 
