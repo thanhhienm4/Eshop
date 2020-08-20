@@ -12,7 +12,7 @@ namespace EshopSolution.Application.Cacalog.Products.DTOS.Manage
         public string Details { set; get; }
         public string SeoDescription { set; get; }
         public string SeoTitle { set; get; }
-
+        public string LanguageId { get; set; }
         public string SeoAlias { get; set; }
     }
 }

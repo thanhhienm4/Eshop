@@ -13,8 +13,8 @@ namespace EshopSolution.Application
         Task<int> Create(ProductCreateRequest request);
         Task<int> Update(ProductUpdateRequest request);
         Task<int> Delete(int ProductId);
-        Task<List <ProductViewModel>> GetAll();
-        Task<PagResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
+       
+        Task<PageResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
 
         Task<bool> UpdatePrice(int productId, decimal newPrice);
         Task<bool> UpdateStock(int productId, int addedQuantity);

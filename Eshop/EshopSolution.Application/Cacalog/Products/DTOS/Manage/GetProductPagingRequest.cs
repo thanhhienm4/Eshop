@@ -8,6 +8,6 @@ namespace EshopSolution.Application.Cacalog.Products.DTOS.Manage
     public class GetProductPagingRequest : PagingRequestBase
     {
         public string Keyword { get; set; }
-        public List<int> CategoryIDs { get; set; }
+        public List<int> CategoryIds { get; set; }
     }
 }

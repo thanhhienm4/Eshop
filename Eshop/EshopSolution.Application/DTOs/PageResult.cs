@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EshopSolution.Application.DTOs
 {
-    public class PagResult <T>
+    public class PageResult <T>
     {
         public List<T> Item { get; set; }
 
