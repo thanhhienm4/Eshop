@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.AspNetCore.Http;
 
-namespace EshopSolution.Application.Cacalog.Products.DTOS.Manage
+namespace EshopSolution.ViewModel.Catalog.Products
 {
     public class ProductCreateRequest
     {
@@ -17,5 +15,6 @@ namespace EshopSolution.Application.Cacalog.Products.DTOS.Manage
         public string SeoAlias { get; set; }
 
         public string LanguageId { get; set; }
+        public IFormFile ThumbnailImage { get; set; }
     }
 }
