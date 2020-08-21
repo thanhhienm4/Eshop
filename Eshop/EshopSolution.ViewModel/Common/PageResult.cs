@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EshopSolution.ViewModel.Common
 {
-    public class PageResult<T>
+    public class PageResult<T> :PagingRequestBase
     {
         public List<T> Item { get; set; }
 
