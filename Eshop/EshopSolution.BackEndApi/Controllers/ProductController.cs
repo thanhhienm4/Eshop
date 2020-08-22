@@ -4,19 +4,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.VisualStudio.Services.DelegatedAuthorization;
 
 namespace EshopSolution.BackEndApi.Controllers
 {
-    [Route("api/{Controller}")]
+    [Route("api/[controller]")]
     [ApiController]
+   
     public class ProductController : ControllerBase
     {
-        //[HttpPost]
+     
         private readonly IPublicProductService _publicProductService;
         public ProductController(IPublicProductService publicProductService)
         {
             _publicProductService = publicProductService;
         }
+
+        [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
             var product =  await _publicProductService.GetAll();
