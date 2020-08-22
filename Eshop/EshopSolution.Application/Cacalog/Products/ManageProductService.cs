@@ -1,5 +1,4 @@
-﻿
-using EshopSolution.Data.EF;
+﻿using EshopSolution.Data.EF;
 using EshopSolution.Data.Entities;
 using EshopSolution.Utilities.Exceptions;
 using System;
@@ -204,8 +203,8 @@ namespace EshopSolution.Application.Cacalog.Products
 
         private async Task<string> SaveFile(IFormFile file)
         {
-            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+            string originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            string fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
             return fileName;
         }
@@ -277,13 +276,13 @@ namespace EshopSolution.Application.Cacalog.Products
                 Stock = product.Stock,
                 ViewCount = product.ViewCount,
                 DateCreated = product.DateCreated,
-                Name = proudctTranslation != null ? proudctTranslation.Name : null,
-                Description = proudctTranslation != null ? proudctTranslation.Description : null,
-                Details = proudctTranslation != null ? proudctTranslation.Details : null,
-                SeoDescription = proudctTranslation != null ? proudctTranslation.SeoDescription : null,
-                SeoTitle = proudctTranslation != null ? proudctTranslation.SeoDescription : null,
-                SeoAlias = proudctTranslation != null ? proudctTranslation.SeoAlias : null,
-                LanguageId = proudctTranslation != null ? proudctTranslation.LanguageId : null
+                Name = proudctTranslation?.Name,
+                Description = proudctTranslation?.Description,
+                Details = proudctTranslation?.Details,
+                SeoDescription = proudctTranslation?.SeoDescription,
+                SeoTitle = proudctTranslation?.SeoDescription,
+                SeoAlias = proudctTranslation?.SeoAlias,
+                LanguageId = proudctTranslation?.LanguageId
             };
             return productViewModel;
 
