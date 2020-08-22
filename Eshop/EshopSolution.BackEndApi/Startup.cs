@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace EshopSolution.BackEndApi
 {
@@ -30,8 +31,16 @@ namespace EshopSolution.BackEndApi
             services.AddDbContext<EshopDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
             services.AddControllersWithViews();
+            services.AddMvc(c => c.Conventions.Add(new ApiExplorerIgnores()));
             //Declare
             services.AddTransient<IPublicProductService, PublicProductService>();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop Solution", Version = "v1" });
+                //c.RoutePrefix = string.Empty;
+
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +63,16 @@ namespace EshopSolution.BackEndApi
 
             app.UseAuthorization();
 
+            app.UseSwagger();
+
+            
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "EshopSolution");
+               
+                
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
