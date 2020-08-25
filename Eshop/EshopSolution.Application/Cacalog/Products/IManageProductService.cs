@@ -30,7 +30,7 @@ namespace EshopSolution.Application
         Task<ProductImageViewModel> GetImageById(int imageId);
         Task<List<ProductImageViewModel>> GetListImages(int productId);
 
-        Task<PageResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
+        Task<PageResult<ProductViewModel>> GetAllByCategoryId( GetPublicProductPagingRequest request);
 
 
 

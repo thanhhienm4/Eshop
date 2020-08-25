@@ -13,8 +13,8 @@ namespace  EshopSolution.Data.Entities
         public bool ApplyForAll { set; get; }
         public int? DiscountPercent { set; get; }
         public decimal? DiscountAmount { set; get; }
-        public string ProductIds { set; get; }
-        public string ProductCategoryIds { set; get; }
+        public int ProductId { set; get; }
+        public int ProductCategoryId { set; get; }
         public Status Status { set; get; }
         public string Name { set; get; }
 

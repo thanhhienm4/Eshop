@@ -17,12 +17,12 @@ using eShopSolution.ViewModels.Catalog.ProductImages;
 
 namespace EshopSolution.Application.Cacalog.Products
 {
-    class ManageProductService : IManageProductService
+    public class ManageProductService : IManageProductService
     {
 
         private readonly EshopDbContext _context;
-        private readonly FileStorageService _storageService;
-        public ManageProductService(EshopDbContext context, FileStorageService storageService)
+        private readonly IStorageService _storageService;
+        public ManageProductService(EshopDbContext context, IStorageService storageService)
         {
             _context = context;
             _storageService = storageService;
@@ -72,7 +72,8 @@ namespace EshopSolution.Application.Cacalog.Products
             }
 
             _context.Products.Add(product);
-            return await _context.SaveChangesAsync();
+             await _context.SaveChangesAsync();
+            return product.Id;
         }
 
         public async Task<int> Update(ProductUpdateRequest request)
@@ -160,7 +161,7 @@ namespace EshopSolution.Application.Cacalog.Products
                         select new { p, pt, pic };
             //2.Filter
             if (string.IsNullOrEmpty(request.Keyword))
-                query = query.Where(x => x.pt.Name.Contains(request.Keyword));
+                query = query.Where(x => x.pt.Name.Contains(request.Keyword)).Where(x=>x.pt.LanguageId==request.LanguageId);
             if (request.CategoryIds.Count > 0)
             {
                 query = query.Where(x => request.CategoryIds.Contains(x.pic.CategoryId));
@@ -323,13 +324,13 @@ namespace EshopSolution.Application.Cacalog.Products
                 }).ToListAsync();
         }
 
-        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
+        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId( GetPublicProductPagingRequest request)
         {
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId
                         join c in _context.Categories on pic.CategoryId equals c.Id
-                        where pt.LanguageId == languageId
+                        where pt.LanguageId == request.LanguageId
                         select new { p, pt, pic };
 
             if (request.CategoryId.HasValue && request.CategoryId.Value > 0)

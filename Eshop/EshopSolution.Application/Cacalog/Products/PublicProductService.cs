@@ -19,7 +19,7 @@ namespace EshopSolution.Application.Cacalog.Products
             _context = context;
         }
 
-        public async Task<List<ProductViewModel>> GetAll()
+        public async Task<List<ProductViewModel>> GetAll(string languageId)
         {
             //1.Select
             var query = from p in _context.Products
@@ -27,6 +27,8 @@ namespace EshopSolution.Application.Cacalog.Products
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId
                         join c in _context.Categories on pic.CategoryId equals c.Id
                         select new { p, pt, pic };
+            //2.Filter
+            query = query.Where(x => x.pt.LanguageId == languageId);
             int totalRow = await query.CountAsync();
             var data = query
                 .Select(x => new ProductViewModel()
@@ -61,7 +63,7 @@ namespace EshopSolution.Application.Cacalog.Products
 
             if (request.CategoryId != null && request.CategoryId.Value > 0)
             {
-                query = query.Where(p => p.pic.CategoryId == request.CategoryId);
+                query = query.Where(p => p.pic.CategoryId == request.CategoryId).Where(p=>p.pt.LanguageId==request.LanguageId);
             }
 
             //3.Paging
