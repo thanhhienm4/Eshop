@@ -150,7 +150,7 @@ namespace EshopSolution.Application.Cacalog.Products
         }
 
 
-        public async Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request)
+        public async Task<PageResult<ProductViewModel>> GetAllPaging(string languageId,GetManageProductPagingRequest request)
         {
             //1.Select
             var query = from p in _context.Products
@@ -161,7 +161,7 @@ namespace EshopSolution.Application.Cacalog.Products
                         select new { p, pt, pic };
             //2.Filter
             if (string.IsNullOrEmpty(request.Keyword))
-                query = query.Where(x => x.pt.Name.Contains(request.Keyword)).Where(x=>x.pt.LanguageId==request.LanguageId);
+                query = query.Where(x => x.pt.Name.Contains(request.Keyword)).Where(x=>x.pt.LanguageId==languageId);
             if (request.CategoryIds.Count > 0)
             {
                 query = query.Where(x => request.CategoryIds.Contains(x.pic.CategoryId));
@@ -210,15 +210,15 @@ namespace EshopSolution.Application.Cacalog.Products
             return fileName;
         }
 
-        public async Task<int> AddImages(ProductImageCreateRequest request)
+        public async Task<int> AddImages(int productId,ProductImageCreateRequest request)
         {
-            var product = await _context.Products.FindAsync(request.ProductId);
+            var product = await _context.Products.FindAsync(productId);
             if (product == null)
-                throw new EshopException($"Can't find Product whit Id {request.ProductId}");
+                throw new EshopException($"Can't find Product whit Id {productId}");
             var productImage = new ProductImage()
             {
                 Caption = request.Caption,
-                ProductId = request.ProductId,
+                ProductId = productId,
                 IsDefault = request.IsDefault,
                 SortOrder = request.SortOrder,
                 DateCreated = DateTime.Now
@@ -230,10 +230,11 @@ namespace EshopSolution.Application.Cacalog.Products
                 productImage.FileSize = request.ImageFile.Length;
             }
             _context.ProductImages.Add(productImage);
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            return productImage.Id;
         }
 
-        public async Task<int> RemoveImages(int imageId)
+        public async Task<int> DeleteImages(int imageId)
         {
             var image = await _context.ProductImages.FindAsync(imageId);
             if (image == null)
@@ -246,11 +247,11 @@ namespace EshopSolution.Application.Cacalog.Products
 
         }
 
-        public async Task<int> UpdateImages(ProductImageCreateRequest request)
+        public async Task<int> UpdateImages(int imageId, ProductImageUpdateRequest request)
         {
-            var productImage = await _context.ProductImages.FindAsync(request.ProductId);
+            var productImage = await _context.ProductImages.FindAsync(imageId);
             if (productImage == null)
-                throw new EshopException($"Can't find ProductImage whit Id {request.ProductId}");
+                throw new EshopException($"Can't find ProductImage whit Id {imageId}");
             else
             {
                 productImage.Caption = request.Caption;
@@ -324,13 +325,13 @@ namespace EshopSolution.Application.Cacalog.Products
                 }).ToListAsync();
         }
 
-        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId( GetPublicProductPagingRequest request)
+        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId( string languageId,GetPublicProductPagingRequest request)
         {
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId
                         join c in _context.Categories on pic.CategoryId equals c.Id
-                        where pt.LanguageId == request.LanguageId
+                        where pt.LanguageId == languageId
                         select new { p, pt, pic };
 
             if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
@@ -366,5 +367,7 @@ namespace EshopSolution.Application.Cacalog.Products
             return pageResult;
 
         }
+
+        
     }
 }

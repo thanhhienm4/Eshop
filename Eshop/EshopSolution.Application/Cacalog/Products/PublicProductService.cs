@@ -51,7 +51,7 @@ namespace EshopSolution.Application.Cacalog.Products
             return await data;
         }
 
-        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request)
+        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(string languageId,GetPublicProductPagingRequest request)
         {
             //1.Select
             var query = from p in _context.Products
@@ -63,7 +63,7 @@ namespace EshopSolution.Application.Cacalog.Products
 
             if (request.CategoryId != null && request.CategoryId.Value > 0)
             {
-                query = query.Where(p => p.pic.CategoryId == request.CategoryId).Where(p=>p.pt.LanguageId==request.LanguageId);
+                query = query.Where(p => p.pic.CategoryId == request.CategoryId).Where(p=>p.pt.LanguageId==languageId);
             }
 
             //3.Paging
