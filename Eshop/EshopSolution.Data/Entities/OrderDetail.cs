@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace  EshopSolution.Data.Entities
+﻿namespace EshopSolution.Data.Entities
 {
     public class OrderDetail
     {
-
         public int OrderId { set; get; }
         public int ProductId { set; get; }
         public int Quantity { set; get; }
@@ -15,6 +10,5 @@ namespace  EshopSolution.Data.Entities
         public Order Order { get; set; }
 
         public Product Product { get; set; }
-
     }
 }

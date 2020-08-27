@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EshopSolution.ViewModel.Catalog.Products
 {
@@ -21,7 +19,5 @@ namespace EshopSolution.ViewModel.Catalog.Products
 
         public string SeoAlias { get; set; }
         public string LanguageId { set; get; }
-
-
     }
 }

@@ -1,11 +1,8 @@
-﻿using  EshopSolution.Data.Entities;
+﻿using EshopSolution.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace  EshopSolution.Data.Configurations
+namespace EshopSolution.Data.Configurations
 {
     public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {
@@ -14,7 +11,6 @@ namespace  EshopSolution.Data.Configurations
             builder.ToTable("Categories");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Status).HasDefaultValue(Status.Active);
-
         }
     }
 }

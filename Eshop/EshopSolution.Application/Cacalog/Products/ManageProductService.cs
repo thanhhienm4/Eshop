@@ -1,27 +1,26 @@
-﻿using EshopSolution.Data.EF;
+﻿using eShopSolution.Application.Common;
+using eShopSolution.ViewModels.Catalog.ProductImages;
+using EshopSolution.Data.EF;
 using EshopSolution.Data.Entities;
 using EshopSolution.Utilities.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using EshopSolution.ViewModel.Catalog.Products;
 using EshopSolution.ViewModel.Common;
-using System.Net.Http.Headers;
-using System.IO;
 using Microsoft.AspNetCore.Http;
-using eShopSolution.Application.Common;
-using eShopSolution.ViewModels.Catalog.ProductImages;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace EshopSolution.Application.Cacalog.Products
 {
     public class ManageProductService : IManageProductService
     {
-
         private readonly EshopDbContext _context;
         private readonly IStorageService _storageService;
+
         public ManageProductService(EshopDbContext context, IStorageService storageService)
         {
             _context = context;
@@ -48,11 +47,8 @@ namespace EshopSolution.Application.Cacalog.Products
                         SeoTitle = request.SeoTitle,
                         SeoAlias = request.SeoAlias,
                         LanguageId = request.LanguageId
-
                     }
                 }
-
-
             };
             if (request.ThumbnailImage != null)
             {
@@ -66,19 +62,17 @@ namespace EshopSolution.Application.Cacalog.Products
                         ImagePath =  await this.SaveFile(request.ThumbnailImage) ,
                         IsDefault = true,
                         SortOrder = 1
-
                     }
                 };
             }
 
             _context.Products.Add(product);
-             await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return product.Id;
         }
 
         public async Task<int> Update(ProductUpdateRequest request)
         {
-
             //1.find product and producttranslation
             var product = await _context.Products.FindAsync(request.Id);
             var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == request.Id
@@ -104,12 +98,11 @@ namespace EshopSolution.Application.Cacalog.Products
                     thumbnailImage.ImagePath = await this.SaveFile(request.ThumbnailImage);
                     _context.ProductImages.Update(thumbnailImage);
                 }
-
             }
             _context.Products.Update(product);
             return await _context.SaveChangesAsync();
-
         }
+
         public async Task<int> Delete(int ProductId)
         {
             var product = await _context.Products.FindAsync(ProductId);
@@ -121,8 +114,8 @@ namespace EshopSolution.Application.Cacalog.Products
 
             _context.Products.Remove(product);
             return await _context.SaveChangesAsync();
-
         }
+
         public async Task<bool> UpdatePrice(int productId, decimal newPrice)
         {
             var product = await _context.Products.FindAsync(productId);
@@ -130,7 +123,6 @@ namespace EshopSolution.Application.Cacalog.Products
                 throw new EshopException($"Can't find product whit id {productId}");
             product.Price = newPrice;
             return await _context.SaveChangesAsync() > 0;
-
         }
 
         public async Task<bool> UpdateStock(int productId, int addedQuantity)
@@ -149,8 +141,7 @@ namespace EshopSolution.Application.Cacalog.Products
             await _context.SaveChangesAsync();
         }
 
-
-        public async Task<PageResult<ProductViewModel>> GetAllPaging(string languageId,GetManageProductPagingRequest request)
+        public async Task<PageResult<ProductViewModel>> GetAllPaging(string languageId, GetManageProductPagingRequest request)
         {
             //1.Select
             var query = from p in _context.Products
@@ -161,7 +152,7 @@ namespace EshopSolution.Application.Cacalog.Products
                         select new { p, pt, pic };
             //2.Filter
             if (string.IsNullOrEmpty(request.Keyword))
-                query = query.Where(x => x.pt.Name.Contains(request.Keyword)).Where(x=>x.pt.LanguageId==languageId);
+                query = query.Where(x => x.pt.Name.Contains(request.Keyword)).Where(x => x.pt.LanguageId == languageId);
             if (request.CategoryIds.Count > 0)
             {
                 query = query.Where(x => request.CategoryIds.Contains(x.pic.CategoryId));
@@ -185,10 +176,6 @@ namespace EshopSolution.Application.Cacalog.Products
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
-
-
-
-
                 }).ToListAsync();
 
             //4.Select and Projection
@@ -199,7 +186,6 @@ namespace EshopSolution.Application.Cacalog.Products
             };
 
             return pageResult;
-
         }
 
         private async Task<string> SaveFile(IFormFile file)
@@ -210,7 +196,7 @@ namespace EshopSolution.Application.Cacalog.Products
             return fileName;
         }
 
-        public async Task<int> AddImages(int productId,ProductImageCreateRequest request)
+        public async Task<int> AddImages(int productId, ProductImageCreateRequest request)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
@@ -222,7 +208,6 @@ namespace EshopSolution.Application.Cacalog.Products
                 IsDefault = request.IsDefault,
                 SortOrder = request.SortOrder,
                 DateCreated = DateTime.Now
-
             };
             if (request.ImageFile != null)
             {
@@ -244,7 +229,6 @@ namespace EshopSolution.Application.Cacalog.Products
                 _context.ProductImages.Remove(image);
                 return await _context.SaveChangesAsync();
             }
-
         }
 
         public async Task<int> UpdateImages(int imageId, ProductImageUpdateRequest request)
@@ -261,7 +245,6 @@ namespace EshopSolution.Application.Cacalog.Products
                 productImage.ImagePath = await this.SaveFile(request.ImageFile);
                 return await _context.SaveChangesAsync();
             }
-
         }
 
         public async Task<ProductViewModel> GetById(int productId, string languageId)
@@ -287,7 +270,6 @@ namespace EshopSolution.Application.Cacalog.Products
                 LanguageId = proudctTranslation?.LanguageId
             };
             return productViewModel;
-
         }
 
         public async Task<ProductImageViewModel> GetImageById(int imageId)
@@ -325,7 +307,7 @@ namespace EshopSolution.Application.Cacalog.Products
                 }).ToListAsync();
         }
 
-        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId( string languageId,GetPublicProductPagingRequest request)
+        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
         {
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
@@ -354,7 +336,6 @@ namespace EshopSolution.Application.Cacalog.Products
                     SeoDescription = x.pt.SeoDescription,
                     SeoTitle = x.pt.SeoTitle,
                     SeoAlias = x.pt.SeoAlias
-
                 });
             var pageResult = new PageResult<ProductViewModel>()
             {
@@ -365,9 +346,6 @@ namespace EshopSolution.Application.Cacalog.Products
             };
 
             return pageResult;
-
         }
-
-        
     }
 }

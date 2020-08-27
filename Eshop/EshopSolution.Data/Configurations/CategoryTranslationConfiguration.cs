@@ -1,11 +1,8 @@
-﻿using  EshopSolution.Data.Entities;
+﻿using EshopSolution.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace  EshopSolution.Data.Configurations
+namespace EshopSolution.Data.Configurations
 {
     public class CategoryTranslationConfiguration : IEntityTypeConfiguration<CategoryTranslation>
     {
@@ -16,7 +13,6 @@ namespace  EshopSolution.Data.Configurations
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id).UseIdentityColumn();
-
 
             builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
 
@@ -31,7 +27,6 @@ namespace  EshopSolution.Data.Configurations
             builder.HasOne(x => x.Language).WithMany(x => x.CategoryTranslations).HasForeignKey(x => x.LanguageId);
 
             builder.HasOne(x => x.Category).WithMany(x => x.CategoryTranslations).HasForeignKey(x => x.CategoryId);
-
         }
     }
 }

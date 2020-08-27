@@ -1,11 +1,8 @@
-﻿using  EshopSolution.Data.Entities;
+﻿using EshopSolution.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace  EshopSolution.Data.Configurations
+namespace EshopSolution.Data.Configurations
 {
     public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
     {

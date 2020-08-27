@@ -1,11 +1,9 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace  EshopSolution.Data.Entities
+namespace EshopSolution.Data.Entities
 {
-   public class Order
+    public class Order
     {
         public int Id { set; get; }
         public DateTime OrderDate { set; get; }
@@ -19,7 +17,5 @@ namespace  EshopSolution.Data.Entities
         public List<OrderDetail> OrderDetails { get; set; }
 
         public AppUser AppUser { get; set; }
-
-
     }
 }

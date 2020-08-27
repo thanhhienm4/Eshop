@@ -1,19 +1,17 @@
-﻿
-using EshopSolution.Data.EF;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using EshopSolution.Data.EF;
 using EshopSolution.ViewModel.Catalog.Products;
 using EshopSolution.ViewModel.Common;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EshopSolution.Application.Cacalog.Products
 {
     public class PublicProductService : IPublicProductService
     {
         public readonly EshopDbContext _context;
+
         public PublicProductService(EshopDbContext context)
         {
             _context = context;
@@ -46,12 +44,11 @@ namespace EshopSolution.Application.Cacalog.Products
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
-
                 }).ToListAsync();
             return await data;
         }
 
-        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(string languageId,GetPublicProductPagingRequest request)
+        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
         {
             //1.Select
             var query = from p in _context.Products
@@ -63,7 +60,7 @@ namespace EshopSolution.Application.Cacalog.Products
 
             if (request.CategoryId != null && request.CategoryId.Value > 0)
             {
-                query = query.Where(p => p.pic.CategoryId == request.CategoryId).Where(p=>p.pt.LanguageId==languageId);
+                query = query.Where(p => p.pic.CategoryId == request.CategoryId).Where(p => p.pt.LanguageId == languageId);
             }
 
             //3.Paging
@@ -85,7 +82,6 @@ namespace EshopSolution.Application.Cacalog.Products
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
-                   
                 }).ToListAsync();
 
             //4.Select and Projection
@@ -96,8 +92,6 @@ namespace EshopSolution.Application.Cacalog.Products
             };
 
             return pageResult;
-
-
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace  EshopSolution.Data.Entities
+﻿namespace EshopSolution.Data.Entities
 {
     public class CategoryTranslation
     {
@@ -17,6 +13,5 @@ namespace  EshopSolution.Data.Entities
         public Category Category { get; set; }
 
         public Language Language { get; set; }
-
     }
 }

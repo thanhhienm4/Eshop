@@ -1,9 +1,6 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
-namespace  EshopSolution.Data.Entities
+namespace EshopSolution.Data.Entities
 {
     public class Promotion
     {
@@ -17,6 +14,5 @@ namespace  EshopSolution.Data.Entities
         public int ProductCategoryId { set; get; }
         public Status Status { set; get; }
         public string Name { set; get; }
-
     }
 }

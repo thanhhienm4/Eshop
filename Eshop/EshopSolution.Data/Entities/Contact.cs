@@ -1,9 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace  EshopSolution.Data.Entities
+﻿namespace EshopSolution.Data.Entities
 {
     public class Contact
     {
@@ -13,6 +8,5 @@ namespace  EshopSolution.Data.Entities
         public string PhoneNumber { set; get; }
         public string Message { set; get; }
         public Status Status { set; get; }
-
     }
 }

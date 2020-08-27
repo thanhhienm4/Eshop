@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace  EshopSolution.Data.Entities
+﻿namespace EshopSolution.Data.Entities
 {
     public class ProductTranslation
     {
@@ -20,6 +16,5 @@ namespace  EshopSolution.Data.Entities
         public Product Product { get; set; }
 
         public Language Language { get; set; }
-
     }
 }

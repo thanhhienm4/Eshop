@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace  EshopSolution.Data.Entities
+namespace EshopSolution.Data.Entities
 {
     public class AppUser : IdentityUser<Guid>
     {

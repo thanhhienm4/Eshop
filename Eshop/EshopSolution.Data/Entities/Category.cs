@@ -1,9 +1,6 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace  EshopSolution.Data.Entities
+namespace EshopSolution.Data.Entities
 {
     public class Category
     {
@@ -16,6 +13,5 @@ namespace  EshopSolution.Data.Entities
         public List<ProductInCategory> ProductInCategories { get; set; }
 
         public List<CategoryTranslation> CategoryTranslations { get; set; }
-
     }
 }

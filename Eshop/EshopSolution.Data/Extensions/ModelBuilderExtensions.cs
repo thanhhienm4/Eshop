@@ -104,20 +104,17 @@ namespace EshopSolution.Data.Extensions
                 EmailConfirmed = true,
                 PasswordHash = hasher.HashPassword(null, "Abcd1234$"),
                 SecurityStamp = string.Empty,
-                ConcurrencyStamp = string.Empty ,
+                ConcurrencyStamp = string.Empty,
 
                 FirstName = "Hien",
                 LastName = "Nguyen Thanh",
                 Dob = new DateTime(2020, 01, 31),
                 PhoneNumber = "0912413908",
-                PhoneNumberConfirmed = true, 
-                LockoutEnabled = false, 
+                PhoneNumberConfirmed = true,
+                LockoutEnabled = false,
                 AccessFailedCount = 0,
                 TwoFactorEnabled = false,
                 LockoutEnd = new DateTimeOffset()
-
-
-
             });
 
             modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
@@ -125,14 +122,6 @@ namespace EshopSolution.Data.Extensions
                 RoleId = roleId,
                 UserId = adminId
             });
-
-
-
-
         }
-
-        
-
-
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
-namespace  EshopSolution.Data.Entities
+namespace EshopSolution.Data.Entities
 {
     public class Product
     {
@@ -23,6 +21,5 @@ namespace  EshopSolution.Data.Entities
         public List<ProductTranslation> ProductTranslations { get; set; }
 
         public List<ProductImage> ProductImages { get; set; }
-
     }
 }
