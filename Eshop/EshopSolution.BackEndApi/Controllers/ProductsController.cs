@@ -1,25 +1,20 @@
-﻿using EshopSolution.Application.Cacalog.Products;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using EshopSolution.ViewModel.Catalog.Products;
+﻿using eShopSolution.ViewModels.Catalog.ProductImages;
 using EshopSolution.Application;
-using eShopSolution.ViewModels.Catalog.ProductImages;
+using EshopSolution.Application.Cacalog.Products;
+using EshopSolution.ViewModel.Catalog.Products;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace EshopSolution.BackEndApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
-    public class ProductController : ControllerBase
+    public class ProductsController : ControllerBase
     {
-
         private readonly IPublicProductService _publicProductService;
         private readonly IManageProductService _manageProductService;
-        public ProductController(IPublicProductService publicProductService, IManageProductService manageProductService)
+
+        public ProductsController(IPublicProductService publicProductService, IManageProductService manageProductService)
         {
             _publicProductService = publicProductService;
             _manageProductService = manageProductService;
@@ -51,6 +46,7 @@ namespace EshopSolution.BackEndApi.Controllers
 
             return Ok(product);
         }
+
         [HttpGet("{categoryId}/{languageId}")]
         public async Task<IActionResult> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
         {
@@ -121,7 +117,6 @@ namespace EshopSolution.BackEndApi.Controllers
 
         //ProductImage
 
-
         [HttpPost("{productId}/images")]
         public async Task<IActionResult> CreateImage(int productId, [FromForm] ProductImageCreateRequest request)
         {
@@ -141,7 +136,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPut("{productId}/images/{imageId}")]
-        public async Task<IActionResult> UpdateImage(int imageId,[FromForm] ProductImageUpdateRequest request)
+        public async Task<IActionResult> UpdateImage(int imageId, [FromForm] ProductImageUpdateRequest request)
         {
             if (ModelState.IsValid == false)
             {
@@ -166,8 +161,9 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return Ok();
         }
+
         [HttpGet("{productId}/images/{imageId}")]
-        public async Task<IActionResult> GetImageById(int productId, int imageId)
+        public async Task<IActionResult> GetImageById(int imageId)
         {
             var image = await _manageProductService.GetImageById(imageId);
             if (image == null)
@@ -176,6 +172,5 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return Ok(image);
         }
-
     }
 }
