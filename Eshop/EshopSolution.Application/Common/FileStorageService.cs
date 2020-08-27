@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading.Tasks;
 
-
 namespace eShopSolution.Application.Common
 {
     public class FileStorageService : IStorageService
