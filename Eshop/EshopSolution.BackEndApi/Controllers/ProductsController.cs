@@ -2,6 +2,7 @@
 using EshopSolution.Application;
 using EshopSolution.Application.Cacalog.Products;
 using EshopSolution.ViewModel.Catalog.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -9,6 +10,7 @@ namespace EshopSolution.BackEndApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IPublicProductService _publicProductService;
@@ -47,7 +49,7 @@ namespace EshopSolution.BackEndApi.Controllers
             return Ok(product);
         }
 
-        [HttpGet("{categoryId}/{languageId}")]
+        [HttpGet("{categoryId}/products/{languageId}")]
         public async Task<IActionResult> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
         {
             var product = await _manageProductService.GetAllByCategoryId(languageId, request);

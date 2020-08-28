@@ -33,7 +33,7 @@ namespace EshopSolution.Application.System.Users
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null)
             {
-                throw new EshopException($"Can't find user whit UserName = {request.UserName}");
+                throw new EshopException($"Can't find user with UserName = {request.UserName}");
             }
             var roles = await _userManager.GetRolesAsync(user);
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
@@ -43,15 +43,15 @@ namespace EshopSolution.Application.System.Users
             }
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,user.Email),
+                new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.GivenName,user.FirstName),
                 new Claim(ClaimTypes.Role, string.Join(";",roles))
             };
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(_configuration["Token:Issuer"],
-              _configuration["Token:Issuer"],
+            var token = new JwtSecurityToken(_configuration["Tokens:Issuer"],
+              _configuration["Tokens:Issuer"],
               claims,
               expires: DateTime.Now.AddMinutes(180),
               signingCredentials: credentials);

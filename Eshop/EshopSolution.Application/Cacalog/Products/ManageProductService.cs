@@ -78,7 +78,7 @@ namespace EshopSolution.Application.Cacalog.Products
             var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == request.Id
             && x.LanguageId == request.LanguageId);
             if (product == null && productTranslation == null)
-                throw new EshopException($"Can't find product whit id {request.Id}");
+                throw new EshopException($"Can't find product with id {request.Id}");
 
             //2.Update producttranslation
             productTranslation.Name = request.Name;
@@ -120,7 +120,7 @@ namespace EshopSolution.Application.Cacalog.Products
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
-                throw new EshopException($"Can't find product whit id {productId}");
+                throw new EshopException($"Can't find product with id {productId}");
             product.Price = newPrice;
             return await _context.SaveChangesAsync() > 0;
         }
@@ -129,7 +129,7 @@ namespace EshopSolution.Application.Cacalog.Products
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
-                throw new EshopException($"Can't find product whit id {productId}");
+                throw new EshopException($"Can't find product with id {productId}");
             product.Stock += addedQuantity;
             return await _context.SaveChangesAsync() > 0;
         }
@@ -200,7 +200,7 @@ namespace EshopSolution.Application.Cacalog.Products
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
-                throw new EshopException($"Can't find Product whit Id {productId}");
+                throw new EshopException($"Can't find Product with Id {productId}");
             var productImage = new ProductImage()
             {
                 Caption = request.Caption,
@@ -223,7 +223,7 @@ namespace EshopSolution.Application.Cacalog.Products
         {
             var image = await _context.ProductImages.FindAsync(imageId);
             if (image == null)
-                throw new EshopException($"Can't find ProductImage whit Id {imageId}");
+                throw new EshopException($"Can't find ProductImage with Id {imageId}");
             else
             {
                 _context.ProductImages.Remove(image);
@@ -235,7 +235,7 @@ namespace EshopSolution.Application.Cacalog.Products
         {
             var productImage = await _context.ProductImages.FindAsync(imageId);
             if (productImage == null)
-                throw new EshopException($"Can't find ProductImage whit Id {imageId}");
+                throw new EshopException($"Can't find ProductImage with Id {imageId}");
             else
             {
                 productImage.Caption = request.Caption;

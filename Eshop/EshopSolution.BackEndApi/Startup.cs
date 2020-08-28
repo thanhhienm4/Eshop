@@ -5,6 +5,10 @@ using EshopSolution.Application.System.Users;
 using EshopSolution.Data.EF;
 using EshopSolution.Data.Entities;
 using EshopSolution.Utilities.Constants;
+using EshopSolution.ViewModel.System.Users;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 
@@ -33,10 +38,10 @@ namespace EshopSolution.BackEndApi
             IdentityModelEventSource.ShowPII = true;
             services.AddDbContext<EshopDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
-            services.AddControllersWithViews();
+            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>()); ;
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            services.AddMvc(c => c.Conventions.Add(new ApiExplorerIgnores()));
+            services.AddMvc(c => c.Conventions.Add(new ApiExplorerIgnores())).AddFluentValidation();
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<EshopDbContext>()
                 .AddDefaultTokenProviders();
@@ -49,6 +54,8 @@ namespace EshopSolution.BackEndApi
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
             services.AddTransient<IUserService, UserService>();
+            //services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
+            //services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
 
             services.AddSwaggerGen(c =>
             {
@@ -83,6 +90,34 @@ namespace EshopSolution.BackEndApi
                     });
                 //c.RoutePrefix = string.Empty;
             });
+
+            string issuer = Configuration.GetValue<string>("Tokens:Issuer");
+            string signingKey = Configuration.GetValue<string>("Tokens:Key");
+            byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
+
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = issuer,
+                    ValidateAudience = true,
+                    ValidAudience = issuer,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = System.TimeSpan.Zero,
+                    IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
+                };
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,11 +136,10 @@ namespace EshopSolution.BackEndApi
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
-
             app.UseAuthentication();
+            app.UseRouting();
+            
             app.UseAuthorization();
-
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
