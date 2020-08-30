@@ -1,12 +1,16 @@
-﻿using Eshop.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
+using EshopSolution.AdminApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Eshop.Controllers
+namespace EshopSolution.AdminApp.Controllers
 {
-   
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,6 +22,7 @@ namespace Eshop.Controllers
 
         public IActionResult Index()
         {
+            var user = User.Identity.Name;
             return View();
         }
 

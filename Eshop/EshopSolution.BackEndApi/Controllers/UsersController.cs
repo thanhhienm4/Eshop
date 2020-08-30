@@ -19,7 +19,7 @@ namespace EshopSolution.BackEndApi.Controllers
 
         [HttpPost("authenticate")]
         [AllowAnonymous]
-        public async Task<IActionResult> Authenticate([FromForm] LoginRequest request)
+        public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
             if (ModelState.IsValid == false)
             {
@@ -30,7 +30,7 @@ namespace EshopSolution.BackEndApi.Controllers
             {
                 return BadRequest("UserName or Password is incorrect");
             }
-            return Ok(new { token = resultToken });
+            return Ok(resultToken);
         }
 
         [HttpPost("register")]
