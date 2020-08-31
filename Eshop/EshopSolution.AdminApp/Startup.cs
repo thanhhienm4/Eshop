@@ -33,9 +33,13 @@ namespace EshopSolution.AdminApp
                     {
                         options.LoginPath = "/User/Login";
                         options.AccessDeniedPath = "/Account/Forbident";
+                        options.LogoutPath = "/User/Logout";
                     });
             services.AddTransient<IUserApiClient, UserApiClient>();
-            
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
@@ -59,7 +63,7 @@ namespace EshopSolution.AdminApp
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

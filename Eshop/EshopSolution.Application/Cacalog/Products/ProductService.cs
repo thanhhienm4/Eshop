@@ -16,12 +16,12 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.Application.Cacalog.Products
 {
-    public class ManageProductService : IManageProductService
+    public class ProductService : IProductService
     {
         private readonly EshopDbContext _context;
         private readonly IStorageService _storageService;
 
-        public ManageProductService(EshopDbContext context, IStorageService storageService)
+        public ProductService(EshopDbContext context, IStorageService storageService)
         {
             _context = context;
             _storageService = storageService;
@@ -148,7 +148,6 @@ namespace EshopSolution.Application.Cacalog.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId
                         join c in _context.Categories on pic.CategoryId equals c.Id
-
                         select new { p, pt, pic };
             //2.Filter
             if (string.IsNullOrEmpty(request.Keyword))
@@ -347,5 +346,7 @@ namespace EshopSolution.Application.Cacalog.Products
 
             return pageResult;
         }
+
+        
     }
 }

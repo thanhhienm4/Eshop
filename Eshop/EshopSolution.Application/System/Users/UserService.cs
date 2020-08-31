@@ -1,11 +1,14 @@
 ﻿using EshopSolution.Data.Entities;
 using EshopSolution.Utilities.Exceptions;
+using EshopSolution.ViewModel.Common;
 using EshopSolution.ViewModel.System.Users;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,6 +48,7 @@ namespace EshopSolution.Application.System.Users
             {
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.GivenName,user.FirstName),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, string.Join(";",roles))
             };
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
@@ -57,6 +61,43 @@ namespace EshopSolution.Application.System.Users
               signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task<PageResult<UserViewModel>> GetUserPaging(GetUserPagingRequest request)
+        {
+            //1.Query
+            var query = _userManager.Users;
+            if(!string.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.UserName.Contains(request.Keyword)
+                                      || x.PhoneNumber.Contains(request.Keyword)
+                                      || x.Email.Contains(request.Keyword));
+                                      
+            }
+
+            //3.Paging
+            int totalRow = await query.CountAsync();
+            var data = query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new UserViewModel()
+                {
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    UserName = x.UserName,
+                    Dob = x.Dob,
+                    Email = x.Email, 
+                    PhoneNumber = x.PhoneNumber
+
+                }).ToListAsync();
+
+            //4.Select and Projection
+            var pageResult = new PageResult<UserViewModel>()
+            {
+                TotalRecord = totalRow,
+                Item = await data
+            };
+
+            return pageResult;
         }
 
         public async Task<bool> Register(RegisterRequest request)

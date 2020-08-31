@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.Application
 {
-    public interface IManageProductService
+    public interface IProductService
     {
+
         Task<int> Create(ProductCreateRequest request);
 
         Task<int> Update(ProductUpdateRequest request);
