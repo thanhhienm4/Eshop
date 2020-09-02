@@ -42,7 +42,8 @@ namespace EshopSolution.BackEndApi
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMvc(c => c.Conventions.Add(new ApiExplorerIgnores())).AddFluentValidation();
-            services.AddIdentity<AppUser, AppRole>()
+            services.AddIdentity<AppUser, AppRole>(
+                option => option.Password.RequireNonAlphanumeric = false)
                 .AddEntityFrameworkStores<EshopDbContext>()
                 .AddDefaultTokenProviders();
             //Declare

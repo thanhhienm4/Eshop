@@ -39,6 +39,14 @@ namespace EshopSolution.Data.EF
             modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("AppRoleClaims");
             modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens").HasKey(x => x.UserId);
 
+            modelBuilder.Entity<Cart>().Property(p => p.Price).HasColumnType("decimal(18,4)");
+            modelBuilder.Entity<OrderDetail>().Property(p => p.Price).HasColumnType("decimal(18,4)");
+            modelBuilder.Entity<Product>().Property(p => p.OriginalPrice).HasColumnType("decimal(18,4)");
+            modelBuilder.Entity<Promotion>().Property(p => p.DiscountAmount).HasColumnType("decimal(18,4)");
+            modelBuilder.Entity<Transaction>().Property(p => p.Amount).HasColumnType("decimal(18,4)");
+            modelBuilder.Entity<Transaction>().Property(p => p.Fee).HasColumnType("decimal(18,4)");
+            modelBuilder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(18,4)");
+
             //Data seeding
             modelBuilder.Seed();
             //base.OnModelCreating(modelBuilder);
