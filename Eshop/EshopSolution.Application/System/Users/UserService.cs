@@ -81,11 +81,12 @@ namespace EshopSolution.Application.System.Users
                 .Take(request.PageSize)
                 .Select(x => new UserViewModel()
                 {
+                    Id = x.Id,
                     FirstName = x.FirstName,
                     LastName = x.LastName,
                     UserName = x.UserName,
                     Dob = x.Dob,
-                    Email = x.Email, 
+                    Email = x.Email,
                     PhoneNumber = x.PhoneNumber
 
                 }).ToListAsync();
@@ -117,6 +118,7 @@ namespace EshopSolution.Application.System.Users
             }
             user = new AppUser()
             {
+              
                 Dob = request.Dob,
                 UserName = request.UserName,
                 Email = request.Email,
@@ -133,37 +135,39 @@ namespace EshopSolution.Application.System.Users
         }
         public async Task<ApiResult<bool>> Update(Guid id , UpdateRequest request)
         {
-            if (_userManager.Users.Where(user => user.Email == request.Email && user.Id != id).FirstOrDefault()!=null)
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
             {
-                return new ApiErrorResult<bool>("Email đã được sử dụng cho tài khoảng khác");
+                return new ApiErrorResult<bool>("Emai đã tồn tại");
             }
-            if (_userManager.Users.Where(user => user.PhoneNumber == request.PhoneNumber && user.Id != id).FirstOrDefault() != null && 
-                !string.IsNullOrEmpty(request.PhoneNumber))
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
             {
-                return new ApiErrorResult<bool>("Số điện thoại đã được sử dụng cho tài khoảng khác");
+                return new ApiErrorResult<bool>("Emai đã tồn tại");
             }
+            //if (_userManager.Users.Where(user => user.PhoneNumber == request.PhoneNumber && user.Id != id).FirstOrDefault() != null && 
+            //    !string.IsNullOrEmpty(request.PhoneNumber))
+            //{
+            //    return new ApiErrorResult<bool>("Số điện thoại đã được sử dụng cho tài khoảng khác");
+            //}
             var user = await _userManager.FindByIdAsync(id.ToString());
-            user = new AppUser()
-            {
+            
+                user.Dob = request.Dob;
+                user.Email = request.Email;
+                user.PhoneNumber = request.PhoneNumber;
+                user.FirstName = request.FirstName;
+                user.LastName = request.LastName;
 
-                Dob = request.Dob,
-                Email = request.Email,
-                PhoneNumber = request.PhoneNumber,
-                FirstName = request.FirstName,
-                LastName = request.LastName
-            };
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
-            {
+            { 
                 return new ApiSuccessResult<bool>();
-            }
-            return new ApiErrorResult<bool>("Cập nhật thành công");
+            }else 
+              return new ApiErrorResult<bool>("Cập nhật không thành công");
         }
 
         public async Task<ApiResult<UserViewModel>> GetById(Guid id)
         {
             //1.Query
-            var user = _userManager.Users.Where(user => user.Id == id).FirstOrDefault();
+            var user =  _userManager.Users.Where(user => user.Id == id).FirstOrDefault();
             if(user == null)
             {
                 return new ApiErrorResult<UserViewModel>("Không tìm thấy User");

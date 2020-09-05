@@ -77,15 +77,42 @@ namespace EshopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
-        [HttpPut]
+        [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Update(Guid id ,UpdateRequest request)
+        public async Task<IActionResult> Edit (Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _userApiClient.GetById(id);
+            
+            if(result.IsSuccessed)
+            {
+                var updateRequest = new UpdateRequest()
+                {
+                    Id = id,
+                    Dob = result.ResultObj.Dob,
+                    Email = result.ResultObj.Email,
+                    FirstName = result.ResultObj.FirstName,
+                    PhoneNumber = result.ResultObj.PhoneNumber,
+                    LastName = result.ResultObj.LastName
+
+                };
+                return View(updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Edit(UpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return View(request);
             }
-            var result = await _userApiClient.Update(id , request);
+            var result = await _userApiClient.Update(request.Id , request);
             if (result.IsSuccessed)
             {
                 return RedirectToAction("Index", "User");

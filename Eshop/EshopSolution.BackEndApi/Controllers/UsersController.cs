@@ -78,15 +78,19 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return BadRequest(result);
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id}/getbyid")]
         public async Task<IActionResult> GetById(Guid id)
         {
             if (ModelState.IsValid == false)
             {
                 return BadRequest();
             }
-            var user = await _userService.GetById(id);
-            return Ok(user);
+            var respond = await _userService.GetById(id);
+            if (respond.IsSuccessed)
+            {
+                return Ok(respond);
+            }
+            return BadRequest(respond);
 
         }
     }

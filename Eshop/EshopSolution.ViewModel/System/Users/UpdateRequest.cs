@@ -5,8 +5,9 @@ using System.Text;
 
 namespace EshopSolution.ViewModel.System.Users
 {
-    public class UpdateRequest
-    {
+    public class UpdateRequest {
+        public  Guid Id {get ; set;}
+
         [Display(Name = "Tên")]
         public string FirstName { get; set; }
 

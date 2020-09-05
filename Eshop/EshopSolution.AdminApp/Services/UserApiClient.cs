@@ -72,23 +72,29 @@ namespace EshopSolution.AdminApp.Services
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respond = await client.PostAsync($"/api/Users/{id}/update", httpContent);
+            var respond = await client.PutAsync($"/api/Users/{id}/update", httpContent);
             var result = await respond.Content.ReadAsStringAsync();
             if (respond.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+                return  JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             }
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+            return  JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
         public async Task<ApiResult<UserViewModel>> GetById(Guid id)
         {
+            //var json = JsonConvert.SerializeObject(id);
             var BearerToken = _httpContextAccessor.HttpContext.Session.GetString("Token");
             var client = _httpClientFactory.CreateClient();
+            //var httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respond = await client.GetAsync($"/api/Users/{id}/GetById");
+            var respond = await client.GetAsync($"/api/Users/{id}/getbyid");
             var body = await respond.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<ApiSuccessResult<UserViewModel>>(body);
+            if(respond.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<UserViewModel>>(body);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<UserViewModel>>(body);
         }
     }
 }
