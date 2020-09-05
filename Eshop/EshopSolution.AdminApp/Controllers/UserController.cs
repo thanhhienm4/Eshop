@@ -43,7 +43,7 @@ namespace EshopSolution.AdminApp.Controllers
                 PageSize = pageSize
             };
             var data = await _userApiClient.GetUserPaging(request);
-            return View(data);
+            return View(data.ResultObj);
         }
         
        
@@ -53,6 +53,7 @@ namespace EshopSolution.AdminApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Remove("Token");
             return RedirectToAction("Index", "Login");
         }
         [HttpGet]
@@ -69,10 +70,27 @@ namespace EshopSolution.AdminApp.Controllers
                 return View(request);
             }
             var result = await _userApiClient.Register(request);
-            if(result == true)
+            if(result.IsSuccessed)
             {
                 return RedirectToAction("Index", "User");
             }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> Update(Guid id ,UpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+            var result = await _userApiClient.Update(id , request);
+            if (result.IsSuccessed)
+            {
+                return RedirectToAction("Index", "User");
+            }
+            ModelState.AddModelError("", result.Message);
             return View(request);
         }
     }

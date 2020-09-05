@@ -1,7 +1,9 @@
 ﻿using EshopSolution.Application.System.Users;
+using EshopSolution.ViewModel.Common;
 using EshopSolution.ViewModel.System.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace EshopSolution.BackEndApi.Controllers
@@ -27,12 +29,12 @@ namespace EshopSolution.BackEndApi.Controllers
                 return BadRequest();
             }
             var resultToken = await _userService.Authenticate(request);
-            if (string.IsNullOrEmpty(resultToken))
+            if (!resultToken.IsSuccessed)
             {
-                return BadRequest("UserName or Password is incorrect");
-            }else
-           
-            return Ok(resultToken);
+                return BadRequest(resultToken);
+            } else
+
+                return Ok(resultToken);
         }
 
         [HttpPost("register")]
@@ -44,11 +46,11 @@ namespace EshopSolution.BackEndApi.Controllers
                 return BadRequest();
             }
             var result = await _userService.Register(request);
-            if (result == false)
+            if (!result.IsSuccessed)
             {
-                return BadRequest("Register fail");
+                return BadRequest(result);
             }
-            return Ok();
+            return Ok(result);
         }
 
         [HttpGet("paging")]
@@ -62,6 +64,30 @@ namespace EshopSolution.BackEndApi.Controllers
             return Ok(user);
 
         }
+        [HttpPut("{id}/update")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateRequest request)
+        {
+            if (ModelState.IsValid == false)
+            {
+                return BadRequest();
+            }
+            var result = await _userService.Update(id, request);
+            if (result.IsSuccessed)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            if (ModelState.IsValid == false)
+            {
+                return BadRequest();
+            }
+            var user = await _userService.GetById(id);
+            return Ok(user);
 
+        }
     }
 }

@@ -9,8 +9,11 @@ namespace EshopSolution.AdminApp.Services
 {
     public interface IUserApiClient
     {
-        Task<string> Authenticate(LoginRequest request);
-        Task<PageResult<UserViewModel>> GetUserPaging(GetUserPagingRequest request);
-        Task<bool> Register(RegisterRequest request);
+        Task<ApiResult<string>> Authenticate(LoginRequest request);
+        Task<ApiResult<PageResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request);
+        Task<ApiResult< bool>> Register(RegisterRequest request);
+
+        Task<ApiResult<bool>> Update(Guid id,UpdateRequest request);
+        Task<ApiResult<UserViewModel>> GetById(Guid id);
     }
 }

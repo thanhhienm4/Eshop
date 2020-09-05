@@ -38,12 +38,17 @@ namespace EshopSolution.BackEndApi
             IdentityModelEventSource.ShowPII = true;
             services.AddDbContext<EshopDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
-            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>()); 
+            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMvc(c => c.Conventions.Add(new ApiExplorerIgnores())).AddFluentValidation();
             services.AddIdentity<AppUser, AppRole>(
-                option => option.Password.RequireNonAlphanumeric = false)
+                option => {
+                        option.Password.RequireNonAlphanumeric = false;
+                        option.Password.RequireDigit = false;
+                        option.Password.RequireLowercase = false;
+                        option.Password.RequireUppercase = false;
+                            })
                 .AddEntityFrameworkStores<EshopDbContext>()
                 .AddDefaultTokenProviders();
             //Declare

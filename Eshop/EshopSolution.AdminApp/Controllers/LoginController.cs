@@ -41,16 +41,21 @@ namespace EshopSolution.AdminApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(ModelState);
+                return View(request);
             }
-            var token = await _userApiClient.Authenticate(request);
-            var userPrincipal = this.ValidateToken(token);
+            var respond = await _userApiClient.Authenticate(request);
+            if(!respond.IsSuccessed)
+            {
+                ModelState.AddModelError("",respond.Message);
+                return View(request);
+            }
+            var userPrincipal = this.ValidateToken(respond.ResultObj);
             var authProperties = new AuthenticationProperties()
             {
                 ExpiresUtc = DateTimeOffset.Now.AddMinutes(10),
                 IsPersistent = true
             };
-            HttpContext.Session.SetString("Token", token);
+            HttpContext.Session.SetString("Token", respond.ResultObj);
             await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         userPrincipal,
