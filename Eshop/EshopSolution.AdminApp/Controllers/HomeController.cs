@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace EshopSolution.AdminApp.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -19,6 +19,7 @@ namespace EshopSolution.AdminApp.Controllers
         {
             _logger = logger;
         }
+
 
         public IActionResult Index()
         {

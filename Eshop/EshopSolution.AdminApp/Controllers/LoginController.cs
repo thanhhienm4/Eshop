@@ -73,7 +73,8 @@ namespace EshopSolution.AdminApp.Controllers
                 ValidIssuer = _configuration["Tokens:Issuer"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]))
             };
-            ClaimsPrincipal claimsPrincipal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, tokenValidationParameters, out SecurityToken validatedToken);
+            ClaimsPrincipal claimsPrincipal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, tokenValidationParameters,
+                                                                            out SecurityToken validatedToken);
             return claimsPrincipal;
         }
 

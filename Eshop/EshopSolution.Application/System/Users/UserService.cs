@@ -95,7 +95,9 @@ namespace EshopSolution.Application.System.Users
             var pageResult = new PageResult<UserViewModel>()
             {
                 TotalRecord = totalRow,
-                Item = await data
+                Item = await data,
+                PageSize = request.PageSize,
+                PageIndex = request.PageIndex
             };
 
             return new ApiSuccessResult<PageResult<UserViewModel>>(pageResult);
@@ -174,6 +176,7 @@ namespace EshopSolution.Application.System.Users
             }
             var data = new UserViewModel()
             {
+                Id = id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserName = user.UserName,

@@ -28,7 +28,7 @@ namespace EshopSolution.AdminApp.Controllers
             //_configuration = configuration;
         }
         [Authorize]
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 3)
         {
             if (!ModelState.IsValid)
             {
@@ -37,7 +37,6 @@ namespace EshopSolution.AdminApp.Controllers
             var session = HttpContext.Session.GetString("Token");
             var request = new GetUserPagingRequest()
             {
-                BearerToken = session,
                 Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize
@@ -120,5 +119,22 @@ namespace EshopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _userApiClient.GetById(id);
+
+            if (result.IsSuccessed)
+            {
+                return View(result.ResultObj);
+            }
+            return View();
+        }
+
     }
 }
