@@ -21,11 +21,11 @@
         }
     }
 
-    var startIndex = Math.Max(Model.PageIndex - Model.PageSize, 1);
-    var finishIndex = Math.Min(Model.PageIndex + Model.PageSize, Model.PageCount);
+    var startIndex = Math.Max(Model.PageIndex - 5, 1);
+    var finishIndex = Math.Min(Model.PageIndex + 5, Model.PageCount);
 }
 
-@if (Model.PageCount > 1)
+@if (Model.PageCount >= 1)
 {
     <ul class="pagination">
         @if (Model.PageIndex != startIndex)
