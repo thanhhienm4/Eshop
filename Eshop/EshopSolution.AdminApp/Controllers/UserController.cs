@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
 {
-   
+
     public class UserController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
@@ -44,8 +44,8 @@ namespace EshopSolution.AdminApp.Controllers
             var data = await _userApiClient.GetUserPaging(request);
             return View(data.ResultObj);
         }
-        
-       
+
+
 
         [HttpPost]
         //[Authorize]
@@ -64,12 +64,12 @@ namespace EshopSolution.AdminApp.Controllers
         [Authorize]
         public async Task<IActionResult> Create(RegisterRequest request)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(request);
             }
             var result = await _userApiClient.Register(request);
-            if(result.IsSuccessed)
+            if (result.IsSuccessed)
             {
                 return RedirectToAction("Index", "User");
             }
@@ -78,15 +78,15 @@ namespace EshopSolution.AdminApp.Controllers
         }
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Edit (Guid id)
+        public async Task<IActionResult> Edit(Guid id)
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
             var result = await _userApiClient.GetById(id);
-            
-            if(result.IsSuccessed)
+
+            if (result.IsSuccessed)
             {
                 var updateRequest = new UpdateRequest()
                 {
@@ -111,7 +111,7 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(request);
             }
-            var result = await _userApiClient.Update(request.Id , request);
+            var result = await _userApiClient.Update(request.Id, request);
             if (result.IsSuccessed)
             {
                 return RedirectToAction("Index", "User");
@@ -135,6 +135,41 @@ namespace EshopSolution.AdminApp.Controllers
             }
             return View();
         }
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid Id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _userApiClient.GetById(Id);
 
+            if (result.IsSuccessed)
+            {
+                return  View(new DeleteRequest()
+                {
+                    Id = Id
+                });
+            }
+           
+            return RedirectToAction("Error", "Home");
+        }
+            
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Delete(DeleteRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+            var result = await _userApiClient.Delete(request);
+            if (result.IsSuccessed)
+            {
+                return RedirectToAction("Index", "User");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
     }
 }

@@ -188,5 +188,21 @@ namespace EshopSolution.Application.System.Users
 
             return new ApiSuccessResult<UserViewModel>(data);
         }
+
+        public async Task<ApiResult<bool>> Delete(Guid Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id.ToString()) ;
+            if(user ==null)
+            {
+                return new ApiErrorResult<bool>("Người dùng không tồn tại !");
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if(result.Succeeded)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Xóa không thành công");
+
+        }
     }
 }

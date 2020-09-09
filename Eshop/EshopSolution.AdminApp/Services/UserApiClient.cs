@@ -96,5 +96,21 @@ namespace EshopSolution.AdminApp.Services
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<UserViewModel>>(body);
         }
+        public async Task<ApiResult<bool>> Delete(DeleteRequest request)
+        {
+            var BearerToken = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respond = await client.DeleteAsync($"/api/Users/{request.Id}");
+            var result = await respond.Content.ReadAsStringAsync();
+            if (respond.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
     }
 }
