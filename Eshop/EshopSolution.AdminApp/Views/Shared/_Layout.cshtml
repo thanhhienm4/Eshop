@@ -34,8 +34,8 @@
                     <a class="dropdown-item" href="#">Cài đặt</a>
                     <a class="dropdown-item" href="#">Lích sử hoạt động</a>
                     <div class="dropdown-divider"></div>
-                    <form method ="post" asp-controller ="User" asp-action="Logout">
-                        <button type ="submit" class="dropdown-item" >Đăng xuất</button>
+                    <form method="post" asp-controller="User" asp-action="Logout">
+                        <button type="submit" class="dropdown-item">Đăng xuất</button>
                     </form>
 
                 </div>
@@ -117,9 +117,10 @@
                 <div id="layoutSidenav">
 
                     <div class="container-fluid">
+
                         @RenderBody();
                     </div>
-                 </div>
+                </div>
             </main>
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid">
@@ -144,5 +145,6 @@
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
     <script src="~/assets/demo/datatables-demo.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

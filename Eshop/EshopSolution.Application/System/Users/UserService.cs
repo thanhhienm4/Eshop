@@ -71,7 +71,10 @@ namespace EshopSolution.Application.System.Users
             {
                 query = query.Where(x => x.UserName.Contains(request.Keyword)
                                       || x.PhoneNumber.Contains(request.Keyword)
-                                      || x.Email.Contains(request.Keyword));
+                                      || x.FirstName.Contains(request.Keyword)
+                                      || x.LastName.Contains(request.Keyword)
+                                      || x.Email.Contains(request.Keyword)
+                                      || x.Dob.ToString().Contains(request.Keyword));
                                       
             }
 

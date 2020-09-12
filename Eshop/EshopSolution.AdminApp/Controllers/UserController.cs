@@ -5,13 +5,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
@@ -41,6 +35,11 @@ namespace EshopSolution.AdminApp.Controllers
                 PageIndex = pageIndex,
                 PageSize = pageSize
             };
+            ViewBag.Keyword = keyword;
+            if(TempData["Result"]!=null)
+            {
+                ViewBag.SuccessMsg = TempData["Result"];
+            }    
             var data = await _userApiClient.GetUserPaging(request);
             return View(data.ResultObj);
         }
@@ -71,6 +70,7 @@ namespace EshopSolution.AdminApp.Controllers
             var result = await _userApiClient.Register(request);
             if (result.IsSuccessed)
             {
+                TempData["Result"] = "Tạo mới thành công";
                 return RedirectToAction("Index", "User");
             }
             ModelState.AddModelError("", result.Message);
@@ -114,6 +114,7 @@ namespace EshopSolution.AdminApp.Controllers
             var result = await _userApiClient.Update(request.Id, request);
             if (result.IsSuccessed)
             {
+                TempData["Result"] = "Chỉnh sửa thành công";
                 return RedirectToAction("Index", "User");
             }
             ModelState.AddModelError("", result.Message);
@@ -166,6 +167,7 @@ namespace EshopSolution.AdminApp.Controllers
             var result = await _userApiClient.Delete(request);
             if (result.IsSuccessed)
             {
+                TempData["Result"] = "Xóa thành công";
                 return RedirectToAction("Index", "User");
             }
             ModelState.AddModelError("", result.Message);
