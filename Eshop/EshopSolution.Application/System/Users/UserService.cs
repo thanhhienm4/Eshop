@@ -1,5 +1,4 @@
 ﻿using EshopSolution.Data.Entities;
-using EshopSolution.Utilities.Exceptions;
 using EshopSolution.ViewModel.Common;
 using EshopSolution.ViewModel.System.Users;
 using Microsoft.AspNetCore.Identity;
@@ -19,7 +18,7 @@ namespace EshopSolution.Application.System.Users
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-       // private readonly RoleManager<AppRole> _roleManager;
+        private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _configuration;
 
         public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
@@ -144,15 +143,7 @@ namespace EshopSolution.Application.System.Users
             {
                 return new ApiErrorResult<bool>("Emai đã tồn tại");
             }
-            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
-            {
-                return new ApiErrorResult<bool>("Emai đã tồn tại");
-            }
-            //if (_userManager.Users.Where(user => user.PhoneNumber == request.PhoneNumber && user.Id != id).FirstOrDefault() != null && 
-            //    !string.IsNullOrEmpty(request.PhoneNumber))
-            //{
-            //    return new ApiErrorResult<bool>("Số điện thoại đã được sử dụng cho tài khoảng khác");
-            //}
+           
             var user = await _userManager.FindByIdAsync(id.ToString());
             
                 user.Dob = request.Dob;
@@ -177,6 +168,7 @@ namespace EshopSolution.Application.System.Users
             {
                 return new ApiErrorResult<UserViewModel>("Không tìm thấy User");
             }
+            var roles = await _userManager.GetRolesAsync(user);
             var data = new UserViewModel()
             {
                 Id = id,
@@ -185,7 +177,8 @@ namespace EshopSolution.Application.System.Users
                 UserName = user.UserName,
                 Dob = user.Dob,
                 Email = user.Email,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                Roles =  roles
 
             };
 
@@ -206,6 +199,35 @@ namespace EshopSolution.Application.System.Users
             }
             return new ApiErrorResult<bool>("Xóa không thành công");
 
+        }
+
+        public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("Tài khoản không tồn tại");
+            }
+            var removedRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();
+            foreach (var roleName in removedRoles)
+            {
+                if (await _userManager.IsInRoleAsync(user, roleName) == true)
+                {
+                    await _userManager.RemoveFromRoleAsync(user, roleName);
+                }
+            }
+
+
+            var addedRoles = request.Roles.Where(x => x.Selected).Select(x => x.Name).ToList();
+            foreach (var roleName in addedRoles)
+            {
+                if(await _userManager.IsInRoleAsync(user, roleName) == false)
+                {
+                    await _userManager.AddToRoleAsync(user, roleName);
+                }
+            }
+
+            return new ApiSuccessResult<bool>();
         }
     }
 }
