@@ -296,7 +296,7 @@ namespace EshopSolution.Application.Cacalog.Products
                 .Select(i => new ProductImageViewModel()
                 {
                     Caption = i.Caption,
-                    DateCreated = i.DateCreated,
+                    DateCreated = i.DateCreated, 
                     FileSize = i.FileSize,
                     Id = i.Id,
                     ImagePath = i.ImagePath,

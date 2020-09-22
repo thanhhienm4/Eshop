@@ -1,6 +1,7 @@
 using eShopSolution.Application.Common;
 using EshopSolution.Application;
 using EshopSolution.Application.Cacalog.Products;
+using EshopSolution.Application.System.Role;
 using EshopSolution.Application.System.Users;
 using EshopSolution.Data.EF;
 using EshopSolution.Data.Entities;
@@ -52,12 +53,13 @@ namespace EshopSolution.BackEndApi
                 .AddEntityFrameworkStores<EshopDbContext>()
                 .AddDefaultTokenProviders();
             //Declare
-
+            
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<IProductService, ProductService >();
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
+            services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();

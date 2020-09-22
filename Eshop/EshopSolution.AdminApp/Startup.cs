@@ -38,6 +38,7 @@ namespace EshopSolution.AdminApp
                         options.LogoutPath = "/User/Logout";
                     });
             services.AddTransient<IUserApiClient, UserApiClient>();
+            services.AddTransient<IRoleApiClient, RoleApiClient>();
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
