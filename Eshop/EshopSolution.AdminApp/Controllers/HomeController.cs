@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EshopSolution.AdminApp.Models;
+using EshopSolution.Utilities.Constants;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using EshopSolution.AdminApp.Models;
-using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics;
 
 namespace EshopSolution.AdminApp.Controllers
 {
@@ -19,7 +17,6 @@ namespace EshopSolution.AdminApp.Controllers
         {
             _logger = logger;
         }
-
 
         public IActionResult Index()
         {
@@ -36,6 +33,16 @@ namespace EshopSolution.AdminApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public IActionResult Language ()
+        {
+
+        }
+        [HttpPost]
+        public IActionResult Language (NavigationViewModel navigationView)
+        {
+            HttpContext.Session.SetString(SystemConstants.AppSetting.DefaultLanguageId,navigationView.CurrentLanguageId);
+            return RedirectToAction("Index");
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EshopSolution.Utilities.Constants;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -12,7 +13,7 @@ namespace EshopSolution.BackEndApi.Controllers
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var sessions = context.HttpContext.Session.GetString("Token");
+            var sessions = context.HttpContext.Session.GetString(SystemConstants.AppSetting.Token);
             if (sessions == null)
             {
                 context.Result = new RedirectToActionResult("Index", "Login", null);

@@ -1,4 +1,5 @@
 ﻿using EshopSolution.AdminApp.Services;
+using EshopSolution.Utilities.Constants;
 using EshopSolution.ViewModel.Common;
 using EshopSolution.ViewModel.System.Users;
 using Microsoft.AspNetCore.Authentication;
@@ -31,7 +32,7 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(ModelState);
             }
-            var session = HttpContext.Session.GetString("Token");
+            var session = HttpContext.Session.GetString(SystemConstants.AppSetting.Token);
             var request = new GetUserPagingRequest()
             {
                 Keyword = keyword,
@@ -54,7 +55,7 @@ namespace EshopSolution.AdminApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            HttpContext.Session.Remove("Token");
+            HttpContext.Session.Remove(SystemConstants.AppSetting.Token);
             return RedirectToAction("Index", "Login");
         }
         [HttpGet]
