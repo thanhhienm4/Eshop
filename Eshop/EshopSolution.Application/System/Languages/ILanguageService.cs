@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.Application.System.Languages
 {
-    interface ILangaugeService
+    public interface ILanguageService
     {
-        Task<ApiResult<LanguageViewModel>> GetAll();
+        Task<ApiResult<List<LanguageViewModel>>> GetAll();
     }
 }

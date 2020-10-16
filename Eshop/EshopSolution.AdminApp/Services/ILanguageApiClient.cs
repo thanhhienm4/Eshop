@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Services
 {
-    interface ILanguageApiClient
+    public interface ILanguageApiClient
     {
         Task<ApiResult<List<LanguageViewModel>>> GetAll();
     }

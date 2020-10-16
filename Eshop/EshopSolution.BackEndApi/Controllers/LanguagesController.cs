@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EshopSolution.Application.System.Languages;
+using EshopSolution.ViewModel.System.Languages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +13,19 @@ namespace EshopSolution.BackEndApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class Languages : Controller
+    public class LanguagesController : Controller
     {
-        [HttpGet("getall")]
-        public Task<IActionResult> GetAll()
+        private readonly ILanguageService _languageService;
+        public LanguagesController(ILanguageService languageService)
         {
-            var languages = 
+            _languageService = languageService;
+        }
+        [HttpGet("getall")]
+        public async Task<IActionResult> GetAll()
+        {
+            var languages =  await _languageService.GetAll();
+            return Ok(languages);
+           
         }
     }
 

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading.Tasks;
 
 namespace EshopSolution.Data.EF
 {
@@ -51,6 +52,8 @@ namespace EshopSolution.Data.EF
             modelBuilder.Seed();
             //base.OnModelCreating(modelBuilder);
         }
+
+        
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }

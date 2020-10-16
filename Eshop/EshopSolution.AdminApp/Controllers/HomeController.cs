@@ -34,10 +34,7 @@ namespace EshopSolution.AdminApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public IActionResult Language ()
-        {
 
-        }
         [HttpPost]
         public IActionResult Language (NavigationViewModel navigationView)
         {
