@@ -30,7 +30,7 @@ namespace EshopSolution.AdminApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<IHttpContextFactory, HttpContextFactory>();
+            services.AddSingleton<IHttpContextFactory, DefaultHttpContextFactory>();
             services.AddHttpClient();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>   
@@ -42,6 +42,7 @@ namespace EshopSolution.AdminApp
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddTransient<IRoleApiClient, RoleApiClient>();
             services.AddTransient<ILanguageApiClient, LanguageApiClient>();
+            services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);

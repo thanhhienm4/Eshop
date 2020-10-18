@@ -13,27 +13,22 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Services
 {
-    public class RoleApiClient : IRoleApiClient
+    public class RoleApiClient :BaseApiClient , IRoleApiClient
     {
 
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public RoleApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public RoleApiClient(IHttpClientFactory httpClientFactory,
+                    IHttpContextAccessor httpContextAccessor,
+                     IConfiguration configuration)
+             : base(httpClientFactory, configuration, httpContextAccessor)
         {
-            _httpClientFactory = httpClientFactory;
-            _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ApiResult<List<RoleViewModel>>> GetAll()
         {
-            var BearerToken = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSetting.Token);
+            var BearerToken = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
             var client = _httpClientFactory.CreateClient();
-            //var httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
-            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSetting.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, BearerToken);
+            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
             var respond = await client.GetAsync($"/api/Role/GetAll");
             var body = await respond.Content.ReadAsStringAsync();
             if (respond.IsSuccessStatusCode)
@@ -41,7 +36,9 @@ namespace EshopSolution.AdminApp.Services
                 var deserializeObject = (List<RoleViewModel>)JsonConvert.DeserializeObject(body, typeof(List<RoleViewModel>));
                 return new ApiSuccessResult<List<RoleViewModel>>(deserializeObject);
             }
-                return JsonConvert.DeserializeObject<ApiErrorResult<List<RoleViewModel>>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<List<RoleViewModel>>>(body);
+            //return await GetAsync<ApiResult<List<RoleViewModel>>>("/api/Role/GetAll");
+
         }
     }
 }

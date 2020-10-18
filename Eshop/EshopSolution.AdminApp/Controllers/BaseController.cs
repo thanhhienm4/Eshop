@@ -13,7 +13,7 @@ namespace EshopSolution.AdminApp.Controllers
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var sessions = context.HttpContext.Session.GetString(SystemConstants.AppSetting.Token);
+            var sessions = context.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
             if (sessions == null)
             {
                 context.Result = new RedirectToActionResult("Index", "Login", null);

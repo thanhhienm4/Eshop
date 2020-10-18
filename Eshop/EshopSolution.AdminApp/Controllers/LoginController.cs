@@ -56,7 +56,7 @@ namespace EshopSolution.AdminApp.Controllers
                 ExpiresUtc = DateTimeOffset.Now.AddMinutes(10),
                 IsPersistent = true
             };
-            HttpContext.Session.SetString(SystemConstants.AppSetting.Token, respond.ResultObj);
+            HttpContext.Session.SetString(SystemConstants.AppSettings.Token, respond.ResultObj);
             await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         userPrincipal,

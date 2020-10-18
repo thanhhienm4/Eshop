@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 
 namespace EshopSolution.ViewModel.Catalog.Products
 {
@@ -19,5 +20,6 @@ namespace EshopSolution.ViewModel.Catalog.Products
 
         public string SeoAlias { get; set; }
         public string LanguageId { set; get; }
+        public IFormFile ThumbnailImage { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(ModelState);
             }
-            var session = HttpContext.Session.GetString(SystemConstants.AppSetting.Token);
+            var session = HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
             var request = new GetUserPagingRequest()
             {
                 Keyword = keyword,
@@ -55,7 +55,7 @@ namespace EshopSolution.AdminApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            HttpContext.Session.Remove(SystemConstants.AppSetting.Token);
+            HttpContext.Session.Remove(SystemConstants.AppSettings.Token);
             return RedirectToAction("Index", "Login");
         }
         [HttpGet]
