@@ -27,7 +27,7 @@ namespace EshopSolution.Application.Cacalog.Products
             _storageService = storageService;
         }
 
-        public async Task<int> Create(ProductCreateRequest request)
+        public async Task<ApiResult<int>> Create(ProductCreateRequest request)
         {
             var product = new Product()
             {
@@ -67,11 +67,15 @@ namespace EshopSolution.Application.Cacalog.Products
             }
 
             _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-            return product.Id;
+            if (_context.SaveChanges() == 0)
+            {
+                return new ApiErrorResult<int>();
+            }
+
+            return new ApiSuccessResult<int>(product.Id);
         }
 
-        public async Task<int> Update(ProductUpdateRequest request)
+        public async Task<ApiResult<int>> Update(ProductUpdateRequest request)
         {
             //1.find product and producttranslation
             var product = await _context.Products.FindAsync(request.Id);
@@ -100,10 +104,14 @@ namespace EshopSolution.Application.Cacalog.Products
                 }
             }
             _context.Products.Update(product);
-            return await _context.SaveChangesAsync();
+            if (_context.SaveChanges() == 0)
+            {
+                return new ApiErrorResult<int>();
+            }
+            return new ApiSuccessResult<int>(request.Id);
         }
 
-        public async Task<int> Delete(int ProductId)
+        public async Task<ApiResult<bool>> Delete(int ProductId)
         {
             var product = await _context.Products.FindAsync(ProductId);
             var images = _context.ProductImages.Where(x => x.ProductId == product.Id);
@@ -111,27 +119,40 @@ namespace EshopSolution.Application.Cacalog.Products
             {
                 await _storageService.DeleteFileAsync(image.ImagePath);
             }
-
             _context.Products.Remove(product);
-            return await _context.SaveChangesAsync();
+            if(_context.SaveChanges()==0)
+            {
+                    return new ApiErrorResult<bool>("Can't not delete product");
+            }
+            return new  ApiSuccessResult<bool> ();
         }
 
-        public async Task<bool> UpdatePrice(int productId, decimal newPrice)
+        public async Task<ApiResult<bool>> UpdatePrice(int productId, decimal newPrice)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
                 throw new EshopException($"Can't find product with id {productId}");
             product.Price = newPrice;
-            return await _context.SaveChangesAsync() > 0;
+            if(_context.SaveChanges() ==0)
+            {
+                    return new ApiErrorResult<bool>();
+            }
+            return new ApiSuccessResult<bool>();
+
         }
 
-        public async Task<bool> UpdateStock(int productId, int addedQuantity)
+        public async Task<ApiResult<bool>> UpdateStock(int productId, int addedQuantity)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
                 throw new EshopException($"Can't find product with id {productId}");
             product.Stock += addedQuantity;
-            return await _context.SaveChangesAsync() > 0;
+            if (_context.SaveChanges() == 0)
+            {
+                return new ApiErrorResult<bool>();
+            }
+            return new ApiSuccessResult<bool>();
+             
         }
 
         public async Task AddViewCount(int productId)
@@ -141,7 +162,7 @@ namespace EshopSolution.Application.Cacalog.Products
             await _context.SaveChangesAsync();
         }
 
-        public async Task<PageResult<ProductViewModel>> GetAllPaging(string languageId, GetManageProductPagingRequest request)
+        public async Task<ApiResult<PageResult<ProductViewModel>>> GetAllPaging(string languageId, GetManageProductPagingRequest request)
         {
             //1.Select
             var query = from p in _context.Products
@@ -149,13 +170,28 @@ namespace EshopSolution.Application.Cacalog.Products
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId
                         join c in _context.Categories on pic.CategoryId equals c.Id
                         select new { p, pt, pic };
+
             //2.Filter
-            if (string.IsNullOrEmpty(request.Keyword))
-                query = query.Where(x => x.pt.Name.Contains(request.Keyword)).Where(x => x.pt.LanguageId == languageId);
-            if (request.CategoryIds.Count > 0)
+
+            // find whit language
+            query = query.Where(x => x.pt.LanguageId == languageId);
+
+            // find whit category
+            if (!(request.CategoryIds == null || request.CategoryIds.Count == 0))
             {
                 query = query.Where(x => request.CategoryIds.Contains(x.pic.CategoryId));
             }
+
+            //find whit keyword
+            if (!string.IsNullOrEmpty(request.Keyword))
+                query = query.Where(x => x.pt.Name.Contains(request.Keyword)).
+                              Where(x => x.pt.Details.Contains(request.Keyword)).
+                              Where(x => x.pt.Description.Contains(request.Keyword)).
+                              Where(x => x.pt.SeoAlias.Contains(request.Keyword)).
+                              Where(x => x.pt.SeoDescription.Contains(request.Keyword)).
+                              Where(x => x.pt.SeoTitle.Contains(request.Keyword));
+
+           
             //3.Paging
             int totalRow = await query.CountAsync();
             var data = query.Skip((request.PageIndex - 1) * request.PageSize)
@@ -166,7 +202,7 @@ namespace EshopSolution.Application.Cacalog.Products
                     Name = x.pt.Name,
                     Description = x.pt.Description,
                     Details = x.pt.Details,
-                    LanguageId = x.pt.LanguageId,
+                    //LanguageId = x.pt.LanguageId,
                     OriginalPrice = x.p.Price,
                     Price = x.p.Price,
                     SeoAlias = x.pt.SeoAlias,
@@ -184,7 +220,7 @@ namespace EshopSolution.Application.Cacalog.Products
                 Item = await data
             };
 
-            return pageResult;
+            return new ApiSuccessResult<PageResult<ProductViewModel>>(pageResult);
         }
 
         private async Task<string> SaveFile(IFormFile file)
@@ -195,7 +231,7 @@ namespace EshopSolution.Application.Cacalog.Products
             return fileName;
         }
 
-        public async Task<int> AddImages(int productId, ProductImageCreateRequest request)
+        public async Task<ApiResult<int>> AddImages(int productId, ProductImageCreateRequest request)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
@@ -214,11 +250,12 @@ namespace EshopSolution.Application.Cacalog.Products
                 productImage.FileSize = request.ImageFile.Length;
             }
             _context.ProductImages.Add(productImage);
-            await _context.SaveChangesAsync();
-            return productImage.Id;
+            if (_context.SaveChanges() == 0)
+                return new ApiErrorResult<int>();
+            return  new ApiSuccessResult<int>(productImage.Id);
         }
 
-        public async Task<int> DeleteImages(int imageId)
+        public async Task<ApiResult<bool>> DeleteImages(int imageId)
         {
             var image = await _context.ProductImages.FindAsync(imageId);
             if (image == null)
@@ -226,11 +263,13 @@ namespace EshopSolution.Application.Cacalog.Products
             else
             {
                 _context.ProductImages.Remove(image);
-                return await _context.SaveChangesAsync();
+                if (_context.SaveChanges() == 0)
+                    return new ApiErrorResult<bool>();
+                return new ApiSuccessResult<bool>();
             }
         }
 
-        public async Task<int> UpdateImages(int imageId, ProductImageUpdateRequest request)
+        public async Task<ApiResult<int>> UpdateImages(int imageId, ProductImageUpdateRequest request)
         {
             var productImage = await _context.ProductImages.FindAsync(imageId);
             if (productImage == null)
@@ -242,11 +281,13 @@ namespace EshopSolution.Application.Cacalog.Products
                 productImage.SortOrder = request.SortOrder;
                 productImage.FileSize = request.ImageFile.Length;
                 productImage.ImagePath = await this.SaveFile(request.ImageFile);
-                return await _context.SaveChangesAsync();
+                if (_context.SaveChanges() == 0)
+                    return new ApiErrorResult<int>();
+                return new ApiSuccessResult<int>(imageId);
             }
         }
 
-        public async Task<ProductViewModel> GetById(int productId, string languageId)
+        public async Task<ApiResult<ProductViewModel>> GetById(int productId, string languageId)
         {
             var product = await _context.Products.FindAsync(productId);
             var proudctTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(pt => pt.ProductId == productId && pt.LanguageId == languageId);
@@ -266,12 +307,12 @@ namespace EshopSolution.Application.Cacalog.Products
                 SeoDescription = proudctTranslation?.SeoDescription,
                 SeoTitle = proudctTranslation?.SeoDescription,
                 SeoAlias = proudctTranslation?.SeoAlias,
-                LanguageId = proudctTranslation?.LanguageId
+                //LanguageId = proudctTranslation?.LanguageId
             };
-            return productViewModel;
+           return new ApiSuccessResult<ProductViewModel>(productViewModel);
         }
 
-        public async Task<ProductImageViewModel> GetImageById(int imageId)
+        public async Task<ApiResult<ProductImageViewModel>> GetImageById(int imageId)
         {
             var productImage = await _context.ProductImages.FindAsync(imageId);
             if (productImage == null)
@@ -287,12 +328,12 @@ namespace EshopSolution.Application.Cacalog.Products
                 SortOrder = productImage.SortOrder,
                 FileSize = productImage.FileSize
             };
-            return pIVM;
+            return new ApiSuccessResult<ProductImageViewModel> (pIVM);
         }
 
-        public async Task<List<ProductImageViewModel>> GetListImages(int productId)
+        public async Task<ApiResult<List<ProductImageViewModel>>> GetListImages(int productId)
         {
-            return await _context.ProductImages.Where(x => x.ProductId == productId)
+            var listPIVM = await _context.ProductImages.Where(x => x.ProductId == productId)
                 .Select(i => new ProductImageViewModel()
                 {
                     Caption = i.Caption,
@@ -304,9 +345,10 @@ namespace EshopSolution.Application.Cacalog.Products
                     ProductId = i.ProductId,
                     SortOrder = i.SortOrder
                 }).ToListAsync();
+            return new ApiSuccessResult<List<ProductImageViewModel>> (listPIVM);
         }
 
-        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
+        public async Task<ApiResult<PageResult<ProductViewModel>>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
         {
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
@@ -344,7 +386,7 @@ namespace EshopSolution.Application.Cacalog.Products
                 PageSize = request.PageSize
             };
 
-            return pageResult;
+            return new ApiSuccessResult<PageResult<ProductViewModel>>(pageResult);
         }
 
         

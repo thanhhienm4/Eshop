@@ -27,26 +27,25 @@ namespace EshopSolution.AdminApp.Services
         }
 
         public async Task<ApiResult<bool>> Delete(int id)
-        {
-          
+        {         
             return await DeleteAsync<ApiResult<bool>>($"/api/Products/{id}");
         }
 
-        public async Task<ApiResult<ProductViewModel>> GetById(int id)
+        public async Task<ApiResult<ProductViewModel>> GetById(int id,string languageId)
         {
-            return await GetAsync< ApiResult<ProductViewModel>>($"/api/Products/{id}");
+
+            return await GetAsync< ApiResult<ProductViewModel>>($"/api/Products/{id}/{languageId}");
         }
 
         public async Task<ApiResult<PageResult<ProductViewModel>>> GetProductPaging(GetManageProductPagingRequest request)
         {
   
-            return await GetAsync<ApiResult<PageResult<ProductViewModel>>>($"/api/Products/{request.LanguageId}/paging?PageIndex=" +
+            return await GetAsync<ApiResult<PageResult<ProductViewModel>>>($"/api/Products/{request.LanguageId}?PageIndex=" +
                $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}");
         }
 
         public async Task<ApiResult<bool>> Update(int id, ProductUpdateRequest request)
         {
-           
             return await PutAsync<ApiResult<bool>>($"/api/Products/{id}/update", request);
            
         }

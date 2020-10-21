@@ -29,12 +29,13 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(ModelState);
             }
-            var session = HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
+           
             var request = new GetManageProductPagingRequest()
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,
-                PageSize = pageSize
+                PageSize = pageSize,
+                LanguageId =  GetLanguageId()
             };
             ViewBag.Keyword = keyword;
             if (TempData["Result"] != null)
@@ -75,7 +76,7 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View();
             }
-            var result = await _productApiClient.GetById(id);
+            var result = await _productApiClient.GetById(id,GetLanguageId());
 
             if (result.IsSuccessed)
             {
@@ -87,7 +88,7 @@ namespace EshopSolution.AdminApp.Controllers
                     Details = result.ResultObj.Details,
                     SeoDescription = result.ResultObj.SeoDescription,
                     SeoTitle = result.ResultObj.SeoTitle,
-                    LanguageId = result.ResultObj.LanguageId,
+                    //LanguageId = result.ResultObj.LanguageId,
                     SeoAlias = result.ResultObj.SeoAlias,
                     ThumbnailImage = result.ResultObj.ThumbnailImage
 
@@ -122,7 +123,7 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View();
             }
-            var result = await _productApiClient.GetById(id);
+            var result = await _productApiClient.GetById(id,GetLanguageId());
 
             if (result.IsSuccessed)
             {
@@ -137,7 +138,7 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View();
             }
-            var result = await _productApiClient.GetById(Id);
+            var result = await _productApiClient.GetById(Id,GetLanguageId());
 
             if (result.IsSuccessed)
             {
@@ -163,6 +164,13 @@ namespace EshopSolution.AdminApp.Controllers
             }
             ModelState.AddModelError("", result.Message);
             return View(request.Id);
+        }
+        private string GetLanguageId()
+        {
+            string languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.LanguageId);
+            if (string.IsNullOrEmpty(languageId))
+                languageId = SystemConstants.AppSettings.DefaultLangaueId;
+            return languageId;
         }
      
     }

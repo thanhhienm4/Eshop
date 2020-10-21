@@ -25,6 +25,8 @@ namespace EshopSolution.AdminApp.Services
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
         }
+
+        // http get data form Api
         protected async Task<TResponse> GetAsync<TResponse>(string url)
         {
             var sessions = _httpContextAccessor
@@ -47,6 +49,7 @@ namespace EshopSolution.AdminApp.Services
             }
             return JsonConvert.DeserializeObject<TResponse>(body);
         }
+        // post data to Api
         protected async Task<TResponse> PostAsync<TResponse>(string url,Object obj)
         {
             var sessions = _httpContextAccessor
@@ -70,6 +73,8 @@ namespace EshopSolution.AdminApp.Services
             }
             return JsonConvert.DeserializeObject<TResponse>(body);
         }
+
+        // send delete request to API
         protected async Task<TResponse> DeleteAsync<TResponse>(string url)
         {
             var BearerToken = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
@@ -87,6 +92,7 @@ namespace EshopSolution.AdminApp.Services
             }
             return JsonConvert.DeserializeObject<TResponse>(body);
         }
+        // send update request to Api
         protected async Task<TResponse> PutAsync<TResponse>(string url, Object obj)
         {
             var BearerToken = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);

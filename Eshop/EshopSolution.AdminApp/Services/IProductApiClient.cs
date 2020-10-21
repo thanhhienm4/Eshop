@@ -13,7 +13,7 @@ namespace EshopSolution.AdminApp.Services
         Task<ApiResult<bool>> Create(ProductCreateRequest request);
 
         Task<ApiResult<bool>> Update(int id, ProductUpdateRequest request);
-        Task<ApiResult<ProductViewModel>> GetById(int id);
+        Task<ApiResult<ProductViewModel>> GetById(int id,string LanguageId);
         Task<ApiResult<bool>> Delete(int id);
     }
 }

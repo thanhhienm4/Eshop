@@ -1,14 +1,21 @@
 ﻿@using EshopSolution.ViewModel.Common
-@using EshopSolution.ViewModel.System.Users
-@model PageResult<UserViewModel>
+@using EshopSolution.ViewModel.Catalog.Products
+@model PageResult<ProductViewModel>
+
 
 @{
-    ViewData["Title"] = "Danh sách User";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm ";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
 
-@section Scripts{ 
+@section Scripts{
     <script>
         setTimeout(function () {
             $("#SuccessMeg").fadeOut('slow');
@@ -26,17 +33,17 @@
     <meta name="author" content="" />
     <title>Dashboard - SB Admin</title>
     <link href="css/styles.css" rel="stylesheet" />
-    
+
 </head>
 <body class="sb-nav-fixed">
-    
-   
+
+
     <div class="card-body">
-        <h1>Danh sách User</h1>
+        <h1>Danh sách sản phẩm </h1>
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6 col-sm-1">
-                    <a class="btn btn-success" asp-action="Create" asp-controller="User">Tạo mới</a>
+                    <a class="btn btn-success" asp-action="Create" asp-controller="Product">Tạo mới</a>
                 </div>
                 <div class="col-md-6 col-sm-4">
                     <form asp-action="Index" method="get">
@@ -46,10 +53,10 @@
                             </div>
                             <div class="col-md-2 col-sm-2">
                                 <button type="submit" class="btn btn-primary">Tìm</button>
-                                
+
                             </div>
                             <div class="col-md-1 col-sm-2">
-                                <button type="button" onclick="window.location.href='/User/Index'" class="btn btn-dark">Reset</button>
+                                <button type="button" onclick="window.location.href='/Product/Index'" class="btn btn-dark">Reset</button>
                             </div>
                     </form>
                 </div>
@@ -63,29 +70,27 @@
                 </div>
             }
         </div>
-        
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>
-                            Tên
+                            Mã sản phẩm
                         </th>
                         <th>
-                            Họ
+                            Tên sản phẩm
                         </th>
                         <th>
-                            Tên đăng nhập
+                            Giá nhập
                         </th>
                         <th>
-                            Số điện thoại
+                            Giá bán
                         </th>
                         <th>
-                            Email
+                            Tồn kho
                         </th>
-                        <th>
-                            Ngày sinh
-                        </th>
+
                         <th></th>
                     </tr>
                 </thead>
@@ -94,29 +99,25 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.FirstName)
+                                @Html.DisplayFor(modelItem => item.ProductId)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.LastName)
+                                @Html.DisplayFor(modelItem => item.Name)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.UserName)
+                                @Html.DisplayFor(modelItem => item.OriginalPrice)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                @Html.DisplayFor(modelItem => item.Price)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Email)
+                                @Html.DisplayFor(modelItem => item.Stock)
                             </td>
-                            <td>
 
-                                @Convert.ToDateTime(item.Dob).ToString("dd/MM/yyyy")
-                            </td>
                             <td>
-                                @Html.ActionLink("Chỉnh sửa", "Edit", new { id = item.Id }) |
-                                @Html.ActionLink("Chi tiết", "Details", new { id = item.Id }) |
-                                @Html.ActionLink("Xóa", "Delete", new { id = item.Id })|
-                                @Html.ActionLink("Cấp quyền", "RoleAssign", new { id = item.Id }) 
+                                @Html.ActionLink("Chỉnh sửa", "Edit", new { id = item.ProductId }) |
+                                @Html.ActionLink("Chi tiết", "Details", new { id = item.ProductId }) |
+                                @Html.ActionLink("Xóa", "Delete", new { id = item.ProductId })
                             </td>
                         </tr>
                     }
@@ -125,11 +126,11 @@
             @await Component.InvokeAsync("Pager", Model)
 
         </div>
-       
+
 
 
     </div>
- 
+
 </body>
 </html>
 

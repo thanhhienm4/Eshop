@@ -9,32 +9,33 @@ namespace EshopSolution.Application
     public interface IProductService
     {
 
-        Task<int> Create(ProductCreateRequest request);
+        Task<ApiResult<int>> Create(ProductCreateRequest request);
 
-        Task<int> Update(ProductUpdateRequest request);
+        Task<ApiResult<int>> Update(ProductUpdateRequest request);
+       
 
-        Task<int> Delete(int ProductId);
+        Task<ApiResult<bool>> Delete(int ProductId);
 
-        Task<PageResult<ProductViewModel>> GetAllPaging(string languageId, GetManageProductPagingRequest request);
+        Task<ApiResult<PageResult<ProductViewModel>>> GetAllPaging(string languageId, GetManageProductPagingRequest request);
 
-        Task<bool> UpdatePrice(int productId, decimal newPrice);
+        Task<ApiResult<bool>> UpdatePrice(int productId, decimal newPrice);
 
-        Task<bool> UpdateStock(int productId, int addedQuantity);
+        Task<ApiResult<bool>> UpdateStock(int productId, int addedQuantity);
 
-        Task<int> AddImages(int productId, ProductImageCreateRequest request);
+        Task<ApiResult<int>> AddImages(int productId, ProductImageCreateRequest request);
 
-        Task<int> DeleteImages(int imageId);
+        Task<ApiResult<bool>> DeleteImages(int imageId);
 
-        Task<int> UpdateImages(int imageId, ProductImageUpdateRequest request);
+        Task<ApiResult<int>> UpdateImages(int imageId, ProductImageUpdateRequest request);
 
         Task AddViewCount(int productId);
 
-        Task<ProductViewModel> GetById(int productId, string languageId);
+        Task<ApiResult<ProductViewModel>> GetById(int productId, string languageId);
 
-        Task<ProductImageViewModel> GetImageById(int imageId);
+        Task<ApiResult<ProductImageViewModel>> GetImageById(int imageId);
 
-        Task<List<ProductImageViewModel>> GetListImages(int productId);
+        Task<ApiResult<List<ProductImageViewModel>>> GetListImages(int productId);
 
-        Task<PageResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
+        Task<ApiResult<PageResult<ProductViewModel>>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
     }
 }
