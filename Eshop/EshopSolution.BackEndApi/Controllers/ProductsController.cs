@@ -22,7 +22,7 @@ namespace EshopSolution.BackEndApi.Controllers
 
         
 
-        [HttpGet("{languageId}")]
+        [HttpGet("{languageId}/paging")]
         public async Task<IActionResult> GetAllPaging(string languageId, [FromQuery] GetManageProductPagingRequest request)
         {
            return Ok( await _productService.GetAllPaging (languageId, request));

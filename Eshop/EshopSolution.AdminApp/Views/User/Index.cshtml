@@ -8,7 +8,7 @@
 
 }
 
-@section Scripts{ 
+@section Scripts{
     <script>
         setTimeout(function () {
             $("#SuccessMeg").fadeOut('slow');
@@ -26,11 +26,9 @@
     <meta name="author" content="" />
     <title>Dashboard - SB Admin</title>
     <link href="css/styles.css" rel="stylesheet" />
-    
 </head>
 <body class="sb-nav-fixed">
-    
-   
+
     <div class="card-body">
         <h1>Danh sách User</h1>
         <div class="card-header">
@@ -46,7 +44,6 @@
                             </div>
                             <div class="col-md-2 col-sm-2">
                                 <button type="submit" class="btn btn-primary">Tìm</button>
-                                
                             </div>
                             <div class="col-md-1 col-sm-2">
                                 <button type="button" onclick="window.location.href='/User/Index'" class="btn btn-dark">Reset</button>
@@ -63,7 +60,7 @@
                 </div>
             }
         </div>
-        
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -116,20 +113,14 @@
                                 @Html.ActionLink("Chỉnh sửa", "Edit", new { id = item.Id }) |
                                 @Html.ActionLink("Chi tiết", "Details", new { id = item.Id }) |
                                 @Html.ActionLink("Xóa", "Delete", new { id = item.Id })|
-                                @Html.ActionLink("Cấp quyền", "RoleAssign", new { id = item.Id }) 
+                                @Html.ActionLink("Cấp quyền", "RoleAssign", new { id = item.Id })
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
             @await Component.InvokeAsync("Pager", Model)
-
         </div>
-       
-
-
     </div>
- 
 </body>
 </html>
-
