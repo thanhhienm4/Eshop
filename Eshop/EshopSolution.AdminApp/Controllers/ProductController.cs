@@ -55,11 +55,12 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(request);
             }
+            request.LanguageId = GetLanguageId();
             var result = await _productApiClient.Create(request);
             if (result.IsSuccessed)
             {
                 TempData["Result"] = "Tạo mới thành công";
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("Index", "Product");
             }
             ModelState.AddModelError("", result.Message);
             return View(request);
@@ -85,7 +86,7 @@ namespace EshopSolution.AdminApp.Controllers
                     Details = result.ResultObj.Details,
                     SeoDescription = result.ResultObj.SeoDescription,
                     SeoTitle = result.ResultObj.SeoTitle,
-                    //LanguageId = result.ResultObj.LanguageId,
+                    LanguageId = result.ResultObj.LanguageId,
                     SeoAlias = result.ResultObj.SeoAlias,
                     ThumbnailImage = result.ResultObj.ThumbnailImage
                 };

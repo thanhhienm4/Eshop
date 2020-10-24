@@ -7,6 +7,7 @@ using EshopSolution.Application.System.Users;
 using EshopSolution.Data.EF;
 using EshopSolution.Data.Entities;
 using EshopSolution.Utilities.Constants;
+using EshopSolution.ViewModel.Catalog.Products;
 using EshopSolution.ViewModel.System.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -66,7 +67,7 @@ namespace EshopSolution.BackEndApi
             services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddTransient<IValidator<UpdateRequest>, UpdateRequestValidator>();
-
+            services.AddTransient<IValidator<ProductCreateRequest>,ProductCreateRequestValidator>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop Solution", Version = "v1" });
