@@ -19,6 +19,11 @@ namespace EshopSolution.AdminApp.Services
              : base(httpClientFactory, configuration, httpContextAccessor)
         { }
 
+        public Task<ApiResult<bool>> AssignCategory(int id, int categoryId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
         {
             var sessions = _httpContextAccessor
@@ -85,8 +90,9 @@ namespace EshopSolution.AdminApp.Services
 
         public async Task<ApiResult<PageResult<ProductViewModel>>> GetProductPaging(GetManageProductPagingRequest request)
         {
-            return await GetAsync<ApiResult<PageResult<ProductViewModel>>>($"/api/Products/{request.LanguageId}/paging?PageIndex=" +
-               $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}");
+            return await GetAsync<ApiResult<PageResult<ProductViewModel>>>($"/api/Products/{request.CategoryId}/paging?PageIndex=" +
+               $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&" +
+               $"LanguageId={request.LanguageId}");
         }
 
         public async Task<ApiResult<bool>> Update(int id, ProductUpdateRequest request)

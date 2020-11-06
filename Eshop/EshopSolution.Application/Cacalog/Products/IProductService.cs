@@ -16,7 +16,7 @@ namespace EshopSolution.Application
 
         Task<ApiResult<bool>> Delete(int ProductId);
 
-        Task<ApiResult<PageResult<ProductViewModel>>> GetAllPaging(string languageId, GetManageProductPagingRequest request);
+        Task<ApiResult<PageResult<ProductViewModel>>> GetAllPaging(GetManageProductPagingRequest request);
 
         Task<ApiResult<bool>> UpdatePrice(int productId, decimal newPrice);
 

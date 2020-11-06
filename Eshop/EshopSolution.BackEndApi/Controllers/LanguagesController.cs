@@ -12,7 +12,7 @@ namespace EshopSolution.BackEndApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+
     public class LanguagesController : Controller
     {
         private readonly ILanguageService _languageService;

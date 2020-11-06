@@ -15,5 +15,6 @@ namespace EshopSolution.AdminApp.Services
         Task<ApiResult<bool>> Update(int id, ProductUpdateRequest request);
         Task<ApiResult<ProductViewModel>> GetById(int id,string LanguageId);
         Task<ApiResult<bool>> Delete(int id);
+        Task<ApiResult<bool>> AssignCategory(int id,int categoryId);
     }
 }

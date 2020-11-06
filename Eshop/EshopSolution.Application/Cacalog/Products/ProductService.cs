@@ -162,25 +162,25 @@ namespace EshopSolution.Application.Cacalog.Products
             await _context.SaveChangesAsync();
         }
 
-        public async Task<ApiResult<PageResult<ProductViewModel>>> GetAllPaging(string languageId, GetManageProductPagingRequest request)
+        public async Task<ApiResult<PageResult<ProductViewModel>>> GetAllPaging( GetManageProductPagingRequest request)
         {
             //1.Select
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        //join pic in _context.ProductInCategories on p.Id equals pic.ProductId
-                        //join c in _context.Categories on pic.CategoryId equals c.Id
-                        select new { p, pt, };
+                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId
+                        join c in _context.Categories on pic.CategoryId equals c.Id
+                        select new { p, pt, pic};
 
             //2.Filter
 
             // find whit language
-            query = query.Where(x => x.pt.LanguageId == languageId);
+            query = query.Where(x => x.pt.LanguageId == request.LanguageId);
 
             // find whit category
-            //if (!(request.CategoryIds == null || request.CategoryIds.Count == 0))
-            //{
-            //    query = query.Where(x => request.CategoryIds.Contains(x.pic.CategoryId));
-            //}
+            if (!(request.CategoryId == null || request.CategoryId == 0))
+            {
+                query = query.Where(x => x.pic.CategoryId == request.CategoryId);
+            }
 
             //find whit keyword
             if (!string.IsNullOrEmpty(request.Keyword))

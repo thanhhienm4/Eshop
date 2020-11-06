@@ -22,10 +22,11 @@ namespace EshopSolution.BackEndApi.Controllers
 
         
 
-        [HttpGet("{languageId}/paging")]
-        public async Task<IActionResult> GetAllPaging(string languageId, [FromQuery] GetManageProductPagingRequest request)
+        [HttpGet("{categoryId}/paging/")]
+        public async Task<IActionResult> GetAllPaging(int categoryId,[FromQuery] GetManageProductPagingRequest request)
         {
-           return Ok( await _productService.GetAllPaging (languageId, request));
+            request.CategoryId = categoryId;
+           return Ok( await _productService.GetAllPaging ( request));
             
         }
 
