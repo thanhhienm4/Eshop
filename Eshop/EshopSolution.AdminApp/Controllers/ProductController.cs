@@ -29,7 +29,7 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Index(string keyword,int? categoryId, int pageIndex = 1, int pageSize = 3)
+        public async Task<IActionResult> Index(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 5)
         {
             if (!ModelState.IsValid)
             {
@@ -42,7 +42,7 @@ namespace EshopSolution.AdminApp.Controllers
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 LanguageId = GetLanguageId(),
-                
+
             };
             if (categoryId != null)
                 request.CategoryId = (int)categoryId;
@@ -54,8 +54,8 @@ namespace EshopSolution.AdminApp.Controllers
                 Value = x.Id.ToString(),
                 Selected = categoryId.HasValue && categoryId.Value == x.Id
             });
-            
-            
+
+
 
             if (TempData["Result"] != null)
             {
@@ -196,25 +196,59 @@ namespace EshopSolution.AdminApp.Controllers
                 languageId = SystemConstants.AppSettings.DefaultLangaueId;
             return languageId;
         }
-
-
-        [HttpPost]
+        [HttpGet]
         [Authorize]
-        public async Task<IActionResult> AssignsCategory(int Id)
+        public async Task<IActionResult> CategoryAssign(int id)
         {
             if (!ModelState.IsValid)
             {
-                return View(Id);
+                return View();
             }
-            var result = await _productApiClient.RoleAssign(request.Id, request);
+            var categoryAssign = await GetCategoryAssignRequest(id);
+            return View(categoryAssign);
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> CategoryAssign(CategoryAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+            var result = await _productApiClient.CategoryAssign(request.Id, request);
             if (result.IsSuccessed)
             {
                 TempData["Result"] = "Gán quyền thành công";
                 return RedirectToAction("Index", "User");
             }
             ModelState.AddModelError("", result.Message);
-            var roleAssignRequest = await GetRoleAssignRequest(request.Id);
-            return View(roleAssignRequest);
+            var categoryAssignRequest = await GetCategoryAssignRequest(request.Id);
+            return View(categoryAssignRequest);
+            
         }
+        private async Task<CategoryAssignRequest> GetCategoryAssignRequest(int id)
+        {
+            string languageId = GetLanguageId();
+            var productViewModel= (await _productApiClient.GetById(id, languageId)).ResultObj;
+            var categories = (await _categoryApiClient.GetAll(languageId)).ResultObj;
+            var categoryAssignRequest = new CategoryAssignRequest();
+
+            foreach (var category in categories)
+            {
+                categoryAssignRequest.Categories.Add(new SelectedItem()
+                {
+
+                    Id = category.Id.ToString(),
+                    Name = category.Name,
+                    Selected = productViewModel.Categories.Contains(category.Name)
+
+                });
+
+            }
+            return categoryAssignRequest;
+        }
+
+
+
     }
 }

@@ -102,7 +102,7 @@ namespace EshopSolution.BackEndApi.Controllers
         public async Task<IActionResult> UpdatePrice(int productId, decimal newPrice)
         {
             var result= await _productService.UpdatePrice(productId, newPrice);
-            if (result.IsSuccessed=false)
+            if (result.IsSuccessed==false)
             {
                 return BadRequest(result);
             }
@@ -110,7 +110,6 @@ namespace EshopSolution.BackEndApi.Controllers
             return Ok(result);
         }
 
-        //ProductImage
 
         [HttpPost("{productId}/images")]
         public async Task<IActionResult> CreateImage(int productId, [FromForm] ProductImageCreateRequest request)

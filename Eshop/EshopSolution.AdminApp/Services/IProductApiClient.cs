@@ -11,10 +11,9 @@ namespace EshopSolution.AdminApp.Services
     {
         Task<ApiResult<PageResult<ProductViewModel>>> GetProductPaging(GetManageProductPagingRequest request);
         Task<ApiResult<bool>> Create(ProductCreateRequest request);
-
         Task<ApiResult<bool>> Update(int id, ProductUpdateRequest request);
         Task<ApiResult<ProductViewModel>> GetById(int id,string LanguageId);
         Task<ApiResult<bool>> Delete(int id);
-        Task<ApiResult<bool>> AssignCategory(int id,int categoryId);
+        Task<ApiResult<bool>> CategoryAssign(int id,CategoryAssignRequest request);
     }
 }

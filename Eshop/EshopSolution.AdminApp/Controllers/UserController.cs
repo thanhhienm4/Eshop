@@ -218,7 +218,7 @@ namespace EshopSolution.AdminApp.Controllers
                 roleAssignRequest.Roles.Add(new SelectedItem()
                 {
 
-                    Id = role.Id,
+                    Id = role.Id.ToString(),
                     Name = role.Name,
                     Selected = userObject.ResultObj.Roles.Contains(role.Name)
 

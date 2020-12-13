@@ -162,13 +162,15 @@ namespace EshopSolution.Application.Cacalog.Products
             await _context.SaveChangesAsync();
         }
 
-        public async Task<ApiResult<PageResult<ProductViewModel>>> GetAllPaging( GetManageProductPagingRequest request)
+        public async Task<ApiResult<PageResult<ProductViewModel>>> GetAllPaging(GetManageProductPagingRequest request)
         {
             //1.Select
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId
-                        join c in _context.Categories on pic.CategoryId equals c.Id
+                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
+                        from pic in ppic.DefaultIfEmpty()
+                        //join c in _context.Categories on pic.CategoryId equals c.Id into picc
+                        //from c in picc.DefaultIfEmpty()
                         select new { p, pt, pic};
 
             //2.Filter
@@ -177,7 +179,7 @@ namespace EshopSolution.Application.Cacalog.Products
             query = query.Where(x => x.pt.LanguageId == request.LanguageId);
 
             // find whit category
-            if (!(request.CategoryId == null || request.CategoryId == 0))
+            if (!(request.CategoryId == 0))
             {
                 query = query.Where(x => x.pic.CategoryId == request.CategoryId);
             }

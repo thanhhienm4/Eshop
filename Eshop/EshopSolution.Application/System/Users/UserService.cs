@@ -208,6 +208,7 @@ namespace EshopSolution.Application.System.Users
             {
                 return new ApiErrorResult<bool>("Tài khoản không tồn tại");
             }
+
             var removedRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();
             foreach (var roleName in removedRoles)
             {

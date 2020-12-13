@@ -25,7 +25,7 @@ namespace EshopSolution.AdminApp.Services
             return await PostAsync<ApiResult<string>>("/api/Users/authenticate", request);
         }
 
-        public async Task<ApiResult< PageResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request)
+        public async Task<ApiResult<PageResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request)
         {
             return await GetAsync<ApiResult<PageResult<UserViewModel>>>($"/api/Users/paging?PageIndex=" +
                 $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}");
@@ -51,9 +51,8 @@ namespace EshopSolution.AdminApp.Services
             return await DeleteAsync<ApiResult<bool>>($"/api/Users/{request.Id}");
         }
         public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
-        {
-           
-            return await PutAsync<ApiResult<bool>>($"/api/Users/{id}/roles", request);
+        {         
+            return await PutAsync<ApiResult<bool>>($"/api/Users/{id}/roles",request);
         }
     }
 }

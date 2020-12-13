@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 
 namespace EshopSolution.ViewModel.Catalog.Products
 {
@@ -20,5 +21,7 @@ namespace EshopSolution.ViewModel.Catalog.Products
         public string LanguageId { set; get; }
         public string SeoAlias { get; set; }
         public IFormFile ThumbnailImage { get; set; }
+
+        public List<String> Categories { get; set; } = new List<string>(); 
     }
 }

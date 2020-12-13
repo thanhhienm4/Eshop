@@ -19,9 +19,9 @@ namespace EshopSolution.AdminApp.Services
              : base(httpClientFactory, configuration, httpContextAccessor)
         { }
 
-        public Task<ApiResult<bool>> AssignCategory(int id, int categoryId)
+        public async Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request)
         {
-            throw new NotImplementedException();
+            return await PutAsync<ApiResult<bool>>($"/api/Products/{id}/categories", request);
         }
 
         public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
