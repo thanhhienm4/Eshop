@@ -127,11 +127,14 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(request);
             }
+            if(request.LanguageId==null)
+                request.LanguageId = GetLanguageId();
             var result = await _productApiClient.Update(request.Id, request);
+           
             if (result.IsSuccessed)
             {
                 TempData["Result"] = "Chỉnh sửa thành công";
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("Index", "Product");
             }
             ModelState.AddModelError("", result.Message);
             return View(request);
@@ -207,6 +210,7 @@ namespace EshopSolution.AdminApp.Controllers
             var categoryAssign = await GetCategoryAssignRequest(id);
             return View(categoryAssign);
         }
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CategoryAssign(CategoryAssignRequest request)
@@ -218,8 +222,8 @@ namespace EshopSolution.AdminApp.Controllers
             var result = await _productApiClient.CategoryAssign(request.Id, request);
             if (result.IsSuccessed)
             {
-                TempData["Result"] = "Gán quyền thành công";
-                return RedirectToAction("Index", "User");
+                TempData["Result"] = "Cập nhập danh mục thành công";
+                return RedirectToAction("Index", "Product");
             }
             ModelState.AddModelError("", result.Message);
             var categoryAssignRequest = await GetCategoryAssignRequest(request.Id);

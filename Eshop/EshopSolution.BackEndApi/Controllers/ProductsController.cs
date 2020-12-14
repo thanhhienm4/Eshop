@@ -38,7 +38,6 @@ namespace EshopSolution.BackEndApi.Controllers
             {
                 return BadRequest("Can't find product");
             }
-
             return Ok(result);
         }
 
@@ -50,12 +49,11 @@ namespace EshopSolution.BackEndApi.Controllers
             {
                 return BadRequest("Can't find product");
             }
-
             return Ok(result);
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
+        [HttpPost("{id}/create")]
+        public async Task<IActionResult> Create(int id,[FromForm] ProductCreateRequest request)
         {
             if (ModelState.IsValid == false)
             {
@@ -66,13 +64,12 @@ namespace EshopSolution.BackEndApi.Controllers
             {
                 return BadRequest(result);
             }
-
             var product = _productService.GetById(result.ResultObj, request.LanguageId);
             return CreatedAtAction(nameof(GetById), new { id = result.ResultObj }, product);
         }
 
-        [HttpPut("update")]
-        public async Task<IActionResult> Update([FromForm] ProductUpdateRequest request)
+        [HttpPut("{productId}/update")]
+        public async Task<IActionResult> Update(int productId,[FromBody] ProductUpdateRequest request)
         {
             if (ModelState.IsValid == false)
             {
@@ -83,7 +80,6 @@ namespace EshopSolution.BackEndApi.Controllers
             {
                 return BadRequest(result);
             }
-
             return Ok(result);
         }
 
@@ -106,7 +102,6 @@ namespace EshopSolution.BackEndApi.Controllers
             {
                 return BadRequest(result);
             }
-
             return Ok(result);
         }
 
@@ -166,7 +161,21 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return Ok(result);
         }
-       
+
+
+        
+        [HttpPut("{productId}/categories")]
+        public async Task<IActionResult> CategoryAssign(int productId,[FromBody] CategoryAssignRequest request)
+        {
+            var result = await _productService.CategoryAssign(request);
+            if(result.IsSuccessed == true)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+
 
     }
 }

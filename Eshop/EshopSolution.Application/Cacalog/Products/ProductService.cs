@@ -20,11 +20,14 @@ namespace EshopSolution.Application.Cacalog.Products
     {
         private readonly EshopDbContext _context;
         private readonly IStorageService _storageService;
+        private readonly ICategoryService _categoryService;
 
-        public ProductService(EshopDbContext context, IStorageService storageService)
+        public ProductService(EshopDbContext context, IStorageService storageService, 
+                              ICategoryService categoryService)
         {
             _context = context;
             _storageService = storageService;
+            _categoryService = categoryService;
         }
 
         public async Task<ApiResult<int>> Create(ProductCreateRequest request)
@@ -59,7 +62,7 @@ namespace EshopSolution.Application.Cacalog.Products
                         Caption =  "Thumbnail image",
                         DateCreated = DateTime.Now,
                         FileSize = request.ThumbnailImage.Length,
-                        ImagePath =  await this.SaveFile(request.ThumbnailImage) ,
+                        ImagePath =  await this.SaveFile(request.ThumbnailImage),
                         IsDefault = true,
                         SortOrder = 1
                     }
@@ -169,20 +172,20 @@ namespace EshopSolution.Application.Cacalog.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
                         from pic in ppic.DefaultIfEmpty()
-                        //join c in _context.Categories on pic.CategoryId equals c.Id into picc
-                        //from c in picc.DefaultIfEmpty()
+                        
+                       
                         select new { p, pt, pic};
 
             //2.Filter
-
-            // find whit language
-            query = query.Where(x => x.pt.LanguageId == request.LanguageId);
-
-            // find whit category
-            if (!(request.CategoryId == 0))
-            {
+            //find whit category
+            if (request.CategoryId != 0)
                 query = query.Where(x => x.pic.CategoryId == request.CategoryId);
-            }
+            
+
+           
+
+            //find whit languageId
+            query = query.Where(x => x.pt.LanguageId == request.LanguageId);
 
             //find whit keyword
             if (!string.IsNullOrEmpty(request.Keyword))
@@ -213,7 +216,7 @@ namespace EshopSolution.Application.Cacalog.Products
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
-                }).ToListAsync();
+                }).Distinct().ToListAsync();
 
             //4.Select and Projection
             var pageResult = new PageResult<ProductViewModel>()
@@ -291,7 +294,7 @@ namespace EshopSolution.Application.Cacalog.Products
                 return new ApiSuccessResult<int>(imageId);
             }
         }
-
+        
         public async Task<ApiResult<ProductViewModel>> GetById(int productId, string languageId)
         {
             var product = await _context.Products.FindAsync(productId);
@@ -312,7 +315,8 @@ namespace EshopSolution.Application.Cacalog.Products
                 SeoDescription = proudctTranslation?.SeoDescription,
                 SeoTitle = proudctTranslation?.SeoDescription,
                 SeoAlias = proudctTranslation?.SeoAlias,
-                //LanguageId = proudctTranslation?.LanguageId
+                LanguageId = proudctTranslation?.LanguageId,
+                Categories = await GetCategoryOfProductId(productId,languageId)
             };
            return new ApiSuccessResult<ProductViewModel>(productViewModel);
         }
@@ -393,7 +397,57 @@ namespace EshopSolution.Application.Cacalog.Products
 
             return new ApiSuccessResult<PageResult<ProductViewModel>>(pageResult);
         }
+        public async Task<ApiResult<bool>> CategoryAssign(CategoryAssignRequest request)
+        {
+            if(!(await _context.Products.AnyAsync(x => x.Id == request.Id)))
+            {
+                return new ApiErrorResult<bool>("Id sản phẩm không tồn tại ");
+            }
+            
+            foreach(SelectedItem category in request.Categories)
+            {
 
-        
+                var productInCategory = _context.ProductInCategories.SingleOrDefault(x =>
+                   x.ProductId == request.Id && x.CategoryId == Int32.Parse(category.Id));
+
+                if (category.Selected == false)
+                {                   
+                    if(productInCategory!=null)
+                    {
+                        _context.ProductInCategories.Remove(productInCategory);
+                   
+                    }
+
+                }else
+                {
+                    if(productInCategory == null)
+                    { 
+                        await _context.ProductInCategories.AddAsync(new ProductInCategory()
+                        {
+                            ProductId = request.Id,
+                            CategoryId = Int32.Parse(category.Id)
+                        });
+                    }
+                }
+            }
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
+
+
+        }
+        public async Task<List<string>> GetCategoryOfProductId(int id,String languageId)
+        {
+            var query = from pic in _context.ProductInCategories
+                        join c in _context.Categories on pic.CategoryId equals c.Id
+                        join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
+                        where id == pic.ProductId && ct.LanguageId == languageId
+                        select ct.Name;
+
+            List<string> categoriesName = await query.Select(x => new string(x.ToString())).ToListAsync();
+            return categoriesName;
+            
+        }
+
+       
     }
 }

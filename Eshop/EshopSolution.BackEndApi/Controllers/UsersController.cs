@@ -109,7 +109,7 @@ namespace EshopSolution.BackEndApi.Controllers
             return BadRequest(result);
         }
         [HttpPut("{id}/roles")]
-        public async Task<IActionResult> RoleAssign(Guid id, [FromBody] RoleAssignRequest request)
+        public async Task<IActionResult> RoleAssign(Guid id,[FromBody] RoleAssignRequest request)
         {
             if (ModelState.IsValid == false)
             {
