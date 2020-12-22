@@ -186,7 +186,7 @@ namespace EshopSolution.AdminApp.Controllers
             if (result.IsSuccessed)
             {
                 TempData["Result"] = "Xóa thành công";
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("Index", "Product");
             }
             ModelState.AddModelError("", result.Message);
             return View(request.Id);

@@ -15,26 +15,26 @@ namespace EshopSolution.BackEndApi.Controllers
     {
         private readonly IProductService _productService;
 
-        public ProductsController( IProductService productService)
+        public ProductsController(IProductService productService)
         {
             _productService = productService;
         }
 
-        
+
 
         [HttpGet("{categoryId}/paging/")]
-        public async Task<IActionResult> GetAllPaging(int categoryId,[FromQuery] GetManageProductPagingRequest request)
+        public async Task<IActionResult> GetAllPaging(int categoryId, [FromQuery] GetManageProductPagingRequest request)
         {
             request.CategoryId = categoryId;
-           return Ok( await _productService.GetAllPaging ( request));
-            
+            return Ok(await _productService.GetAllPaging(request));
+
         }
 
         [HttpGet("{productId}/{languageId}")]
         public async Task<IActionResult> GetById(int productId, string languageId)
         {
-            var result= await _productService.GetById(productId, languageId);
-            if (result.IsSuccessed==false)
+            var result = await _productService.GetById(productId, languageId);
+            if (result.IsSuccessed == false)
             {
                 return BadRequest("Can't find product");
             }
@@ -45,7 +45,7 @@ namespace EshopSolution.BackEndApi.Controllers
         public async Task<IActionResult> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
         {
             var result = await _productService.GetAllByCategoryId(languageId, request);
-            if (result.IsSuccessed==false)
+            if (result.IsSuccessed == false)
             {
                 return BadRequest("Can't find product");
             }
@@ -68,7 +68,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPut("{productId}/update")]
-        public async Task<IActionResult> Update(int productId,[FromBody] ProductUpdateRequest request)
+        public async Task<IActionResult> Update(int productId, [FromBody] ProductUpdateRequest request)
         {
             if (ModelState.IsValid == false)
             {
@@ -82,8 +82,8 @@ namespace EshopSolution.BackEndApi.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("productId")]
-        public async Task<IActionResult> Delete([FromForm] int productId)
+        [HttpDelete("{productId}")]
+        public async Task<IActionResult> Delete(int productId)
         {
             var result = await _productService.Delete(productId);
             if (result.IsSuccessed == false)
