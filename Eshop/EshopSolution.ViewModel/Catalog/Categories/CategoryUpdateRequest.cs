@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EshopSolution.ViewModel.Catalog.Categories
 {
-    public class CategoryViewModel
+    public class CategoryUpdateRequest
     {
         public int Id { get; set; }
         public int SortOrder { set; get; }
@@ -17,6 +17,5 @@ namespace EshopSolution.ViewModel.Catalog.Categories
         public string SeoTitle { set; get; }
         public string LanguageId { set; get; }
         public string SeoAlias { set; get; }
-
     }
 }

@@ -11,7 +11,11 @@ namespace EshopSolution.Application.Cacalog.Products
     public interface ICategoryService 
     {
         Task <ApiResult<List<CategoryViewModel>>> GetAll(String languageId);
-        Task<ApiResult<int>> Create();
-   
+        Task<ApiResult<int>> Create(CategoryCreateRequest request);
+        Task<ApiResult<int>> Update(CategoryUpdateRequest request);
+        Task<ApiResult<int>> Delete(int id);
+        CategoryViewModel GetById(int id,string languageId);
+
+
     }
 }

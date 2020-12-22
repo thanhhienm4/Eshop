@@ -10,5 +10,8 @@ namespace EshopSolution.AdminApp.Services
     public interface ICategoryApiClient
     {
         Task<ApiResult<List<CategoryViewModel>>> GetAll(string LanguageId);
+        Task<ApiResult<int>> Update(CategoryUpdateRequest request);
+        Task<ApiResult<int>> Create(CategoryCreateRequest request);
+        Task<ApiResult<int>> Delete(int id);
     }
 }

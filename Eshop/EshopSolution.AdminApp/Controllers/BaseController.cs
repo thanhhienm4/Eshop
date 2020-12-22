@@ -20,5 +20,12 @@ namespace EshopSolution.AdminApp.Controllers
             }
             base.OnActionExecuting(context);
         }
+        protected string GetLanguageId()
+        {
+            string languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.LanguageId);
+            if (string.IsNullOrEmpty(languageId))
+                languageId = SystemConstants.AppSettings.DefaultLangaueId;
+            return languageId;
+        }
     }
 }

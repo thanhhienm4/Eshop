@@ -9,9 +9,9 @@ namespace EshopSolution.Application
     public interface IProductService
     {
 
-        Task<ApiResult<int>> Create(ProductCreateRequest request);
+        Task<ApiResult<bool>> Create(ProductCreateRequest request);
 
-        Task<ApiResult<int>> Update(ProductUpdateRequest request);
+        Task<ApiResult<bool>> Update(ProductUpdateRequest request);
        
 
         Task<ApiResult<bool>> Delete(int ProductId);
@@ -22,11 +22,11 @@ namespace EshopSolution.Application
 
         Task<ApiResult<bool>> UpdateStock(int productId, int addedQuantity);
 
-        Task<ApiResult<int>> AddImages(int productId, ProductImageCreateRequest request);
+        Task<ApiResult<bool>> AddImages(int productId, ProductImageCreateRequest request);
 
         Task<ApiResult<bool>> DeleteImages(int imageId);
 
-        Task<ApiResult<int>> UpdateImages(int imageId, ProductImageUpdateRequest request);
+        Task<ApiResult<bool>> UpdateImages(int imageId, ProductImageUpdateRequest request);
 
         Task AddViewCount(int productId);
 

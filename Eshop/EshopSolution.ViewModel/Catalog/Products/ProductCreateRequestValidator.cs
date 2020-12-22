@@ -13,6 +13,8 @@ namespace EshopSolution.ViewModel.Catalog.Products
             RuleFor(x => x.Name).NotEmpty().WithMessage("Không được bỏ trống tên sản phẩm");
             RuleFor(x => x.Price).NotEmpty().WithMessage("Không được bỏ trống tên mặt hàng");
             RuleFor(x => x.Stock).NotEmpty().WithMessage("Không được bỏ trống");
+            RuleFor(x => x.Description).NotEmpty().WithMessage("Không được bỏ trống");
+            RuleFor(x => x.Details).NotEmpty().WithMessage("Không được bỏ trống");
 
 
         }

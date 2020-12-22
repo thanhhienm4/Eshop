@@ -39,10 +39,10 @@ namespace EshopSolution.AdminApp.Services
             client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, sessions);
-            
+
             var requestContent = new MultipartFormDataContent();
 
-            if(request.ThumbnailImage!=null)
+            if (request.ThumbnailImage != null)
             {
                 byte[] data;
                 using (var br = new BinaryReader(request.ThumbnailImage.OpenReadStream()))
@@ -52,35 +52,40 @@ namespace EshopSolution.AdminApp.Services
                 ByteArrayContent bytes = new ByteArrayContent(data);
                 requestContent.Add(bytes, "ThumbnailImage", request.ThumbnailImage.FileName);
             }
-            if(request.Description!=null)
-                requestContent.Add(new StringContent(request.Description.ToString()),"Description");
+            if (request.Description != null)
+                requestContent.Add(new StringContent(request.Description.ToString()), "Description");
             if (request.Details != null)
-                requestContent.Add(new StringContent(request.Details.ToString()),"Details");
+                requestContent.Add(new StringContent(request.Details.ToString()), "Details");
             if (request.LanguageId != null)
                 requestContent.Add(new StringContent(request.LanguageId.ToString()), "LanguageId");
             if (request.Name != null)
                 requestContent.Add(new StringContent(request.Name.ToString()), "Name");
             //if (request.OriginalPrice != null)
-                requestContent.Add(new StringContent(request.OriginalPrice.ToString()), "OriginalPrice");
+            requestContent.Add(new StringContent(request.OriginalPrice.ToString()), "OriginalPrice");
             //if (request.Price!= null)
-                requestContent.Add(new StringContent(request.Price.ToString()), "Price");
-            if (request.SeoAlias != null)
-                requestContent.Add(new StringContent(request.SeoAlias.ToString()), "SeoAlias");
-            if (request.SeoDescription != null)
-                requestContent.Add(new StringContent(request.SeoDescription.ToString()), "SeoDescription");
-            if (request.SeoTitle != null)
-                requestContent.Add(new StringContent(request.SeoTitle.ToString()), "SeoTitle");
+            requestContent.Add(new StringContent(request.Price.ToString()), "Price");
+            if (String.IsNullOrWhiteSpace(request.SeoAlias))
+                request.SeoAlias = "";
+            requestContent.Add(new StringContent(request.SeoAlias.ToString()), "SeoAlias");
+
+            if (String.IsNullOrWhiteSpace(request.SeoDescription))
+                request.SeoDescription = "";
+            requestContent.Add(new StringContent(request.SeoDescription.ToString()), "SeoDescription");
+
+            if (String.IsNullOrWhiteSpace(request.SeoTitle))
+                request.SeoTitle = "";
+            requestContent.Add(new StringContent(request.SeoTitle.ToString()), "SeoTitle");
             //if (request.Stock != null)
-                requestContent.Add(new StringContent(request.Stock.ToString()), "Stock");
+            requestContent.Add(new StringContent(request.Stock.ToString()), "Stock");
 
             var response = await client.PostAsync($"/api/products/create", requestContent);
-           
-            if(response.IsSuccessStatusCode)
+
+            if (response.IsSuccessStatusCode)
             {
                 return new ApiSuccessResult<bool>(response.IsSuccessStatusCode);
             }
             return new ApiErrorResult<bool>();
-            //return await PostAsync<ApiResult<bool>>("/api/Products/create", requestContent);
+            //return await PostAsync<ApiResult<bool>>("/api/Products/create", request);
         }
 
         public async Task<ApiResult<bool>> Delete(int id)

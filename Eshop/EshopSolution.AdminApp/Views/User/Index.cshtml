@@ -33,21 +33,22 @@
         <h1>Danh sách User</h1>
         <div class="card-header">
             <div class="row">
-                <div class="col-md-6 col-sm-1">
+                <div class="col-md-8 col-xs-12">
                     <a class="btn btn-success" asp-action="Create" asp-controller="User">Tạo mới</a>
                 </div>
-                <div class="col-md-6 col-sm-4">
+                <div class="col-md-4 col-xs-12">
                     <form asp-action="Index" method="get">
                         <div class="row">
-                            <div class="col-md-7 col-sm-2">
+                            <div class="col-md-6">
                                 <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
                             </div>
-                            <div class="col-md-2 col-sm-2">
+                            <div class="col-md-2">
                                 <button type="submit" class="btn btn-primary">Tìm</button>
                             </div>
-                            <div class="col-md-1 col-sm-2">
+                            <div class="col-md-2">
                                 <button type="button" onclick="window.location.href='/User/Index'" class="btn btn-dark">Reset</button>
                             </div>
+                        </div>
                     </form>
                 </div>
             </div>

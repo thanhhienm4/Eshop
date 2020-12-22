@@ -33,7 +33,6 @@
     <link href="css/styles.css" rel="stylesheet" />
 </head>
 <body class="sb-nav-fixed">
-
     <div class="card-body">
         <h1>Danh sách sản phẩm </h1>
         <div class="card-header">
@@ -44,13 +43,13 @@
                 <div class="col-md-6 col-xs-12">
                     <form asp-action="Index" method="get">
                         <div class="row">
-                            <from asp-action="Index" method="get">
-                                <div class="row">
+                            @*<from asp-action="Index" method="get">*@
+                                @*<div class="row">*@
                                     <div class="col-md-4">
                                         <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
                                     </div>
                                     <div class="col-md-4">
-                                        <select name="categoryId" onchange="this.form.submit()" asp-items="@ViewBag.Categories" class="form-control">
+                                        <select name="categoryId" onchange="this.form.submit()" asp-items="@ViewBag.Categories" class="form-control" >
                                             <option>--Chọn danh mục--</option>
                                         </select>
                                     </div>
@@ -58,8 +57,8 @@
                                         <button type="submit" class="btn btn-primary">Tìm</button>
                                         <button type="button" onclick="window.location.href='/Product/Index'" class="btn btn-dark">Reset</button>
                                     </div>
-                                </div>
-                            </from>
+                                @*</div>*@
+                            @*</from>*@
 
                         </div>
                     </form>

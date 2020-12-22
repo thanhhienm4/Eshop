@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         private readonly IProductApiClient _productApiClient;
         private readonly ICategoryApiClient _categoryApiClient;
@@ -31,10 +31,10 @@ namespace EshopSolution.AdminApp.Controllers
         [Authorize]
         public async Task<IActionResult> Index(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 5)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(ModelState);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return View(ModelState);
+            //}
 
             var request = new GetManageProductPagingRequest()
             {
@@ -192,13 +192,7 @@ namespace EshopSolution.AdminApp.Controllers
             return View(request.Id);
         }
 
-        private string GetLanguageId()
-        {
-            string languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.LanguageId);
-            if (string.IsNullOrEmpty(languageId))
-                languageId = SystemConstants.AppSettings.DefaultLangaueId;
-            return languageId;
-        }
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> CategoryAssign(int id)

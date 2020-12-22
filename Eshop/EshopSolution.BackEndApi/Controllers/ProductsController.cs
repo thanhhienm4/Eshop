@@ -52,8 +52,8 @@ namespace EshopSolution.BackEndApi.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{id}/create")]
-        public async Task<IActionResult> Create(int id,[FromForm] ProductCreateRequest request)
+        [HttpPost("create")]
+        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (ModelState.IsValid == false)
             {
@@ -64,8 +64,7 @@ namespace EshopSolution.BackEndApi.Controllers
             {
                 return BadRequest(result);
             }
-            var product = _productService.GetById(result.ResultObj, request.LanguageId);
-            return CreatedAtAction(nameof(GetById), new { id = result.ResultObj }, product);
+            return Ok(result);
         }
 
         [HttpPut("{productId}/update")]
@@ -120,8 +119,7 @@ namespace EshopSolution.BackEndApi.Controllers
             }
 
             //var product = _productService.GetById(productId, request.LanguageId);
-            var image = _productService.GetImageById(result.ResultObj);
-            return CreatedAtAction(nameof(GetImageById), new { id = result.ResultObj }, image);
+            return Ok(result);
         }
 
         [HttpPut("{productId}/images/{imageId}")]

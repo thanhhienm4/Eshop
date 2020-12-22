@@ -30,7 +30,7 @@ namespace EshopSolution.Application.Cacalog.Products
             _categoryService = categoryService;
         }
 
-        public async Task<ApiResult<int>> Create(ProductCreateRequest request)
+        public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
         {
             var product = new Product()
             {
@@ -72,20 +72,20 @@ namespace EshopSolution.Application.Cacalog.Products
             _context.Products.Add(product);
             if (_context.SaveChanges() == 0)
             {
-                return new ApiErrorResult<int>();
+                return new ApiErrorResult<bool>("Đăng kí không thành công");
             }
 
-            return new ApiSuccessResult<int>(product.Id);
+            return new ApiSuccessResult<bool>();
         }
 
-        public async Task<ApiResult<int>> Update(ProductUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(ProductUpdateRequest request)
         {
             //1.find product and producttranslation
             var product = await _context.Products.FindAsync(request.Id);
             var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == request.Id
             && x.LanguageId == request.LanguageId);
             if (product == null && productTranslation == null)
-                throw new EshopException($"Can't find product with id {request.Id}");
+                throw new EshopException($"Không thể thìm thấy san phẩn có  id {request.Id}");
 
             //2.Update producttranslation
             productTranslation.Name = request.Name;
@@ -107,11 +107,12 @@ namespace EshopSolution.Application.Cacalog.Products
                 }
             }
             _context.Products.Update(product);
+            _context.ProductTranslations.Update(productTranslation);
             if (_context.SaveChanges() == 0)
             {
-                return new ApiErrorResult<int>();
+                return new ApiErrorResult<bool>();
             }
-            return new ApiSuccessResult<int>(request.Id);
+            return new ApiSuccessResult<bool>();
         }
 
         public async Task<ApiResult<bool>> Delete(int ProductId)
@@ -239,7 +240,7 @@ namespace EshopSolution.Application.Cacalog.Products
             return fileName;
         }
 
-        public async Task<ApiResult<int>> AddImages(int productId, ProductImageCreateRequest request)
+        public async Task<ApiResult<bool>> AddImages(int productId, ProductImageCreateRequest request)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
@@ -259,8 +260,8 @@ namespace EshopSolution.Application.Cacalog.Products
             }
             _context.ProductImages.Add(productImage);
             if (_context.SaveChanges() == 0)
-                return new ApiErrorResult<int>();
-            return  new ApiSuccessResult<int>(productImage.Id);
+                return new ApiErrorResult<bool>();
+            return  new ApiSuccessResult<bool>();
         }
 
         public async Task<ApiResult<bool>> DeleteImages(int imageId)
@@ -277,7 +278,7 @@ namespace EshopSolution.Application.Cacalog.Products
             }
         }
 
-        public async Task<ApiResult<int>> UpdateImages(int imageId, ProductImageUpdateRequest request)
+        public async Task<ApiResult<bool>> UpdateImages(int imageId, ProductImageUpdateRequest request)
         {
             var productImage = await _context.ProductImages.FindAsync(imageId);
             if (productImage == null)
@@ -290,8 +291,8 @@ namespace EshopSolution.Application.Cacalog.Products
                 productImage.FileSize = request.ImageFile.Length;
                 productImage.ImagePath = await this.SaveFile(request.ImageFile);
                 if (_context.SaveChanges() == 0)
-                    return new ApiErrorResult<int>();
-                return new ApiSuccessResult<int>(imageId);
+                    return new ApiErrorResult<bool>();
+                return new ApiSuccessResult<bool>();
             }
         }
         
