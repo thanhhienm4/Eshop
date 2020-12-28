@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
 {
+    [Authorize]
     public class ProductController : BaseController
     {
         private readonly IProductApiClient _productApiClient;
@@ -31,10 +32,6 @@ namespace EshopSolution.AdminApp.Controllers
         [Authorize]
         public async Task<IActionResult> Index(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 5)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(ModelState);
-            //}
 
             var request = new GetManageProductPagingRequest()
             {
@@ -42,8 +39,8 @@ namespace EshopSolution.AdminApp.Controllers
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 LanguageId = GetLanguageId(),
-
             };
+
             if (categoryId != null)
                 request.CategoryId = (int)categoryId;
             ViewBag.Keyword = keyword;
@@ -72,7 +69,6 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Create(ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -91,7 +87,6 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
             if (!ModelState.IsValid)
@@ -120,7 +115,6 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Edit(ProductUpdateRequest request)
         {
             if (!ModelState.IsValid)
@@ -141,7 +135,6 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> Details(int id)
         {
             if (!ModelState.IsValid)
@@ -175,7 +168,6 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Delete(ProductDeleteRequest request)
         {
             if (!ModelState.IsValid)
@@ -194,7 +186,6 @@ namespace EshopSolution.AdminApp.Controllers
 
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> CategoryAssign(int id)
         {
             if (!ModelState.IsValid)
@@ -206,7 +197,6 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> CategoryAssign(CategoryAssignRequest request)
         {
             if (!ModelState.IsValid)

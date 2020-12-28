@@ -12,12 +12,58 @@ namespace EshopSolution.Application.Cacalog.Products
 {
     public class CategoryService : ICategoryService
     {
+        public async Task<ApiResult<PageResult<CategoryViewModel>>> GetAllPaging(GetManageCategoryPagingRequest request)
+        {
+            //1.filter
+            var query = from c in _context.Categories
+                        join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
+                        select new { c, ct };
+
+            //2.filer by languageid
+            query = query.Where(x => x.ct.LanguageId == request.LanguageId);
+
+            //3/filter by keyword
+            if (!String.IsNullOrWhiteSpace(request.Keyword))
+                query = query.Where(x => x.ct.Name.Contains(request.Keyword)
+                                    || x.ct.SeoAlias.Contains(request.Keyword)
+                                    || x.ct.SeoDescription.Contains(request.Keyword)
+                                    || x.ct.SeoTitle.Contains(request.Keyword)
+                                    || x.ct.CategoryId.ToString().Contains(request.Keyword));
+
+            //4. paging
+            query = query.Skip((request.PageIndex - 1) * request.PageSize);
+            var data = query.Select(x => new CategoryViewModel()
+            {
+                Id = x.c.Id,
+                Name = x.ct.Name,
+                IsShowOnHome = x.c.IsShowOnHome,
+                ParentId = x.c.ParentId,
+                LanguageId = x.ct.LanguageId,
+                SeoAlias = x.ct.SeoAlias,
+                SeoDescription = x.ct.SeoDescription,
+                SeoTitle = x.ct.SeoTitle,
+                SortOrder = x.c.SortOrder,
+                Status = x.c.Status
+                
+            }).ToList();
+
+            var pageResult = new PageResult<CategoryViewModel>()
+            {
+                TotalRecord = data.Count(),
+                Item = data,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+            };
+
+            return new ApiSuccessResult<PageResult<CategoryViewModel>>(pageResult);
+
+        }
         private readonly EshopDbContext _context ;
         public CategoryService(EshopDbContext eshopDbContext)
         {
             _context = eshopDbContext;
         }
-        public CategoryViewModel GetById(int id,string languageId)
+        public async Task<CategoryViewModel> GetById(int id,string languageId)
         {
             var query = from c in _context.Categories
                         join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
@@ -44,16 +90,16 @@ namespace EshopSolution.Application.Cacalog.Products
             return categoryViewModel;
 
         }
-        public async Task<ApiResult<int>> Create(CategoryCreateRequest request)
+        public async Task<ApiResult<bool>> Create(CategoryCreateRequest request)
         {
             var query = from c in _context.Categories
                         join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
                         where ct.LanguageId == request.LanguageId && ct.Name  == request.Name
        
                         select new { c, ct };
-            if(query != null)
+            if(query.Count() !=0)
             {
-                return new  ApiErrorResult<int>("Tên danh mục bị trùng ");
+                return new  ApiErrorResult<bool>("Tên danh mục bị trùng ");
             }
 
             Category category = new Category()
@@ -77,9 +123,9 @@ namespace EshopSolution.Application.Cacalog.Products
             };
              _context.Categories.Add(category);
             if (_context.SaveChanges() == 0)
-                return new ApiErrorResult<int>();
+                return new ApiErrorResult<bool>();
             else
-                return new ApiSuccessResult<int>(category.Id);
+                return new ApiSuccessResult<bool>();
 
             
         }
@@ -102,17 +148,18 @@ namespace EshopSolution.Application.Cacalog.Products
         }
         
 
-        public async Task<ApiResult <int>> Update(CategoryUpdateRequest request)
+        public async Task<ApiResult <bool>> Update(CategoryUpdateRequest request)
         {
-            CategoryViewModel categoryVD= GetById(request.Id, request.LanguageId);
+            CategoryViewModel categoryVD= await GetById(request.Id, request.LanguageId);
             if(categoryVD == null)
-                return new ApiErrorResult<int>();
+
+                return new ApiErrorResult<bool>();
 
             //check categorytranslation
             CategoryTranslation categoryTranslation =  _context.CategoryTranslations.Where(x => x.CategoryId == request.Id
                           && x.LanguageId == request.LanguageId).FirstOrDefault();
             if(categoryTranslation == null)
-                return new ApiErrorResult<int>();
+                return new ApiErrorResult<bool>();
 
             //update Category
             var category = new Category()
@@ -133,24 +180,24 @@ namespace EshopSolution.Application.Cacalog.Products
             _context.Categories.Update(category);
             _context.CategoryTranslations.Update(categoryTranslation);
 
-            _context.SaveChanges();
-            return new ApiSuccessResult<int>();
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
             
             
         }
 
-        public async Task<ApiResult<int>> Delete(int id)
+        public async Task<ApiResult<bool>> Delete(int id)
         {
             Category category = _context.Categories.Where(x => x.Id == id).FirstOrDefault();
             if (category == null)
-                return new ApiErrorResult<int>();
+                return new ApiErrorResult<bool>();
 
             _context.Categories.Remove(category);
 
-            if (_context.SaveChanges() > 0)
-                return new ApiSuccessResult<int>();
+            if (await _context.SaveChangesAsync() > 0)
+                return new ApiSuccessResult<bool>();
             else
-                return new ApiErrorResult<int>();
+                return new ApiErrorResult<bool>();
         }
     }
 }

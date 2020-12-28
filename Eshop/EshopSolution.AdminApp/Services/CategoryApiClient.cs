@@ -18,25 +18,36 @@ namespace EshopSolution.AdminApp.Services
              : base(httpClientFactory, configuration, httpContextAccessor)
         { }
 
-        public Task<ApiResult<int>> Create(CategoryCreateRequest request)
+        public async Task<ApiResult<bool>> Create(CategoryCreateRequest request)
         {
-            return PostAsync<ApiResult<int>>("api/Categories/create", request);
+            return await PostAsync<ApiResult<bool>>("api/Categories/create", request);
         }
 
-        public Task<ApiResult<int>> Delete(int id)
+        public async Task<ApiResult<bool>> Delete(int id)
         {
-            return DeleteAsync<ApiResult<int>>($"api/Categories/{id}");
-        }
+            return await DeleteAsync<ApiResult<bool>>($"api/Categories/{id}");
 
-        public Task<ApiResult<List<CategoryViewModel>>> GetAll(String languageId)
+        }
+        public async Task<ApiResult<CategoryViewModel>> GetById(int id, string languageId)
         {
-            return GetAsync<ApiResult<List<CategoryViewModel>>>($"api/Categories/GetAll?languageId={languageId}");
+            return await GetAsync<ApiResult<CategoryViewModel>>($"api/Categories/GetbyId/{id}/{languageId}");
+        }
+        public async Task<ApiResult<List<CategoryViewModel>>> GetAll(string languageId)
+        {
+            return await GetAsync<ApiResult<List<CategoryViewModel>>>($"api/Categories/GetAll?languageId={languageId}");
             
         }
 
-        public Task<ApiResult<int>> Update(CategoryUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(CategoryUpdateRequest request)
         {
-            return PutAsync<ApiResult<int>>("api/Categories/update",request);
+            return await PutAsync<ApiResult<bool>>("api/Categories/update",request);
+        }
+
+        public async Task<ApiResult<PageResult<CategoryViewModel>>> GetCategoryPaging(GetManageCategoryPagingRequest request)
+        {
+            return await GetAsync<ApiResult<PageResult<CategoryViewModel>>>($"/api/Categories/Paging?PageIndex=" +
+               $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&" +
+               $"LanguageId={request.LanguageId}");
         }
     }
 }

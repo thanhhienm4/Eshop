@@ -1,0 +1,99 @@
+﻿@using EshopSolution.ViewModel.Catalog.Categories
+@using EshopSolution.ViewModel.Common
+@model PageResult<CategoryViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<html>
+
+
+<body class="sb-nav-fixed">
+    <div class="card-body">
+        <h1>Danh sách danh mục </h1>
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <a class="btn btn-success" asp-action="Create" asp-controller="Category">Tạo mới</a>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <form asp-action="Index" method="get">
+                        <div class="row">
+                            @*<from asp-action="Index" method="get">*@
+                            @*<div class="row">*@
+                            <div class="col-md-4">
+                                <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
+                            </div>
+                            <div class="cold-md-3">
+                                <button type="submit" class="btn btn-primary">Tìm</button>
+                                <button type="button" onclick="window.location.href='/Product/Index'" class="btn btn-dark">Reset</button>
+                            </div>
+                            @*</div>*@
+                            @*</from>*@
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div>
+            @if (ViewBag.SuccessMsg != null)
+            {
+                <div id="SuccessMeg" class="alert alert-success" role="alert">
+                    @ViewBag.SuccessMsg
+                </div>
+            }
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            Mã
+                        </th>
+                        <th>
+                            Tên
+                        </th>
+                        <th>
+                            Trạng thái
+                        </th>
+                        <th>
+                            Seo title
+                        </th>
+
+ 
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Item)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SeoTitle)
+                            </td>
+
+                            <td>
+                                @Html.ActionLink("Chỉnh sửa", "Edit", new { id = item.Id }) |
+                                @Html.ActionLink("Chi tiết", "Details", new { id = item.Id }) |
+                                @Html.ActionLink("Xóa", "Delete", new { id = item.Id }) |
+                               
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @await Component.InvokeAsync("Pager", Model)
+        </div>
+    </div>
+</body>
+</html>

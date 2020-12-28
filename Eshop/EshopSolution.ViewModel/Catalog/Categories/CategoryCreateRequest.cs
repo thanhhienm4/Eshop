@@ -7,7 +7,6 @@ namespace EshopSolution.ViewModel.Catalog.Categories
 {
     public class CategoryCreateRequest
     {
-        public int Id { get; set; }
         public int SortOrder { set; get; }
         public bool IsShowOnHome { set; get; }
         public int? ParentId { set; get; }

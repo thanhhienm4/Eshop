@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EshopSolution.Application.Cacalog.Products;
 using EshopSolution.ViewModel.Catalog.Categories;
+using EshopSolution.ViewModel.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,12 @@ namespace EshopSolution.BackEndApi.Controllers
         {
             _categoryService = categoryService;
         }
+        [HttpGet("Paging")]
+        public async Task<IActionResult> getAllPaging([FromQuery]GetManageCategoryPagingRequest request)
+        {
+            var data = await _categoryService.GetAllPaging(request);
+            return Ok(data);
+        }
 
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll(string languageId)
@@ -28,6 +35,18 @@ namespace EshopSolution.BackEndApi.Controllers
             return Ok(data);
         }
 
+       [HttpGet("GetById/{id}/{languageId}")]
+       public async Task<IActionResult> GetById(int id,string languageId)
+        {
+            var data = await  _categoryService.GetById(id, languageId);
+            if (data != null)
+            {
+                return Ok(new ApiSuccessResult<CategoryViewModel>(data));
+            }
+                
+            else
+                return Ok(new ApiErrorResult<CategoryViewModel>("Không tìm thấy"));
+        }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -36,17 +55,19 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPut("update")]
-        public async Task<IActionResult> Update([FromForm] CategoryUpdateRequest request)
+        public async Task<IActionResult> Update([FromBody] CategoryUpdateRequest request)
         {
             var data = await _categoryService.Update(request);
             return Ok(data);
         }
 
-        [HttpPost("crete")]
-        public async Task<IActionResult> Create([FromForm]CategoryCreateRequest request)
+        [HttpPost("create")]
+        public async Task<IActionResult> Create([FromBody]CategoryCreateRequest request)
         {
             var data = await _categoryService.Create(request);
             return Ok(data);
         }
+
+
     }
 }

@@ -5,10 +5,10 @@ using System.Text;
 
 namespace EshopSolution.ViewModel.Catalog.Categories
 {
-    class GetManageCategoryPagingRequest : PagingRequestBase
+    public class GetManageCategoryPagingRequest : PagingRequestBase
     {
-        string Keyword { get; set; }
-        string LanguageId { get; set; }
+        public string Keyword { get; set; }
+        public string LanguageId { get; set; }
 
     }
 }

@@ -9,9 +9,11 @@ namespace EshopSolution.AdminApp.Services
 {
     public interface ICategoryApiClient
     {
+        Task<ApiResult<CategoryViewModel>> GetById(int id, string languageId);
+        Task<ApiResult<PageResult<CategoryViewModel>>> GetCategoryPaging(GetManageCategoryPagingRequest request);
         Task<ApiResult<List<CategoryViewModel>>> GetAll(string LanguageId);
-        Task<ApiResult<int>> Update(CategoryUpdateRequest request);
-        Task<ApiResult<int>> Create(CategoryCreateRequest request);
-        Task<ApiResult<int>> Delete(int id);
+        Task<ApiResult<bool>> Update(CategoryUpdateRequest request);
+        Task<ApiResult<bool>> Create(CategoryCreateRequest request);
+        Task<ApiResult<bool>> Delete(int id);
     }
 }
