@@ -1,7 +1,4 @@
 ﻿using EshopSolution.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EshopSolution.ViewModel.Catalog.Categories
 {
@@ -17,6 +14,5 @@ namespace EshopSolution.ViewModel.Catalog.Categories
         public string SeoTitle { set; get; }
         public string LanguageId { set; get; }
         public string SeoAlias { set; get; }
-
     }
 }

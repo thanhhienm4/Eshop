@@ -21,7 +21,7 @@ namespace EshopSolution.AdminApp.Services
 
         public async Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request)
         {
-            return await PutAsync<ApiResult<bool>>($"/api/Products/{id}/categories",request);
+            return await PutAsync<ApiResult<bool>>($"/api/Products/{id}/categories", request);
         }
 
         public async Task<ApiResult<bool>> Update(int id, ProductUpdateRequest request)
@@ -104,7 +104,5 @@ namespace EshopSolution.AdminApp.Services
                $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&" +
                $"LanguageId={request.LanguageId}");
         }
-
-
     }
 }

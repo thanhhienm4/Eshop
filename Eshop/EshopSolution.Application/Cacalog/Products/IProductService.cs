@@ -8,11 +8,9 @@ namespace EshopSolution.Application
 {
     public interface IProductService
     {
-
         Task<ApiResult<bool>> Create(ProductCreateRequest request);
 
         Task<ApiResult<bool>> Update(ProductUpdateRequest request);
-       
 
         Task<ApiResult<bool>> Delete(int ProductId);
 
@@ -39,6 +37,5 @@ namespace EshopSolution.Application
         Task<ApiResult<PageResult<ProductViewModel>>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
 
         Task<ApiResult<bool>> CategoryAssign(CategoryAssignRequest request);
-
     }
 }

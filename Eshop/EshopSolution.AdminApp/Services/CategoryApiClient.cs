@@ -2,15 +2,13 @@
 using EshopSolution.ViewModel.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Services
 {
-    public class CategoryApiClient :BaseApiClient, ICategoryApiClient 
+    public class CategoryApiClient : BaseApiClient, ICategoryApiClient
     {
         public CategoryApiClient(IHttpClientFactory httpClientFactory,
                     IHttpContextAccessor httpContextAccessor,
@@ -26,21 +24,21 @@ namespace EshopSolution.AdminApp.Services
         public async Task<ApiResult<bool>> Delete(int id)
         {
             return await DeleteAsync<ApiResult<bool>>($"api/Categories/{id}");
-
         }
+
         public async Task<ApiResult<CategoryViewModel>> GetById(int id, string languageId)
         {
             return await GetAsync<ApiResult<CategoryViewModel>>($"api/Categories/GetbyId/{id}/{languageId}");
         }
+
         public async Task<ApiResult<List<CategoryViewModel>>> GetAll(string languageId)
         {
             return await GetAsync<ApiResult<List<CategoryViewModel>>>($"api/Categories/GetAll?languageId={languageId}");
-            
         }
 
         public async Task<ApiResult<bool>> Update(CategoryUpdateRequest request)
         {
-            return await PutAsync<ApiResult<bool>>("api/Categories/update",request);
+            return await PutAsync<ApiResult<bool>>("api/Categories/update", request);
         }
 
         public async Task<ApiResult<PageResult<CategoryViewModel>>> GetCategoryPaging(GetManageCategoryPagingRequest request)

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EshopSolution.Application.Cacalog.Products;
+﻿using EshopSolution.Application.Cacalog.Products;
 using EshopSolution.ViewModel.Catalog.Categories;
 using EshopSolution.ViewModel.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace EshopSolution.BackEndApi.Controllers
 {
@@ -15,14 +12,15 @@ namespace EshopSolution.BackEndApi.Controllers
     [Authorize]
     public class CategoriesController : Controller
     {
-
         private readonly ICategoryService _categoryService;
+
         public CategoriesController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
+
         [HttpGet("Paging")]
-        public async Task<IActionResult> getAllPaging([FromQuery]GetManageCategoryPagingRequest request)
+        public async Task<IActionResult> getAllPaging([FromQuery] GetManageCategoryPagingRequest request)
         {
             var data = await _categoryService.GetAllPaging(request);
             return Ok(data);
@@ -35,18 +33,18 @@ namespace EshopSolution.BackEndApi.Controllers
             return Ok(data);
         }
 
-       [HttpGet("GetById/{id}/{languageId}")]
-       public async Task<IActionResult> GetById(int id,string languageId)
+        [HttpGet("GetById/{id}/{languageId}")]
+        public async Task<IActionResult> GetById(int id, string languageId)
         {
-            var data = await  _categoryService.GetById(id, languageId);
+            var data = await _categoryService.GetById(id, languageId);
             if (data != null)
             {
                 return Ok(new ApiSuccessResult<CategoryViewModel>(data));
             }
-                
             else
                 return Ok(new ApiErrorResult<CategoryViewModel>("Không tìm thấy"));
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -62,12 +60,10 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody]CategoryCreateRequest request)
+        public async Task<IActionResult> Create([FromBody] CategoryCreateRequest request)
         {
             var data = await _categoryService.Create(request);
             return Ok(data);
         }
-
-
     }
 }

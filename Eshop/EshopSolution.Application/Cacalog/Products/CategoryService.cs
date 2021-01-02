@@ -1,12 +1,11 @@
 ﻿using EshopSolution.Data.EF;
+using EshopSolution.Data.Entities;
 using EshopSolution.ViewModel.Catalog.Categories;
 using EshopSolution.ViewModel.Common;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq;
-using EshopSolution.Data.Entities;
+using System.Threading.Tasks;
 
 namespace EshopSolution.Application.Cacalog.Products
 {
@@ -44,7 +43,6 @@ namespace EshopSolution.Application.Cacalog.Products
                 SeoTitle = x.ct.SeoTitle,
                 SortOrder = x.c.SortOrder,
                 Status = x.c.Status
-                
             }).ToList();
 
             var pageResult = new PageResult<CategoryViewModel>()
@@ -56,14 +54,16 @@ namespace EshopSolution.Application.Cacalog.Products
             };
 
             return new ApiSuccessResult<PageResult<CategoryViewModel>>(pageResult);
-
         }
-        private readonly EshopDbContext _context ;
+
+        private readonly EshopDbContext _context;
+
         public CategoryService(EshopDbContext eshopDbContext)
         {
             _context = eshopDbContext;
         }
-        public async Task<CategoryViewModel> GetById(int id,string languageId)
+
+        public async Task<CategoryViewModel> GetById(int id, string languageId)
         {
             var query = from c in _context.Categories
                         join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
@@ -88,18 +88,18 @@ namespace EshopSolution.Application.Cacalog.Products
             }).FirstOrDefault();
 
             return categoryViewModel;
-
         }
+
         public async Task<ApiResult<bool>> Create(CategoryCreateRequest request)
         {
             var query = from c in _context.Categories
                         join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
-                        where ct.LanguageId == request.LanguageId && ct.Name  == request.Name
-       
+                        where ct.LanguageId == request.LanguageId && ct.Name == request.Name
+
                         select new { c, ct };
-            if(query.Count() !=0)
+            if (query.Count() != 0)
             {
-                return new  ApiErrorResult<bool>("Tên danh mục bị trùng ");
+                return new ApiErrorResult<bool>("Tên danh mục bị trùng ");
             }
 
             Category category = new Category()
@@ -108,7 +108,7 @@ namespace EshopSolution.Application.Cacalog.Products
                 IsShowOnHome = request.IsShowOnHome,
                 ParentId = request.ParentId,
                 Status = request.Status,
-                CategoryTranslations  =  new List<CategoryTranslation>(){
+                CategoryTranslations = new List<CategoryTranslation>(){
                     new CategoryTranslation()
                     {
                         LanguageId = request.LanguageId,
@@ -116,20 +116,16 @@ namespace EshopSolution.Application.Cacalog.Products
                         SeoAlias = request.SeoAlias,
                         SeoDescription = request.SeoDescription,
                         SeoTitle = request.SeoTitle
-                        
                     }
                 },
-
             };
-             _context.Categories.Add(category);
-            if (_context.SaveChanges() == 0)
+            _context.Categories.Add(category);
+            if (await _context.SaveChangesAsync() == 0)
                 return new ApiErrorResult<bool>();
             else
                 return new ApiSuccessResult<bool>();
-
-            
         }
-       
+
         public async Task<ApiResult<List<CategoryViewModel>>> GetAll(String languageId)
         {
             //1.fillter
@@ -146,19 +142,18 @@ namespace EshopSolution.Application.Cacalog.Products
 
             return new ApiSuccessResult<List<CategoryViewModel>>(data);
         }
-        
 
-        public async Task<ApiResult <bool>> Update(CategoryUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(CategoryUpdateRequest request)
         {
-            CategoryViewModel categoryVD= await GetById(request.Id, request.LanguageId);
-            if(categoryVD == null)
+            CategoryViewModel categoryVD = await GetById(request.Id, request.LanguageId);
+            if (categoryVD == null)
 
                 return new ApiErrorResult<bool>();
 
             //check categorytranslation
-            CategoryTranslation categoryTranslation =  _context.CategoryTranslations.Where(x => x.CategoryId == request.Id
-                          && x.LanguageId == request.LanguageId).FirstOrDefault();
-            if(categoryTranslation == null)
+            CategoryTranslation categoryTranslation = _context.CategoryTranslations.Where(x => x.CategoryId == request.Id
+                         && x.LanguageId == request.LanguageId).FirstOrDefault();
+            if (categoryTranslation == null)
                 return new ApiErrorResult<bool>();
 
             //update Category
@@ -182,8 +177,6 @@ namespace EshopSolution.Application.Cacalog.Products
 
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();
-            
-            
         }
 
         public async Task<ApiResult<bool>> Delete(int id)

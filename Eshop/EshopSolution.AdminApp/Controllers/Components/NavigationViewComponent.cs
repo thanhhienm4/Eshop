@@ -21,11 +21,16 @@ namespace EshopSolution.AdminApp.Controllers.Components
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var languages = await _languageApiClient.GetAll();
+            string curentLanguageId = HttpContext.Session.GetString(SystemConstants.AppSettings.LanguageId);
+            if(string.IsNullOrEmpty(curentLanguageId))
+            {
+                curentLanguageId = SystemConstants.AppSettings.DefaultLangaueId;
+            }
+
             var navigationVm = new NavigationViewModel()
             {
-                CurrentLanguageId = HttpContext
-                .Session
-                .GetString(SystemConstants.AppSettings.LanguageId),
+                CurrentLanguageId = curentLanguageId,
+                
                 Languages = languages.ResultObj
             };
             return View("Default", navigationVm);

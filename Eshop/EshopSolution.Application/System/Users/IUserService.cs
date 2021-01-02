@@ -12,8 +12,10 @@ namespace EshopSolution.Application.System.Users
         Task<ApiResult<bool>> Register(RegisterRequest request);
 
         Task<ApiResult<PageResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request);
+
         Task<ApiResult<bool>> Update(Guid id, UpdateRequest request);
-        Task<ApiResult<bool>> RoleAssign (Guid id, RoleAssignRequest request);
+
+        Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
 
         Task<ApiResult<UserViewModel>> GetById(Guid id);
 

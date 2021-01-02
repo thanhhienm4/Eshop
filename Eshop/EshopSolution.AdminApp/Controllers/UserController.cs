@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
 {
-
     public class UserController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
+
         //private readonly IConfiguration _configuration;
-        private readonly IRoleApiClient _roleApiClient; 
+        private readonly IRoleApiClient _roleApiClient;
 
         public UserController(IUserApiClient userApiClient, IRoleApiClient roleApiClient)
         {
@@ -25,6 +25,7 @@ namespace EshopSolution.AdminApp.Controllers
             _roleApiClient = roleApiClient;
             //_configuration = configuration;
         }
+
         [Authorize]
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 3)
         {
@@ -40,15 +41,13 @@ namespace EshopSolution.AdminApp.Controllers
                 PageSize = pageSize
             };
             ViewBag.Keyword = keyword;
-            if(TempData["Result"]!=null)
+            if (TempData["Result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["Result"];
-            }    
+            }
             var data = await _userApiClient.GetUserPaging(request);
             return View(data.ResultObj);
         }
-
-
 
         [HttpPost]
         //[Authorize]
@@ -58,11 +57,13 @@ namespace EshopSolution.AdminApp.Controllers
             HttpContext.Session.Remove(SystemConstants.AppSettings.Token);
             return RedirectToAction("Index", "Login");
         }
+
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Create(RegisterRequest request)
@@ -80,6 +81,7 @@ namespace EshopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Edit(Guid id)
@@ -100,7 +102,6 @@ namespace EshopSolution.AdminApp.Controllers
                     FirstName = result.ResultObj.FirstName,
                     PhoneNumber = result.ResultObj.PhoneNumber,
                     LastName = result.ResultObj.LastName
-
                 };
                 return View(updateRequest);
             }
@@ -124,6 +125,7 @@ namespace EshopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Details(Guid id)
@@ -140,6 +142,7 @@ namespace EshopSolution.AdminApp.Controllers
             }
             return View();
         }
+
         [HttpGet]
         public async Task<IActionResult> Delete(Guid Id)
         {
@@ -151,15 +154,15 @@ namespace EshopSolution.AdminApp.Controllers
 
             if (result.IsSuccessed)
             {
-                return  View(new DeleteRequest()
+                return View(new DeleteRequest()
                 {
                     Id = Id
                 });
             }
-           
+
             return RedirectToAction("Error", "Home");
         }
-            
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Delete(DeleteRequest request)
@@ -177,6 +180,7 @@ namespace EshopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> RoleAssign(Guid id)
@@ -187,7 +191,6 @@ namespace EshopSolution.AdminApp.Controllers
             }
             var roleAssignRequest = await GetRoleAssignRequest(id);
             return View(roleAssignRequest);
-           
         }
 
         [HttpPost]
@@ -208,6 +211,7 @@ namespace EshopSolution.AdminApp.Controllers
             var roleAssignRequest = await GetRoleAssignRequest(request.Id);
             return View(roleAssignRequest);
         }
+
         private async Task<RoleAssignRequest> GetRoleAssignRequest(Guid id)
         {
             var userObject = await _userApiClient.GetById(id);
@@ -217,11 +221,9 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 roleAssignRequest.Roles.Add(new SelectedItem()
                 {
-
                     Id = role.Id.ToString(),
                     Name = role.Name,
                     Selected = userObject.ResultObj.Roles.Contains(role.Name)
-
                 });
             }
 

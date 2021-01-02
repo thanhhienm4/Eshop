@@ -1,15 +1,10 @@
 ﻿using EshopSolution.AdminApp.Services;
-using EshopSolution.Utilities.Constants;
 using EshopSolution.ViewModel.Common;
 using EshopSolution.ViewModel.System.Languages;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace eShopSolution.AdminApp.Services

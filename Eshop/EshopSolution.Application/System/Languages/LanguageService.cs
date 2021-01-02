@@ -2,18 +2,16 @@
 using EshopSolution.ViewModel.Common;
 using EshopSolution.ViewModel.System.Languages;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EshopSolution.Application.System.Languages
 {
-    
-    public class LanguageService :ILanguageService
+    public class LanguageService : ILanguageService
     {
         private readonly EshopDbContext _context;
+
         public LanguageService(EshopDbContext context)
         {
             _context = context;

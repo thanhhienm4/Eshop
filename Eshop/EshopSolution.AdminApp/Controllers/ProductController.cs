@@ -1,18 +1,12 @@
 ﻿using EshopSolution.AdminApp.Services;
-using EshopSolution.Data.Entities;
-using EshopSolution.Utilities.Constants;
 using EshopSolution.ViewModel.Catalog.Categories;
 using EshopSolution.ViewModel.Catalog.Products;
 using EshopSolution.ViewModel.Common;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Cryptography.Xml;
 using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
@@ -32,7 +26,6 @@ namespace EshopSolution.AdminApp.Controllers
         [Authorize]
         public async Task<IActionResult> Index(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 5)
         {
-
             var request = new GetManageProductPagingRequest()
             {
                 Keyword = keyword,
@@ -51,8 +44,6 @@ namespace EshopSolution.AdminApp.Controllers
                 Value = x.Id.ToString(),
                 Selected = categoryId.HasValue && categoryId.Value == x.Id
             });
-
-
 
             if (TempData["Result"] != null)
             {
@@ -121,10 +112,10 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(request);
             }
-            if(request.LanguageId==null)
+            if (request.LanguageId == null)
                 request.LanguageId = GetLanguageId();
             var result = await _productApiClient.Update(request.Id, request);
-           
+
             if (result.IsSuccessed)
             {
                 TempData["Result"] = "Chỉnh sửa thành công";
@@ -184,7 +175,6 @@ namespace EshopSolution.AdminApp.Controllers
             return View(request.Id);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> CategoryAssign(int id)
         {
@@ -212,12 +202,12 @@ namespace EshopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             var categoryAssignRequest = await GetCategoryAssignRequest(request.Id);
             return View(categoryAssignRequest);
-            
         }
+
         private async Task<CategoryAssignRequest> GetCategoryAssignRequest(int id)
         {
             string languageId = GetLanguageId();
-            var productViewModel= (await _productApiClient.GetById(id, languageId)).ResultObj;
+            var productViewModel = (await _productApiClient.GetById(id, languageId)).ResultObj;
             var categories = (await _categoryApiClient.GetAll(languageId)).ResultObj;
             var categoryAssignRequest = new CategoryAssignRequest();
 
@@ -225,18 +215,12 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 categoryAssignRequest.Categories.Add(new SelectedItem()
                 {
-
                     Id = category.Id.ToString(),
                     Name = category.Name,
                     Selected = productViewModel.Categories.Contains(category.Name)
-
                 });
-
             }
             return categoryAssignRequest;
         }
-
-
-
     }
 }

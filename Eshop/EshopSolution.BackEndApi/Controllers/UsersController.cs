@@ -1,5 +1,4 @@
 ﻿using EshopSolution.Application.System.Users;
-using EshopSolution.ViewModel.Common;
 using EshopSolution.ViewModel.System.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +31,8 @@ namespace EshopSolution.BackEndApi.Controllers
             if (!resultToken.IsSuccessed)
             {
                 return BadRequest(resultToken);
-            } else
+            }
+            else
 
                 return Ok(resultToken);
         }
@@ -62,8 +62,8 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             var user = await _userService.GetUserPaging(request);
             return Ok(user);
-
         }
+
         [HttpPut("{id}/update")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateRequest request)
         {
@@ -78,6 +78,7 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return BadRequest(result);
         }
+
         [HttpGet("{id}/getbyid")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -91,12 +92,11 @@ namespace EshopSolution.BackEndApi.Controllers
                 return Ok(respond);
             }
             return BadRequest(respond);
-
         }
+
         [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(Guid Id)
         {
-
             if (ModelState.IsValid == false)
             {
                 return BadRequest();
@@ -108,8 +108,9 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return BadRequest(result);
         }
+
         [HttpPut("{id}/roles")]
-        public async Task<IActionResult> RoleAssign(Guid id,[FromBody] RoleAssignRequest request)
+        public async Task<IActionResult> RoleAssign(Guid id, [FromBody] RoleAssignRequest request)
         {
             if (ModelState.IsValid == false)
             {
@@ -122,7 +123,5 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return BadRequest(result);
         }
-
     }
-    
 }

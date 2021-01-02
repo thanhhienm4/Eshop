@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EshopSolution.Utilities.Constants;
+﻿using EshopSolution.Utilities.Constants;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -20,6 +16,7 @@ namespace EshopSolution.AdminApp.Controllers
             }
             base.OnActionExecuting(context);
         }
+
         protected string GetLanguageId()
         {
             string languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.LanguageId);

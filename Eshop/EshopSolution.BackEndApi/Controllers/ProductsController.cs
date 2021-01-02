@@ -1,6 +1,5 @@
 ﻿using eShopSolution.ViewModels.Catalog.ProductImages;
 using EshopSolution.Application;
-using EshopSolution.Application.Cacalog.Products;
 using EshopSolution.ViewModel.Catalog.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,14 +19,11 @@ namespace EshopSolution.BackEndApi.Controllers
             _productService = productService;
         }
 
-
-
         [HttpGet("{categoryId}/paging/")]
         public async Task<IActionResult> GetAllPaging(int categoryId, [FromQuery] GetManageProductPagingRequest request)
         {
             request.CategoryId = categoryId;
             return Ok(await _productService.GetAllPaging(request));
-
         }
 
         [HttpGet("{productId}/{languageId}")]
@@ -96,14 +92,13 @@ namespace EshopSolution.BackEndApi.Controllers
         [HttpPatch("{productId}/{newPrice}")]
         public async Task<IActionResult> UpdatePrice(int productId, decimal newPrice)
         {
-            var result= await _productService.UpdatePrice(productId, newPrice);
-            if (result.IsSuccessed==false)
+            var result = await _productService.UpdatePrice(productId, newPrice);
+            if (result.IsSuccessed == false)
             {
                 return BadRequest(result);
             }
             return Ok(result);
         }
-
 
         [HttpPost("{productId}/images")]
         public async Task<IActionResult> CreateImage(int productId, [FromForm] ProductImageCreateRequest request)
@@ -152,7 +147,7 @@ namespace EshopSolution.BackEndApi.Controllers
         [HttpGet("{productId}/images/{imageId}")]
         public async Task<IActionResult> GetImageById(int imageId)
         {
-            var result= await _productService.GetImageById(imageId);
+            var result = await _productService.GetImageById(imageId);
             if (result.IsSuccessed == false)
             {
                 return BadRequest(result);
@@ -160,20 +155,15 @@ namespace EshopSolution.BackEndApi.Controllers
             return Ok(result);
         }
 
-
-        
         [HttpPut("{productId}/categories")]
-        public async Task<IActionResult> CategoryAssign(int productId,[FromBody] CategoryAssignRequest request)
+        public async Task<IActionResult> CategoryAssign(int productId, [FromBody] CategoryAssignRequest request)
         {
             var result = await _productService.CategoryAssign(request);
-            if(result.IsSuccessed == true)
+            if (result.IsSuccessed == true)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-
-
-
     }
 }

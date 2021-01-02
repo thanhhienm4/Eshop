@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using EshopSolution.AdminApp.Services;
+﻿using EshopSolution.AdminApp.Services;
 using EshopSolution.Utilities.Constants;
 using EshopSolution.ViewModel.System.Users;
 using Microsoft.AspNetCore.Authentication;
@@ -16,6 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
 {
@@ -29,6 +27,7 @@ namespace EshopSolution.AdminApp.Controllers
             _userApiClient = userApiClient;
             _configuration = configuration;
         }
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Index()
@@ -45,9 +44,9 @@ namespace EshopSolution.AdminApp.Controllers
                 return View(request);
             }
             var respond = await _userApiClient.Authenticate(request);
-            if(!respond.IsSuccessed)
+            if (!respond.IsSuccessed)
             {
-                ModelState.AddModelError("",respond.Message);
+                ModelState.AddModelError("", respond.Message);
                 return View(request);
             }
             var userPrincipal = this.ValidateToken(respond.ResultObj);
@@ -64,6 +63,7 @@ namespace EshopSolution.AdminApp.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {
             IdentityModelEventSource.ShowPII = true;
@@ -78,6 +78,5 @@ namespace EshopSolution.AdminApp.Controllers
                                                                             out SecurityToken validatedToken);
             return claimsPrincipal;
         }
-
     }
 }

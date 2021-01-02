@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EshopSolution.AdminApp.Services;
+﻿using EshopSolution.AdminApp.Services;
 using EshopSolution.ViewModel.Catalog.Categories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
 {
@@ -13,6 +10,7 @@ namespace EshopSolution.AdminApp.Controllers
     public class CategoryController : BaseController
     {
         private readonly ICategoryApiClient _categoryApiCilent;
+
         public CategoryController(ICategoryApiClient categoryApiClient)
         {
             _categoryApiCilent = categoryApiClient;
@@ -20,7 +18,6 @@ namespace EshopSolution.AdminApp.Controllers
 
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 5)
         {
-
             var request = new GetManageCategoryPagingRequest()
             {
                 Keyword = keyword,
@@ -38,7 +35,6 @@ namespace EshopSolution.AdminApp.Controllers
             var data = await _categoryApiCilent.GetCategoryPaging(request);
             return View(data.ResultObj);
         }
-
 
         [HttpGet]
         public IActionResult Create()
@@ -67,8 +63,8 @@ namespace EshopSolution.AdminApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var result = await _categoryApiCilent.GetById(id,GetLanguageId());
-            if(result.IsSuccessed)
+            var result = await _categoryApiCilent.GetById(id, GetLanguageId());
+            if (result.IsSuccessed)
             {
                 var request = new CategoryUpdateRequest()
                 {
@@ -78,17 +74,16 @@ namespace EshopSolution.AdminApp.Controllers
                     Name = result.ResultObj.Name,
                     ParentId = result.ResultObj.ParentId,
                     SeoAlias = result.ResultObj.SeoAlias,
-                    SeoDescription = result.ResultObj.SeoDescription, 
+                    SeoDescription = result.ResultObj.SeoDescription,
                     SeoTitle = result.ResultObj.SeoTitle,
                     SortOrder = result.ResultObj.SortOrder,
                     Status = result.ResultObj.Status
-
                 };
                 return View(request);
             }
             return RedirectToAction("Error", "Home");
-
         }
+
         [HttpPost]
         public async Task<IActionResult> Edit(CategoryUpdateRequest request)
         {
@@ -108,6 +103,7 @@ namespace EshopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
@@ -115,14 +111,14 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(id);
             }
-            var category = _categoryApiCilent.GetById(id, GetLanguageId());
-            if(category !=null)
+            var category = await _categoryApiCilent.GetById(id, GetLanguageId());
+            if (category != null)
             {
                 return View(new CategoryDeleteRequest(id));
             }
             return RedirectToAction("Error", "Home");
-
         }
+
         [HttpPost]
         public async Task<IActionResult> Delete(CategoryDeleteRequest request)
         {
@@ -142,5 +138,4 @@ namespace EshopSolution.AdminApp.Controllers
             return View(request);
         }
     }
-
 }
