@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EshopSolution.ViewModel.Common
 {
@@ -9,14 +7,13 @@ namespace EshopSolution.ViewModel.Common
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
         public int TotalRecord { get; set; }
-        public int PageCount 
+
+        public int PageCount
         {
             get
             {
-                return (int)Math.Ceiling((double)TotalRecord/PageSize);
+                return (int)Math.Ceiling((double)TotalRecord / PageSize);
             }
         }
-
-
     }
 }

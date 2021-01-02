@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace EshopSolution.ViewModel.System.Users
 {
-    public class UpdateRequest {
-        public  Guid Id {get ; set;}
+    public class UpdateRequest
+    {
+        public Guid Id { get; set; }
 
         [Display(Name = "Tên")]
         public string FirstName { get; set; }
@@ -23,7 +22,5 @@ namespace EshopSolution.ViewModel.System.Users
 
         [Display(Name = "Số điện thoại")]
         public string PhoneNumber { get; set; }
-
-
     }
 }

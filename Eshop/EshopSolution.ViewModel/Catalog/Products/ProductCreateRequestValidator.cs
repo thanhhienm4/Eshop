@@ -1,7 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EshopSolution.ViewModel.Catalog.Products
 {
@@ -15,8 +12,6 @@ namespace EshopSolution.ViewModel.Catalog.Products
             RuleFor(x => x.Stock).NotEmpty().WithMessage("Không được bỏ trống");
             RuleFor(x => x.Description).NotEmpty().WithMessage("Không được bỏ trống");
             RuleFor(x => x.Details).NotEmpty().WithMessage("Không được bỏ trống");
-
-
         }
     }
 }

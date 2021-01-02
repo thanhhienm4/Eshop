@@ -41,23 +41,24 @@ namespace EshopSolution.BackEndApi
             IdentityModelEventSource.ShowPII = true;
             services.AddDbContext<EshopDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
-            services.AddControllers().AddFluentValidation() ; 
+            services.AddControllers().AddFluentValidation();
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMvc(c => c.Conventions.Add(new ApiExplorerIgnores())).AddFluentValidation();
             services.AddIdentity<AppUser, AppRole>(
-                option => {
-                        option.Password.RequireNonAlphanumeric = false;
-                        option.Password.RequireDigit = false;
-                        option.Password.RequireLowercase = false;
-                        option.Password.RequireUppercase = false;
-                            })
+                option =>
+                {
+                    option.Password.RequireNonAlphanumeric = false;
+                    option.Password.RequireDigit = false;
+                    option.Password.RequireLowercase = false;
+                    option.Password.RequireUppercase = false;
+                })
                 .AddEntityFrameworkStores<EshopDbContext>()
                 .AddDefaultTokenProviders();
             //Declare
-            
+
             services.AddTransient<IStorageService, FileStorageService>();
-            services.AddTransient<IProductService, ProductService >();
+            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
@@ -68,7 +69,7 @@ namespace EshopSolution.BackEndApi
             services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddTransient<IValidator<UpdateRequest>, UpdateRequestValidator>();
-            services.AddTransient<IValidator<ProductCreateRequest>,ProductCreateRequestValidator>();
+            services.AddTransient<IValidator<ProductCreateRequest>, ProductCreateRequestValidator>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop Solution", Version = "v1" });
@@ -128,8 +129,6 @@ namespace EshopSolution.BackEndApi
                     IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
                 };
             });
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -150,7 +149,7 @@ namespace EshopSolution.BackEndApi
 
             app.UseAuthentication();
             app.UseRouting();
-            
+
             app.UseAuthorization();
             app.UseSwagger();
 

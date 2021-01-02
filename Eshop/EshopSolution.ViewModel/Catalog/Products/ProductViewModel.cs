@@ -22,6 +22,6 @@ namespace EshopSolution.ViewModel.Catalog.Products
         public string SeoAlias { get; set; }
         public IFormFile ThumbnailImage { get; set; }
 
-        public List<String> Categories { get; set; } = new List<string>(); 
+        public List<String> Categories { get; set; } = new List<string>();
     }
 }

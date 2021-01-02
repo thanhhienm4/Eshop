@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EshopSolution.ViewModel.Common;
+﻿using EshopSolution.ViewModel.Common;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers.Components
 {

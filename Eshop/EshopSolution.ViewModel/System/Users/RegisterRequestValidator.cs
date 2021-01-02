@@ -1,11 +1,9 @@
 ﻿using FluentValidation;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EshopSolution.ViewModel.System.Users
 {
-    public class RegisterRequestValidator : AbstractValidator <RegisterRequest>
+    public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
     {
         public RegisterRequestValidator()
         {
@@ -20,8 +18,7 @@ namespace EshopSolution.ViewModel.System.Users
             RuleFor(x => x.Password).NotEmpty().WithMessage("Mật khẩu không được để trống");
             RuleFor(x => x.ConfirmPassword).NotEmpty().WithMessage("Vui lòng nhập lại mật khẩu");
 
-            RuleFor(x=> x.Password).Equal(x => x.ConfirmPassword).When(customer => !String.IsNullOrWhiteSpace(customer.Password)).WithMessage("Mật khẩu không khớp");
+            RuleFor(x => x.Password).Equal(x => x.ConfirmPassword).When(customer => !String.IsNullOrWhiteSpace(customer.Password)).WithMessage("Mật khẩu không khớp");
         }
     }
-    
 }

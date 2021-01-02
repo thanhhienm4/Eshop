@@ -23,7 +23,7 @@ namespace EshopSolution.ViewModel.System.Users
 
         [Display(Name = "Tên đăng nhập")]
         public string UserName { get; set; }
-        
+
         [Display(Name = "Mật khẩu")]
         [DataType(DataType.Password)]
         public string Password { get; set; }

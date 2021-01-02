@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EshopSolution.ViewModel.Common
+﻿namespace EshopSolution.ViewModel.Common
 {
     public class PagingRequestBase
     {

@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -18,7 +16,7 @@ namespace EshopSolution.AdminApp.Services
         protected readonly IConfiguration _configuration;
         protected readonly IHttpContextAccessor _httpContextAccessor;
 
-        public BaseApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, 
+        public BaseApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration,
             IHttpContextAccessor httpContextAccessor)
         {
             _httpClientFactory = httpClientFactory;
@@ -36,21 +34,22 @@ namespace EshopSolution.AdminApp.Services
 
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
-            client.DefaultRequestHeaders.Authorization = 
+            client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, sessions);
             var response = await client.GetAsync(url);
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
                 TResponse myDeserializedObjList = (TResponse)JsonConvert
-                    .DeserializeObject(body,typeof(TResponse));
+                    .DeserializeObject(body, typeof(TResponse));
 
                 return myDeserializedObjList;
             }
             return JsonConvert.DeserializeObject<TResponse>(body);
         }
+
         // post data to Api
-        protected async Task<TResponse> PostAsync<TResponse>(string url,Object obj)
+        protected async Task<TResponse> PostAsync<TResponse>(string url, Object obj)
         {
             var sessions = _httpContextAccessor
                 .HttpContext
@@ -62,7 +61,7 @@ namespace EshopSolution.AdminApp.Services
             client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, sessions);
-            var response = await client.PostAsync(url,httpContent);
+            var response = await client.PostAsync(url, httpContent);
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
@@ -92,6 +91,7 @@ namespace EshopSolution.AdminApp.Services
             }
             return JsonConvert.DeserializeObject<TResponse>(body);
         }
+
         // send update request to Api
         protected async Task<TResponse> PutAsync<TResponse>(string url, Object obj)
         {

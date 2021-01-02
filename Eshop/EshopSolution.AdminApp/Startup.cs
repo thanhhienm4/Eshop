@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using eShopSolution.AdminApp.Services;
 using EshopSolution.AdminApp.Services;
 using EshopSolution.ViewModel.System.Users;
@@ -10,10 +6,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace EshopSolution.AdminApp
 {
@@ -33,7 +29,7 @@ namespace EshopSolution.AdminApp
             services.AddSingleton<IHttpContextFactory, DefaultHttpContextFactory>();
             services.AddHttpClient();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .AddCookie(options =>   
+                    .AddCookie(options =>
                     {
                         options.LoginPath = "/Login/Index";
                         options.AccessDeniedPath = "/Account/Forbident";
@@ -43,7 +39,7 @@ namespace EshopSolution.AdminApp
             services.AddTransient<IRoleApiClient, RoleApiClient>();
             services.AddTransient<ILanguageApiClient, LanguageApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
-            services.AddTransient<ICategoryApiClient,CategoryApiClient>();
+            services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
