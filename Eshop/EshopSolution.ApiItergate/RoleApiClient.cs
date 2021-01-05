@@ -10,7 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace EshopSolution.AdminApp.Services
+namespace EshopSolution.ApiIntergate
 {
     public class RoleApiClient : BaseApiClient, IRoleApiClient
     {

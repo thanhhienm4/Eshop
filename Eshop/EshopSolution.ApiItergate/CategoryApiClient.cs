@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace EshopSolution.AdminApp.Services
+namespace EshopSolution.ApiIntergate
 {
     public class CategoryApiClient : BaseApiClient, ICategoryApiClient
     {

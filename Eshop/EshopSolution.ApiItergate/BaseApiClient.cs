@@ -8,7 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EshopSolution.AdminApp.Services
+namespace EshopSolution.ApiIntergate
 {
     public class BaseApiClient
     {
@@ -49,7 +49,7 @@ namespace EshopSolution.AdminApp.Services
         }
 
         // post data to Api
-        protected async Task<TResponse> PostAsync<TResponse>(string url, Object obj)
+        protected async Task<TResponse> PostAsync<TResponse>(string url, object obj)
         {
             var sessions = _httpContextAccessor
                 .HttpContext
@@ -93,11 +93,11 @@ namespace EshopSolution.AdminApp.Services
         }
 
         // send update request to Api
-        protected async Task<TResponse> PutAsync<TResponse>(string url, Object obj)
+        protected async Task<TResponse> PutAsync<TResponse>(string url, object obj)
         {
             var BearerToken = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
             var json = JsonConvert.SerializeObject(obj);
-            var httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, BearerToken);
             client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);

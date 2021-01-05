@@ -1,5 +1,4 @@
-﻿using EshopSolution.AdminApp.Services;
-using EshopSolution.ViewModel.Common;
+﻿using EshopSolution.ViewModel.Common;
 using EshopSolution.ViewModel.System.Languages;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +6,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace eShopSolution.AdminApp.Services
+namespace EshopSolution.ApiIntergate
 {
     public class LanguageApiClient : BaseApiClient, ILanguageApiClient
     {

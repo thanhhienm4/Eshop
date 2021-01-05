@@ -1,4 +1,4 @@
-﻿using EshopSolution.AdminApp.Services;
+﻿using EshopSolution.ApiIntergate;
 using EshopSolution.ViewModel.Catalog.Categories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

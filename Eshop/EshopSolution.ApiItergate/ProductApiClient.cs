@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace EshopSolution.AdminApp.Services
+namespace EshopSolution.ApiIntergate
 {
     public class ProductApiClient : BaseApiClient, IProductApiClient
     {
@@ -64,15 +64,15 @@ namespace EshopSolution.AdminApp.Services
             requestContent.Add(new StringContent(request.OriginalPrice.ToString()), "OriginalPrice");
             //if (request.Price!= null)
             requestContent.Add(new StringContent(request.Price.ToString()), "Price");
-            if (String.IsNullOrWhiteSpace(request.SeoAlias))
+            if (string.IsNullOrWhiteSpace(request.SeoAlias))
                 request.SeoAlias = "";
             requestContent.Add(new StringContent(request.SeoAlias.ToString()), "SeoAlias");
 
-            if (String.IsNullOrWhiteSpace(request.SeoDescription))
+            if (string.IsNullOrWhiteSpace(request.SeoDescription))
                 request.SeoDescription = "";
             requestContent.Add(new StringContent(request.SeoDescription.ToString()), "SeoDescription");
 
-            if (String.IsNullOrWhiteSpace(request.SeoTitle))
+            if (string.IsNullOrWhiteSpace(request.SeoTitle))
                 request.SeoTitle = "";
             requestContent.Add(new StringContent(request.SeoTitle.ToString()), "SeoTitle");
             //if (request.Stock != null)
