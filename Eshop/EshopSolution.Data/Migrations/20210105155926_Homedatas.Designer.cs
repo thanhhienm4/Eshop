@@ -4,14 +4,16 @@ using EshopSolution.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EshopSolution.Data.Migrations
 {
     [DbContext(typeof(EshopDbContext))]
-    partial class EshopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210105155926_Homedatas")]
+    partial class Homedatas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,7 +80,7 @@ namespace EshopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "c68ab340-8a90-49e3-9a2e-acb2f247555a",
+                            ConcurrencyStamp = "3cbaa2b5-f8ec-47cd-9889-9d6e72d6c4c5",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -165,7 +167,7 @@ namespace EshopSolution.Data.Migrations
                             LockoutEnd = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             NormalizedEmail = "Mistakem4@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFrSiedZPNij+bp7l6VXlFQVZKqpCxg7+2TLUyBlEG5H4jHG7YKnOrMeyG8PhRdnRg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBGPM2HE8+2mU2aRzj1wiGw6xTul2TpelGAao1uQIUAdyUJVKuFdDW0EZit1Jw+zTQ==",
                             PhoneNumber = "0912413908",
                             PhoneNumberConfirmed = true,
                             SecurityStamp = "",
@@ -210,7 +212,7 @@ namespace EshopSolution.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn(1, 1);
+                        .UseIdentityColumn();
 
                     b.Property<bool>("IsShowOnHome")
                         .HasColumnType("bit");
@@ -498,7 +500,7 @@ namespace EshopSolution.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2021, 1, 5, 23, 14, 59, 221, DateTimeKind.Local).AddTicks(682),
+                            DateCreated = new DateTime(2021, 1, 5, 22, 59, 24, 606, DateTimeKind.Local).AddTicks(252),
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,

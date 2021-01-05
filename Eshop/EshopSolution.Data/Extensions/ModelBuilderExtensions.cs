@@ -122,6 +122,28 @@ namespace EshopSolution.Data.Extensions
                 RoleId = roleId,
                 UserId = adminId
             });
+            modelBuilder.Entity<Slide>().HasData(
+                new Slide
+                {
+                   Id = 1,
+                    Name = "First product",
+                    Desciption = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.,",
+                    Url = "#",
+                    Image = "themes/images/carousel/4.png",
+                    SortOther = 1,
+                    status = Status.Active
+                },
+                new Slide
+                {
+                    Id = 2,
+                    Name = "First product",
+                    Desciption = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.,",
+                    Url = "#",
+                    Image = "themes/images/carousel/1.png",
+                    SortOther = 1,
+                    status = Status.Active
+                })
+            ;
         }
     }
 }
