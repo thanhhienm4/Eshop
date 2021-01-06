@@ -26,9 +26,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Host", "3.Host", "{6E1B39
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EshopSolution.AdminApp", "EshopSolution.AdminApp\EshopSolution.AdminApp.csproj", "{57D27F12-6141-4DF6-93E8-FF608E9588E8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{2FC28B84-12E4-402B-98E1-57DFF8DF6F46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EshopSolution.WebApp", "WebApp\EshopSolution.WebApp.csproj", "{2FC28B84-12E4-402B-98E1-57DFF8DF6F46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EshopSolution.ApiIntergate", "EshopSolution.ApiItergate\EshopSolution.ApiIntergate.csproj", "{F27027BA-629F-45CE-94EC-1A6F3AF9F747}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EshopSolution.ApiIntergate", "EshopSolution.ApiItergate\EshopSolution.ApiIntergate.csproj", "{F27027BA-629F-45CE-94EC-1A6F3AF9F747}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

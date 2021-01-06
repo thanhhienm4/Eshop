@@ -1,4 +1,5 @@
 ﻿using EshopSolution.Application.System.Role;
+using EshopSolution.Application.Unilities.Slides;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -7,22 +8,21 @@ namespace EshopSolution.BackEndApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class RoleController : ControllerBase
+    //[Authorize]
+    public class SlideController : ControllerBase
     {
-        private readonly IRoleService _roleService;
+        private readonly ISlideService _slideService;
 
-        public RoleController(IRoleService roleService)
+        public SlideController(ISlideService slideService)
         {
-            _roleService = roleService;
+            _slideService = slideService;
         }
 
         [HttpGet("GetAll")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
-            var roles = await _roleService.GetAll();
-            return Ok(roles);
+            var slides = await _slideService.GetAll();
+            return Ok(slides);
         }
     }
 }

@@ -4,11 +4,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using LazZiya.ExpressLocalization;
-using WebApp.LocalizationResources;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Http;
+using EshopSolution.ApiIntergate;
+using System;
+using EshopSolution.WebApp.LocalizationResources;
 
-namespace WebApp
+namespace EshopSolution.WebApp
 {
     public class Startup
     {
@@ -22,15 +25,16 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddHttpClient();
             var cultures = new[]
             {
                 new CultureInfo("en"),
                 new CultureInfo("vi"),
             };
             services.AddMvc().AddRazorRuntimeCompilation();
-            services.AddRazorPages()
-                .AddExpressLocalization<ExpressLocalizationResource, ViewLocalizationResource>(
+            services.AddControllersWithViews()
+            //services.AddRazorPages()
+               .AddExpressLocalization<ExpressLocalizationResource, ViewLocalizationResource>(
                 ops =>
                 {
                     ops.ResourcesPath = "LocalizationResources";
@@ -41,7 +45,12 @@ namespace WebApp
                         o.DefaultRequestCulture = new RequestCulture("vi");
                     };
                 });
-            
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<ISlideApiClient, SlideApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +70,7 @@ namespace WebApp
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
+            app.UseSession();
             app.UseRequestLocalization();
             app.UseEndpoints(endpoints =>
             {

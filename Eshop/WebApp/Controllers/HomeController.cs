@@ -1,27 +1,39 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EshopSolution.ApiIntergate;
+using EshopSolution.WebApp.Models;
+using LazZiya.ExpressLocalization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
-using WebApp.Models;
+using System.Threading.Tasks;
 
 namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ISlideApiClient _slideApiClient;
+        private readonly ISharedCultureLocalizer _loc;
+        public HomeController(ILogger<HomeController> logger, ISlideApiClient slideApiClient, ISharedCultureLocalizer loc)
         {
             _logger = logger;
+            _slideApiClient = slideApiClient;
+            _loc = loc;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var msg = _loc.GetLocalizedString("Vietnamese");
+            var slides = await _slideApiClient.GetAll();
+            var viewModel = new HomeViewModel()
+            {
+                Slides = slides
+            };
+            return View(viewModel);
         }
-
+            
         public IActionResult Privacy()
         {
             return View();

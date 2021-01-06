@@ -1,10 +1,11 @@
-﻿using System;
+﻿using EshopSolution.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EshopSolution.Data.Entities
+namespace EshopSolution.ViewModel.Utilities.Slides
 {
-    public class Slide
+    public class SlideViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -13,6 +14,5 @@ namespace EshopSolution.Data.Entities
         public string Image { get; set; }
         public int SortOrder { get; set; }
         public Status status { get; set; }
-       
     }
 }

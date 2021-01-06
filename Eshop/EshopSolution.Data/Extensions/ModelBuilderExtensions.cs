@@ -130,7 +130,7 @@ namespace EshopSolution.Data.Extensions
                     Desciption = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.,",
                     Url = "#",
                     Image = "themes/images/carousel/4.png",
-                    SortOther = 1,
+                    SortOrder = 1,
                     status = Status.Active
                 },
                 new Slide
@@ -140,7 +140,7 @@ namespace EshopSolution.Data.Extensions
                     Desciption = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.,",
                     Url = "#",
                     Image = "themes/images/carousel/1.png",
-                    SortOther = 1,
+                    SortOrder = 1,
                     status = Status.Active
                 })
             ;

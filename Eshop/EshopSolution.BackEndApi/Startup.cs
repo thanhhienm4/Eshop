@@ -4,6 +4,7 @@ using EshopSolution.Application.Cacalog.Products;
 using EshopSolution.Application.System.Languages;
 using EshopSolution.Application.System.Role;
 using EshopSolution.Application.System.Users;
+using EshopSolution.Application.Unilities.Slides;
 using EshopSolution.Data.EF;
 using EshopSolution.Data.Entities;
 using EshopSolution.Utilities.Constants;
@@ -63,6 +64,7 @@ namespace EshopSolution.BackEndApi
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
             services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<ISlideService, SlideService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ILanguageService, LanguageService>();
             services.AddTransient<ICategoryService, CategoryService>();
