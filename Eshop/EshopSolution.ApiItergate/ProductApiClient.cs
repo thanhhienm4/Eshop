@@ -4,6 +4,7 @@ using EshopSolution.ViewModel.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -103,6 +104,10 @@ namespace EshopSolution.ApiIntergate
             return await GetAsync<ApiResult<PageResult<ProductViewModel>>>($"/api/Products/{request.CategoryId}/paging?PageIndex=" +
                $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&" +
                $"LanguageId={request.LanguageId}");
+        }
+        public async Task<List<ProductViewModel>> GetFeatured(string languuageId,int take)
+        {
+            return (await GetAsync<ApiResult<List<ProductViewModel>>>($"/api/Products/featured/{languuageId}/{take}")).ResultObj;
         }
     }
 }

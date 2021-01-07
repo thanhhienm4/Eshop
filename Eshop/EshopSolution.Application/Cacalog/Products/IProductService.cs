@@ -37,5 +37,7 @@ namespace EshopSolution.Application
         Task<ApiResult<PageResult<ProductViewModel>>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
 
         Task<ApiResult<bool>> CategoryAssign(CategoryAssignRequest request);
+
+        Task<ApiResult<List<ProductViewModel>>> GetFeatured(string languageId, int number);
     }
 }

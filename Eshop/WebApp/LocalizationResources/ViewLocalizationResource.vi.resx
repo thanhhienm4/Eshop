@@ -169,6 +169,10 @@
     <value>Đăng xuất</value>
     <comment>VIew/Layout</comment>
   </data>
+  <data name="name" xml:space="preserve">
+    <value>Tên</value>
+    <comment>Home/Index</comment>
+  </data>
   <data name="ORDER HISTORY" xml:space="preserve">
     <value>Lịch sử m,ua hàng</value>
     <comment>View/Layout</comment>

@@ -97,9 +97,9 @@ namespace EshopSolution.AdminApp.Controllers
                     SeoDescription = result.ResultObj.SeoDescription,
                     SeoTitle = result.ResultObj.SeoTitle,
                     LanguageId = result.ResultObj.LanguageId,
-                    SeoAlias = result.ResultObj.SeoAlias,
-                    ThumbnailImage = result.ResultObj.ThumbnailImage
+                    SeoAlias = result.ResultObj.SeoAlias,                 
                 };
+                //updateRequest.ThumbnailImage. = result.ResultObj.ThumbnailImage;
                 return View(updateRequest);
             }
             return RedirectToAction("Error", "Home");

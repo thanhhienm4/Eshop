@@ -1,4 +1,5 @@
 ﻿using EshopSolution.ApiIntergate;
+using EshopSolution.Utilities.Constants;
 using EshopSolution.WebApp.Models;
 using LazZiya.ExpressLocalization;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace WebApp.Controllers
@@ -15,21 +17,24 @@ namespace WebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ISlideApiClient _slideApiClient;
+        private readonly IProductApiClient _productApiClient;
         private readonly ISharedCultureLocalizer _loc;
-        public HomeController(ILogger<HomeController> logger, ISlideApiClient slideApiClient, ISharedCultureLocalizer loc)
+        public HomeController(ILogger<HomeController> logger, ISlideApiClient slideApiClient, ISharedCultureLocalizer loc,IProductApiClient productApiClient)
         {
             _logger = logger;
             _slideApiClient = slideApiClient;
             _loc = loc;
+            _productApiClient = productApiClient;
         }
 
         public async Task<IActionResult> Index()
         {
             var msg = _loc.GetLocalizedString("Vietnamese");
-            var slides = await _slideApiClient.GetAll();
+            string culture = CultureInfo.CurrentCulture.Name;
             var viewModel = new HomeViewModel()
             {
-                Slides = slides
+                Slides = await _slideApiClient.GetAll(),
+                Products = await _productApiClient.GetFeatured(culture, SystemConstants.ProductSettings.NumberOfFeaturedProducts)
             };
             return View(viewModel);
         }

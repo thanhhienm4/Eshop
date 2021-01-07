@@ -437,5 +437,35 @@ namespace EshopSolution.Application.Cacalog.Products
             List<string> categoriesName = await query.Select(x => new string(x.ToString())).ToListAsync();
             return categoriesName;
         }
+        public async Task<ApiResult<List<ProductViewModel>>> GetFeatured(string languageId,int number)
+        {
+            //1.Select
+            var query = from p in _context.Products
+                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId
+                        join pi in _context.ProductImages on p.Id equals pi.ProductId
+                        where p.IsFeatured == true && pt.LanguageId == languageId && pi.IsDefault == true
+                        select new { p, pt, pi };
+
+            var data = await query.OrderBy(x => x.p.DateCreated)
+                .Select(x => new ProductViewModel()
+                {
+                    ProductId = x.p.Id,
+                    Name = x.pt.Name,
+                    Description = x.pt.Description,
+                    Details = x.pt.Details,
+                    LanguageId = x.pt.LanguageId,
+                    OriginalPrice = x.p.Price,
+                    Price = x.p.Price,
+                    SeoAlias = x.pt.SeoAlias,
+                    SeoDescription = x.pt.SeoDescription,
+                    SeoTitle = x.pt.SeoTitle,
+                    Stock = x.p.Stock,
+                    ViewCount = x.p.ViewCount,
+                    DateCreated = x.p.DateCreated,
+                    ThumbnailImage = x.pi.ImagePath
+                }).Distinct().Take(number).ToListAsync();
+
+            return new ApiSuccessResult<List<ProductViewModel>>(data);
+        }
     }
 }

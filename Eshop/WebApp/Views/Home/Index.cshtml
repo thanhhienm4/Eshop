@@ -1,4 +1,5 @@
 ﻿@model  EshopSolution.WebApp.Models.HomeViewModel
+@using EshopSolution.ViewModel.Catalog.Products 
 @{
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,7 +12,7 @@
                 {
                     <div class="item">
                         <div class="container">
-                            <a href=@slide.Url><img style="width:100%" src=@slide.Image alt=@slide.Name /></a>
+                            <a href=@slide.Url><img style="width:100%" src="@slide.Image" alt=@slide.Name /></a>
                             <div class="carousel-caption">
                                 <h4>@slide.Name</h4>
                                 <p>@slide.Desciption</p>
@@ -32,172 +33,43 @@
         <div class="row-fluid">
             <div id="featured" class="carousel slide">
                 <div class="carousel-inner">
-                    <div class="item active">
-                        <ul class="thumbnails">
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <i class="tag"></i>
-                                    <a href="product_details.html"><img src="/themes/images/products/b1.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5><localize>name</localize> </h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <i class="tag"></i>
-                                    <a href="product_details.html"><img src="/themes/images/products/b2.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5><localize>Product name</localize></h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <i class="tag"></i>
-                                    <a href="product_details.html"><img src="/themes/images/products/b3.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <i class="tag"></i>
-                                    <a href="product_details.html"><img src="/themes/images/products/b4.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="item">
-                        <ul class="thumbnails">
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <i class="tag"></i>
-                                    <a href="product_details.html"><img src="/themes/images/products/5.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <i class="tag"></i>
-                                    <a href="product_details.html"><img src="/themes/images/products/6.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <a href="product_details.html"><img src="/themes/images/products/7.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <a href="product_details.html"><img src="/themes/images/products/8.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="item">
-                        <ul class="thumbnails">
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <a href="product_details.html"><img src="/themes/images/products/9.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <a href="product_details.html"><img src="/themes/images/products/10.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <a href="product_details.html"><img src="/themes/images/products/11.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <a href="product_details.html"><img src="/themes/images/products/1.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="item">
-                        <ul class="thumbnails">
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <a href="product_details.html"><img src="/themes/images/products/2.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <a href="product_details.html"><img src="/themes/images/products/3.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <a href="product_details.html"><img src="/themes/images/products/4.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="span3">
-                                <div class="thumbnail">
-                                    <a href="product_details.html"><img src="/themes/images/products/5.jpg" alt=""></a>
-                                    <div class="caption">
-                                        <h5>Product name</h5>
-                                        <h4><a class="btn" href="product_details.html">VIEW</a> <span class="pull-right">$222.00</span></h4>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    @{
+                        List<List<ProductViewModel>> listOfFeaturedProduct = new List<List<ProductViewModel>>();
+                        List<ProductViewModel> productViewModels = new List<ProductViewModel>();
+                    }
+
+                    @for (int index = 0; index < Model.Products.Count; index++)
+                    {
+                        productViewModels.Add(Model.Products[index]);
+                        if (index % 4 == 3 || index == Model.Products.Count-1)
+                        {
+                            listOfFeaturedProduct.Add(productViewModels);
+                            productViewModels = new List<ProductViewModel>();
+                        }
+                    }
+                    @foreach (List<ProductViewModel> list in listOfFeaturedProduct)
+                    {
+                        <div class="item active">
+                            <ul class="thumbnails">
+                                @foreach (ProductViewModel item in list)
+                                {
+                                    <li class="span3">
+                                        <div class="thumbnail">
+                                            <i class="tag"></i>
+                                            <a href="product_details.html"><img src="@item.ThumbnailImage" alt=@item.Name></a>
+                                            <div class="caption">
+                                                <h5><localize>name</localize> </h5>
+                                                <h4><a class="btn" href="product_details.html"><localize>VIEW</localize></a> <span class="pull-right">@item.Price.ToString()</span></h4>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+                    }
+
+
                 </div>
                 <a class="left carousel-control" href="#featured" data-slide="prev">‹</a>
                 <a class="right carousel-control" href="#featured" data-slide="next">›</a>

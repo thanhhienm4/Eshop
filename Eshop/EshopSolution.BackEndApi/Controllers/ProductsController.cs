@@ -165,5 +165,17 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpGet("featured/{languageId}/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetFeatured(string languageId, int take)
+        {
+            var result = await _productService.GetFeatured(languageId, take);
+            if (result.IsSuccessed == false)
+            {
+                return BadRequest("Can't find product");
+            }
+            return Ok(result);
+        }
     }
 }

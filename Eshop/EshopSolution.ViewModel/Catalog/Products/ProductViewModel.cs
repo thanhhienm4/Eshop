@@ -20,7 +20,7 @@ namespace EshopSolution.ViewModel.Catalog.Products
         public string SeoTitle { set; get; }
         public string LanguageId { set; get; }
         public string SeoAlias { get; set; }
-        public IFormFile ThumbnailImage { get; set; }
+        public string ThumbnailImage { get; set; }
 
         public List<String> Categories { get; set; } = new List<string>();
     }

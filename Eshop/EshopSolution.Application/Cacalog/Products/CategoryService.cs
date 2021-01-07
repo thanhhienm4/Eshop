@@ -11,6 +11,50 @@ namespace EshopSolution.Application.Cacalog.Products
 {
     public class CategoryService : ICategoryService
     {
+        public async Task<ApiResult<PageResult<CategoryViewModel>>> GetFeaturedP(GetManageCategoryPagingRequest request)
+        {
+            //1.filter
+            var query = from c in _context.Categories
+                        join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
+                        select new { c, ct };
+
+            //2.filer by languageid
+            query = query.Where(x => x.ct.LanguageId == request.LanguageId);
+
+            //3/filter by keyword
+            if (!String.IsNullOrWhiteSpace(request.Keyword))
+                query = query.Where(x => x.ct.Name.Contains(request.Keyword)
+                                    || x.ct.SeoAlias.Contains(request.Keyword)
+                                    || x.ct.SeoDescription.Contains(request.Keyword)
+                                    || x.ct.SeoTitle.Contains(request.Keyword)
+                                    || x.ct.CategoryId.ToString().Contains(request.Keyword));
+
+            //4. paging
+            query = query.Skip((request.PageIndex - 1) * request.PageSize);
+            var data = query.Select(x => new CategoryViewModel()
+            {
+                Id = x.c.Id,
+                Name = x.ct.Name,
+                IsShowOnHome = x.c.IsShowOnHome,
+                ParentId = x.c.ParentId,
+                LanguageId = x.ct.LanguageId,
+                SeoAlias = x.ct.SeoAlias,
+                SeoDescription = x.ct.SeoDescription,
+                SeoTitle = x.ct.SeoTitle,
+                SortOrder = x.c.SortOrder,
+                Status = x.c.Status
+            }).ToList();
+
+            var pageResult = new PageResult<CategoryViewModel>()
+            {
+                TotalRecord = data.Count(),
+                Item = data,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+            };
+
+            return new ApiSuccessResult<PageResult<CategoryViewModel>>(pageResult);
+        }
         public async Task<ApiResult<PageResult<CategoryViewModel>>> GetAllPaging(GetManageCategoryPagingRequest request)
         {
             //1.filter

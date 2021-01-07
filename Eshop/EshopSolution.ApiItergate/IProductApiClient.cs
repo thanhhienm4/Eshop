@@ -1,5 +1,6 @@
 ﻿using EshopSolution.ViewModel.Catalog.Products;
 using EshopSolution.ViewModel.Common;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EshopSolution.ApiIntergate
@@ -17,5 +18,6 @@ namespace EshopSolution.ApiIntergate
         Task<ApiResult<bool>> Delete(int id);
 
         Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
+        Task<List<ProductViewModel>> GetFeatured(string languuageId, int take);
     }
 }
