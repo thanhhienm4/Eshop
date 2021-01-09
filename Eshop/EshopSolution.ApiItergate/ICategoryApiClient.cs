@@ -11,7 +11,7 @@ namespace EshopSolution.ApiIntergate
 
         Task<ApiResult<PageResult<CategoryViewModel>>> GetCategoryPaging(GetManageCategoryPagingRequest request);
 
-        Task<ApiResult<List<CategoryViewModel>>> GetAll(string LanguageId);
+        Task<List<CategoryViewModel>> GetAll(string LanguageId);
 
         Task<ApiResult<bool>> Update(CategoryUpdateRequest request);
 

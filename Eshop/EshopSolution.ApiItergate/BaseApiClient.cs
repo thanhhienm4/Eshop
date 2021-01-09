@@ -33,7 +33,7 @@ namespace EshopSolution.ApiIntergate
                 .GetString(SystemConstants.AppSettings.Token);
 
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            client.BaseAddress = new Uri(SystemConstants.ServerSettings.ServerBackEnd);
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, sessions);
             var response = await client.GetAsync(url);
@@ -58,7 +58,7 @@ namespace EshopSolution.ApiIntergate
             var json = JsonConvert.SerializeObject(obj);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            client.BaseAddress = new Uri(SystemConstants.ServerSettings.ServerBackEnd);
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, sessions);
             var response = await client.PostAsync(url, httpContent);
@@ -79,7 +79,7 @@ namespace EshopSolution.ApiIntergate
             var BearerToken = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, BearerToken);
-            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            client.BaseAddress = new Uri(SystemConstants.ServerSettings.ServerBackEnd);
             var respond = await client.DeleteAsync(url);
             var body = await respond.Content.ReadAsStringAsync();
             if (respond.IsSuccessStatusCode)
@@ -100,7 +100,7 @@ namespace EshopSolution.ApiIntergate
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, BearerToken);
-            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            client.BaseAddress = new Uri(SystemConstants.ServerSettings.ServerBackEnd);
             var respond = await client.PutAsync(url, httpContent);
             var body = await respond.Content.ReadAsStringAsync();
             if (respond.IsSuccessStatusCode)

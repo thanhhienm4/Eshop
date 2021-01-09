@@ -26,7 +26,7 @@ namespace EshopSolution.ApiIntergate
             var BearerToken = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, BearerToken);
-            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            client.BaseAddress = new Uri(SystemConstants.ServerSettings.ServerBackEnd);
             var respond = await client.GetAsync($"/api/Role/GetAll");
             var body = await respond.Content.ReadAsStringAsync();
             if (respond.IsSuccessStatusCode)

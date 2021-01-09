@@ -33,6 +33,6 @@ namespace EshopSolution.ViewModel.Catalog.Products
         public IFormFile ThumbnailImage { get; set; }
 
         [Display(Name ="Sản phẩm nổi bật")]
-        public bool? isFeatured { get; set; }
+        public bool isFeatured { get; set; }
     }
 }

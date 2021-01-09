@@ -200,6 +200,9 @@
     <value>VIEW</value>
     <comment>Home/Index</comment>
   </data>
+  <data name="Welcome!" xml:space="preserve">
+    <value>Welcome!</value>
+  </data>
   <data name="YOUR ACCOUNT" xml:space="preserve">
     <value>YOUR ACCOUNT</value>
     <comment>View/Layout</comment>

@@ -12,7 +12,7 @@
                 {
                     <div class="item">
                         <div class="container">
-                            <a href=@slide.Url><img style="width:100%" src="@slide.Image" alt=@slide.Name /></a>
+                            <a href=@slide.Url><img style="width:100%" src="@slide.Image" alt="@slide.Name" /></a>
                             <div class="carousel-caption">
                                 <h4>@slide.Name</h4>
                                 <p>@slide.Desciption</p>
@@ -38,10 +38,10 @@
                         List<ProductViewModel> productViewModels = new List<ProductViewModel>();
                     }
 
-                    @for (int index = 0; index < Model.Products.Count; index++)
+                    @for (int index = 0; index < Model.FeaturedProducts.Count; index++)
                     {
-                        productViewModels.Add(Model.Products[index]);
-                        if (index % 4 == 3 || index == Model.Products.Count-1)
+                        productViewModels.Add(Model.FeaturedProducts[index]);
+                        if (index % 4 == 3 || index == Model.FeaturedProducts.Count-1)
                         {
                             listOfFeaturedProduct.Add(productViewModels);
                             productViewModels = new List<ProductViewModel>();
@@ -56,10 +56,10 @@
                                     <li class="span3">
                                         <div class="thumbnail">
                                             <i class="tag"></i>
-                                            <a href="product_details.html"><img src="@item.ThumbnailImage" alt=@item.Name></a>
+                                            <a href="product_details.html"><img src="@item.ThumbnailImage" alt="@item.Name"></a>
                                             <div class="caption">
-                                                <h5><localize>name</localize> </h5>
-                                                <h4><a class="btn" href="product_details.html"><localize>VIEW</localize></a> <span class="pull-right">@item.Price.ToString()</span></h4>
+                                                <h5>@item.Name</h5>
+                                                <h4><a class="btn" href="product_details.html"><localize>VIEW</localize></a> <span class="pull-right">@((int)item.Price)</span></h4>
                                             </div>
                                         </div>
                                     </li>
@@ -76,80 +76,23 @@
             </div>
         </div>
     </div>
-    <h4>Latest Products </h4>
+    <h4><localize>Latest Products</localize> </h4>
     <ul class="thumbnails">
-        <li class="span3">
-            <div class="thumbnail">
-                <a href="product_details.html"><img src="/themes/images/products/6.jpg" alt="" /></a>
-                <div class="caption">
-                    <h5>Product name</h5>
-                    <p>
-                        Lorem Ipsum is simply dummy text.
-                    </p>
+        @foreach (ProductViewModel item in Model.LatestProducts)
+        {
+            <li class="span3">
+                <div class="thumbnail">
+                    <a href="product_details.html"><img src="@item.ThumbnailImage" alt="@item.Name" /></a>
+                    <div class="caption">
+                        <h5>@item.Name</h5>
+                        <p>
+                            @item.Description
+                        </p>
+                        <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#"><localize>Add to</localize> <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">@((int)item.Price)</a></h4>
+                    </div>
+                </div>
+            </li>
+        }
 
-                    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-                </div>
-            </div>
-        </li>
-        <li class="span3">
-            <div class="thumbnail">
-                <a href="product_details.html"><img src="/themes/images/products/7.jpg" alt="" /></a>
-                <div class="caption">
-                    <h5>Product name</h5>
-                    <p>
-                        Lorem Ipsum is simply dummy text.
-                    </p>
-                    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-                </div>
-            </div>
-        </li>
-        <li class="span3">
-            <div class="thumbnail">
-                <a href="product_details.html"><img src="/themes/images/products/8.jpg" alt="" /></a>
-                <div class="caption">
-                    <h5>Product name</h5>
-                    <p>
-                        Lorem Ipsum is simply dummy text.
-                    </p>
-                    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-                </div>
-            </div>
-        </li>
-        <li class="span3">
-            <div class="thumbnail">
-                <a href="product_details.html"><img src="/themes/images/products/9.jpg" alt="" /></a>
-                <div class="caption">
-                    <h5>Product name</h5>
-                    <p>
-                        Lorem Ipsum is simply dummy text.
-                    </p>
-                    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-                </div>
-            </div>
-        </li>
-        <li class="span3">
-            <div class="thumbnail">
-                <a href="product_details.html"><img src="/themes/images/products/10.jpg" alt="" /></a>
-                <div class="caption">
-                    <h5>Product name</h5>
-                    <p>
-                        Lorem Ipsum is simply dummy text.
-                    </p>
-                    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-                </div>
-            </div>
-        </li>
-        <li class="span3">
-            <div class="thumbnail">
-                <a href="product_details.html"><img src="/themes/images/products/11.jpg" alt="" /></a>
-                <div class="caption">
-                    <h5>Product name</h5>
-                    <p>
-                        Lorem Ipsum is simply dummy text.
-                    </p>
-                    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-                </div>
-            </div>
-        </li>
     </ul>
 </div>

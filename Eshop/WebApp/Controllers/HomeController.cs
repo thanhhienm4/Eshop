@@ -34,7 +34,8 @@ namespace WebApp.Controllers
             var viewModel = new HomeViewModel()
             {
                 Slides = await _slideApiClient.GetAll(),
-                Products = await _productApiClient.GetFeatured(culture, SystemConstants.ProductSettings.NumberOfFeaturedProducts)
+                FeaturedProducts = await _productApiClient.GetFeaturedProducts(culture, SystemConstants.ProductSettings.NumberOfFeaturedProducts),
+                LatestProducts = await _productApiClient.GetLatestProducts(culture,SystemConstants.ProductSettings.NumberOfLastestProducts)
             };
             return View(viewModel);
         }

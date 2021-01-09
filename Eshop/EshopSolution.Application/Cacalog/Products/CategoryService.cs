@@ -180,6 +180,7 @@ namespace EshopSolution.Application.Cacalog.Products
             query = query.Where(x => x.ct.LanguageId == languageId);
             var data = query.Select(x => new CategoryViewModel()
             {
+                ParentId = x.c.ParentId,
                 Id = x.c.Id,
                 Name = x.ct.Name
             }).ToList();

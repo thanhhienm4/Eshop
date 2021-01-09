@@ -37,8 +37,8 @@ namespace EshopSolution.AdminApp.Controllers
             if (categoryId != null)
                 request.CategoryId = (int)categoryId;
             ViewBag.Keyword = keyword;
-            ApiResult<List<CategoryViewModel>> categories = await _categoryApiClient.GetAll(GetLanguageId());
-            ViewBag.Categories = categories.ResultObj.Select(x => new SelectListItem()
+            List<CategoryViewModel> categories = await _categoryApiClient.GetAll(GetLanguageId());
+            ViewBag.Categories = categories.Select(x => new SelectListItem()
             {
                 Text = x.Name,
                 Value = x.Id.ToString(),
@@ -208,7 +208,7 @@ namespace EshopSolution.AdminApp.Controllers
         {
             string languageId = GetLanguageId();
             var productViewModel = (await _productApiClient.GetById(id, languageId)).ResultObj;
-            var categories = (await _categoryApiClient.GetAll(languageId)).ResultObj;
+            var categories = (await _categoryApiClient.GetAll(languageId));
             var categoryAssignRequest = new CategoryAssignRequest();
 
             foreach (var category in categories)

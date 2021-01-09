@@ -10,6 +10,7 @@ namespace EshopSolution.WebApp.Models
     public class HomeViewModel
     {
         public List<SlideViewModel> Slides { get; set; }
-        public List<ProductViewModel> Products { get; set; }
+        public List<ProductViewModel> FeaturedProducts { get; set; }
+        public List<ProductViewModel> LatestProducts { get; set; }
     }
 }

@@ -37,7 +37,7 @@ namespace EshopSolution.ApiIntergate
                 .Session
                 .GetString(SystemConstants.AppSettings.Token);
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            client.BaseAddress = new Uri(SystemConstants.ServerSettings.ServerBackEnd);
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, sessions);
 
@@ -105,9 +105,15 @@ namespace EshopSolution.ApiIntergate
                $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&" +
                $"LanguageId={request.LanguageId}");
         }
-        public async Task<List<ProductViewModel>> GetFeatured(string languuageId,int take)
+        public async Task<List<ProductViewModel>> GetFeaturedProducts(string languageId,int take)
         {
-            return (await GetAsync<ApiResult<List<ProductViewModel>>>($"/api/Products/featured/{languuageId}/{take}")).ResultObj;
+            return (await GetAsync<ApiResult<List<ProductViewModel>>>($"/api/Products/featured/{languageId}/{take}")).ResultObj;
         }
+        public async Task<List<ProductViewModel>> GetLatestProducts(string languageId, int take)
+        {
+            return (await GetAsync<ApiResult<List<ProductViewModel>>>($"/api/Products/latest/{languageId}/{take}")).ResultObj;
+        }
+
+
     }
 }

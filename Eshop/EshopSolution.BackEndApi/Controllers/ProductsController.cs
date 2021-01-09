@@ -168,9 +168,20 @@ namespace EshopSolution.BackEndApi.Controllers
 
         [HttpGet("featured/{languageId}/{take}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetFeatured(string languageId, int take)
+        public async Task<IActionResult> GetFeaturedProducts(string languageId, int take)
         {
-            var result = await _productService.GetFeatured(languageId, take);
+            var result = await _productService.GetFeaturedProducts(languageId, take);
+            if (result.IsSuccessed == false)
+            {
+                return BadRequest("Can't find product");
+            }
+            return Ok(result);
+        }
+        [HttpGet("latest/{languageId}/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetLatestProducts(string languageId, int take)
+        {
+            var result = await _productService.GetLatestProducts(languageId, take);
             if (result.IsSuccessed == false)
             {
                 return BadRequest("Can't find product");

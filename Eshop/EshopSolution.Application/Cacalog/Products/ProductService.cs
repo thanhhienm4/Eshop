@@ -2,6 +2,7 @@
 using eShopSolution.ViewModels.Catalog.ProductImages;
 using EshopSolution.Data.EF;
 using EshopSolution.Data.Entities;
+using EshopSolution.Utilities.Constants;
 using EshopSolution.Utilities.Exceptions;
 using EshopSolution.ViewModel.Catalog.Products;
 using EshopSolution.ViewModel.Common;
@@ -437,13 +438,47 @@ namespace EshopSolution.Application.Cacalog.Products
             List<string> categoriesName = await query.Select(x => new string(x.ToString())).ToListAsync();
             return categoriesName;
         }
-        public async Task<ApiResult<List<ProductViewModel>>> GetFeatured(string languageId,int number)
+        public async Task<ApiResult<List<ProductViewModel>>> GetFeaturedProducts(string languageId,int number)
         {
             //1.Select
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join pi in _context.ProductImages on p.Id equals pi.ProductId
-                        where p.IsFeatured == true && pt.LanguageId == languageId && pi.IsDefault == true
+                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
+                        from pi in ppi.DefaultIfEmpty()
+                        where p.IsFeatured == true && pt.LanguageId == languageId && (pi.IsDefault == true || pi == null)
+                        select new { p, pt, pi };
+
+            var data = await query.OrderBy(x => x.p.ViewCount)
+                .Select(x => new ProductViewModel()
+                {
+                    ProductId = x.p.Id,
+                    Name = x.pt.Name,
+                    Description = x.pt.Description,
+                    Details = x.pt.Details,
+                    LanguageId = x.pt.LanguageId,
+                    OriginalPrice = x.p.Price,
+                    Price = x.p.Price,
+                    SeoAlias = x.pt.SeoAlias,
+                    SeoDescription = x.pt.SeoDescription,
+                    SeoTitle = x.pt.SeoTitle,
+                    Stock = x.p.Stock,
+                    ViewCount = x.p.ViewCount,
+                    DateCreated = x.p.DateCreated,
+                    ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.pi.ImagePath}"
+
+                }).Distinct().Take(number).ToListAsync();
+
+            return new ApiSuccessResult<List<ProductViewModel>>(data);
+        }
+        public async Task<ApiResult<List<ProductViewModel>>> GetLatestProducts(string languageId, int number)
+        {
+            //1.Select
+            var query = from p in _context.Products
+                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId
+                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
+                        from pi in ppi.DefaultIfEmpty()
+                        where pt.LanguageId == languageId && (pi.IsDefault == true || pi == null)
                         select new { p, pt, pi };
 
             var data = await query.OrderBy(x => x.p.DateCreated)
@@ -462,10 +497,14 @@ namespace EshopSolution.Application.Cacalog.Products
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
-                    ThumbnailImage = x.pi.ImagePath
+                    ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.pi.ImagePath}"
+
                 }).Distinct().Take(number).ToListAsync();
 
             return new ApiSuccessResult<List<ProductViewModel>>(data);
         }
+
+
     }
 }

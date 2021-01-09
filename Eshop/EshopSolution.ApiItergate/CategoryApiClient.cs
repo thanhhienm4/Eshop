@@ -31,9 +31,9 @@ namespace EshopSolution.ApiIntergate
             return await GetAsync<ApiResult<CategoryViewModel>>($"api/Categories/GetbyId/{id}/{languageId}");
         }
 
-        public async Task<ApiResult<List<CategoryViewModel>>> GetAll(string languageId)
+        public async Task<List<CategoryViewModel>> GetAll(string languageId)
         {
-            return await GetAsync<ApiResult<List<CategoryViewModel>>>($"api/Categories/GetAll?languageId={languageId}");
+            return (await GetAsync<ApiResult<List<CategoryViewModel>>>($"api/Categories/GetAll?languageId={languageId}")).ResultObj;
         }
 
         public async Task<ApiResult<bool>> Update(CategoryUpdateRequest request)

@@ -15,6 +15,11 @@
         public static class ProductSettings
         {
             public const int NumberOfFeaturedProducts = 4;
+            public const int NumberOfLastestProducts = 6;
+        }
+        public static class ServerSettings
+        {
+            public const string ServerBackEnd = "https://localhost:5002";
         }
     }
 }

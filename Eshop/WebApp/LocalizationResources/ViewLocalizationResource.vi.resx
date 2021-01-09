@@ -201,6 +201,10 @@
     <value>CHI TIẾT</value>
     <comment>Home/Index</comment>
   </data>
+  <data name="Welcome!" xml:space="preserve">
+    <value>Xin chào!</value>
+    <comment>View</comment>
+  </data>
   <data name="YOUR ACCOUNT" xml:space="preserve">
     <value>Tài khoản của bạn</value>
     <comment>View/Layout</comment>
