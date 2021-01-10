@@ -72,6 +72,7 @@ namespace EshopSolution.BackEndApi
             services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddTransient<IValidator<UpdateRequest>, UpdateRequestValidator>();
             services.AddTransient<IValidator<ProductCreateRequest>, ProductCreateRequestValidator>();
+            services.AddTransient<IValidator<ProductUpdateRequest>, ProductUpdateRequestValidator>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop Solution", Version = "v1" });

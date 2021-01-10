@@ -3,7 +3,7 @@
     public static class SystemConstants
     {
         public const string MainConnectionString = "EshopSolutionDB";
-
+        public const string NotAvailable = "N/A";
         public static class AppSettings
         {
             public const string DefaultLangaueId = "vi";

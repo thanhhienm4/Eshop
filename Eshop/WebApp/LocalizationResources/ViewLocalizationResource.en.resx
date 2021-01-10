@@ -161,6 +161,10 @@
     <value>Items in your cart</value>
     <comment>Home/Index</comment>
   </data>
+  <data name="Latest Products" xml:space="preserve">
+    <value>Latest Products</value>
+    <comment>Home/Index</comment>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
     <comment>Home/Index</comment>

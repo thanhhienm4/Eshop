@@ -16,11 +16,14 @@ namespace EshopSolution.AdminApp.Controllers
     {
         private readonly IProductApiClient _productApiClient;
         private readonly ICategoryApiClient _categoryApiClient;
+        private readonly ILanguageApiClient _languageApiClient;
 
-        public ProductController(IProductApiClient productApiClient, ICategoryApiClient categoryApiClient)
+        public ProductController(IProductApiClient productApiClient, ICategoryApiClient categoryApiClient,
+           ILanguageApiClient languageApiClient)
         {
             _productApiClient = productApiClient;
             _categoryApiClient = categoryApiClient;
+            _languageApiClient = languageApiClient;
         }
 
         [Authorize]
@@ -54,9 +57,14 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
-            return View();
+            ViewBag.Languages = (await _languageApiClient.GetAll()).ResultObj;
+            var productCreateRequest = new ProductCreateRequest()
+            {
+                LanguageId = GetLanguageId()
+            };
+            return View(productCreateRequest);
         }
 
         [HttpPost]
@@ -66,7 +74,7 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(request);
             }
-            request.LanguageId = GetLanguageId();
+            //request.LanguageId = GetLanguageId();
             var result = await _productApiClient.Create(request);
             if (result.IsSuccessed)
             {
@@ -97,9 +105,12 @@ namespace EshopSolution.AdminApp.Controllers
                     SeoDescription = result.ResultObj.SeoDescription,
                     SeoTitle = result.ResultObj.SeoTitle,
                     LanguageId = result.ResultObj.LanguageId,
-                    SeoAlias = result.ResultObj.SeoAlias,                 
+                    SeoAlias = result.ResultObj.SeoAlias,
+                    isFeatured = result.ResultObj.IsFeatured
                 };
                 //updateRequest.ThumbnailImage. = result.ResultObj.ThumbnailImage;
+
+                ViewBag.Languages =(await _languageApiClient.GetAll()).ResultObj;
                 return View(updateRequest);
             }
             return RedirectToAction("Error", "Home");

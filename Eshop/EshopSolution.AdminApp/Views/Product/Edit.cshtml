@@ -20,42 +20,42 @@
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" placeholder="N/A" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <input asp-for="Description" class="form-control" placeholder="N/A" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="isFeatured" class="control-label"></label>
-                <input asp-for="isFeatured" class="form-control" type="checkbox" />
-                <span asp-validation-for="isFeatured" class="text-danger"></span>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="isFeatured" /> @Html.DisplayNameFor(model => model.isFeatured)
+                </label>
             </div>
             <div class="form-group">
                 <label asp-for="Details" class="control-label"></label>
-                <input asp-for="Details" class="form-control" />
+                <input asp-for="Details" class="form-control" placeholder="N/A" />
                 <span asp-validation-for="Details" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SeoDescription" class="control-label"></label>
-                <input asp-for="SeoDescription" class="form-control" />
+                <input asp-for="SeoDescription" class="form-control" placeholder="N/A" />
                 <span asp-validation-for="SeoDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SeoTitle" class="control-label"></label>
-                <input asp-for="SeoTitle" class="form-control" />
+                <input asp-for="SeoTitle" class="form-control" placeholder="N/A" />
                 <span asp-validation-for="SeoTitle" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LanguageId" class="control-label"></label>
-                <input asp-for="LanguageId" class="form-control" />
-                <span asp-validation-for="LanguageId" class="text-danger"></span>
+                <select class="form-control" asp-for="LanguageId" asp-items="new @SelectList(ViewBag.Languages,"Id","Name")">
+                </select>
             </div>
+           
             <div class="form-group">
                 <label asp-for="SeoAlias" class="control-label"></label>
-                <input asp-for="SeoAlias" class="form-control" />
+                <input asp-for="SeoAlias" class="form-control" placeholder="N/A" />
                 <span asp-validation-for="SeoAlias" class="text-danger"></span>
             </div>
             <div class="form-group">

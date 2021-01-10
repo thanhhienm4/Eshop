@@ -28,6 +28,7 @@ namespace EshopSolution.ApiIntergate
         public async Task<ApiResult<bool>> Update(int id, ProductUpdateRequest request)
         {
             return await PutAsync<ApiResult<bool>>($"/api/Products/{id}/update", request);
+
         }
 
         public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
