@@ -1,5 +1,5 @@
-﻿using EshopSolution.ViewModel.Common;
-using EshopSolution.ViewModel.Utilities.Slides;
+﻿using EshopSolution.ViewModels.Common;
+using EshopSolution.ViewModels.Utilities.Slides;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;

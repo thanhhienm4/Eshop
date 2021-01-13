@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EshopSolution.Application",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EshopSolution.Utilities", "EshopSolution.Utilities\EshopSolution.Utilities.csproj", "{97932EA1-C167-472B-B906-8522B1D957B0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EshopSolution.ViewModel", "EshopSolution.ViewModel\EshopSolution.ViewModel.csproj", "{4D2E86BD-7500-4357-95C7-67B0BEFE4E2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EshopSolution.ViewModels", "EshopSolution.ViewModel\EshopSolution.ViewModels.csproj", "{4D2E86BD-7500-4357-95C7-67B0BEFE4E2D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EshopSolution.BackEndApi", "EshopSolution.BackEndApi\EshopSolution.BackEndApi.csproj", "{70E4879C-D440-41AE-BDCB-3A2A8BCA3763}"
 EndProject

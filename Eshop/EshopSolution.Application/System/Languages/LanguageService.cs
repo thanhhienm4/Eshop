@@ -1,6 +1,6 @@
 ﻿using EshopSolution.Data.EF;
-using EshopSolution.ViewModel.Common;
-using EshopSolution.ViewModel.System.Languages;
+using EshopSolution.ViewModels.Common;
+using EshopSolution.ViewModels.System.Languages;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;

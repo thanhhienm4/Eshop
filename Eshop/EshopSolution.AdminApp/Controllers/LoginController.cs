@@ -1,6 +1,6 @@
 ﻿using EshopSolution.ApiIntergate;
 using EshopSolution.Utilities.Constants;
-using EshopSolution.ViewModel.System.Users;
+using EshopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;

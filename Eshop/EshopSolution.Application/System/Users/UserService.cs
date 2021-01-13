@@ -1,6 +1,6 @@
 ﻿using EshopSolution.Data.Entities;
-using EshopSolution.ViewModel.Common;
-using EshopSolution.ViewModel.System.Users;
+using EshopSolution.ViewModels.Common;
+using EshopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

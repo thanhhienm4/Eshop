@@ -1,6 +1,6 @@
 ﻿using EshopSolution.Utilities.Constants;
-using EshopSolution.ViewModel.Catalog.Products;
-using EshopSolution.ViewModel.Common;
+using EshopSolution.ViewModels.Catalog.Products;
+using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;

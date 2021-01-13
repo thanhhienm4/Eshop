@@ -1,7 +1,7 @@
 ﻿using EshopSolution.Data.EF;
 using EshopSolution.Data.Entities;
-using EshopSolution.ViewModel.Catalog.Categories;
-using EshopSolution.ViewModel.Common;
+using EshopSolution.ViewModels.Catalog.Categories;
+using EshopSolution.ViewModels.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

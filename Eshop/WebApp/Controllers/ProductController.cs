@@ -1,5 +1,5 @@
 ﻿using EshopSolution.ApiIntergate;
-using EshopSolution.ViewModel.Catalog.Products;
+using EshopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,6 @@
-﻿using eShopSolution.ViewModels.Catalog.ProductImages;
+﻿using EshopSolution.ViewModels.Catalog.ProductImages;
 using EshopSolution.Application;
-using EshopSolution.ViewModel.Catalog.Products;
+using EshopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

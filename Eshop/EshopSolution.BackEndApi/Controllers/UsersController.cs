@@ -1,5 +1,5 @@
 ﻿using EshopSolution.Application.System.Users;
-using EshopSolution.ViewModel.System.Users;
+using EshopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;

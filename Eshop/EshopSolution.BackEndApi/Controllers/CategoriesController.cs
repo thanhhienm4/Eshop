@@ -1,6 +1,6 @@
 ﻿using EshopSolution.Application.Cacalog.Products;
-using EshopSolution.ViewModel.Catalog.Categories;
-using EshopSolution.ViewModel.Common;
+using EshopSolution.ViewModels.Catalog.Categories;
+using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

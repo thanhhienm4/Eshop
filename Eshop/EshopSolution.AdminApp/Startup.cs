@@ -1,5 +1,5 @@
 using EshopSolution.ApiIntergate;
-using EshopSolution.ViewModel.System.Users;
+using EshopSolution.ViewModels.System.Users;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;

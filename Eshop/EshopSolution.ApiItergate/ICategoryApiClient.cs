@@ -1,5 +1,5 @@
-﻿using EshopSolution.ViewModel.Catalog.Categories;
-using EshopSolution.ViewModel.Common;
+﻿using EshopSolution.ViewModels.Catalog.Categories;
+using EshopSolution.ViewModels.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

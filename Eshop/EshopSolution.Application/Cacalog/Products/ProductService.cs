@@ -1,11 +1,11 @@
 ﻿using eShopSolution.Application.Common;
-using eShopSolution.ViewModels.Catalog.ProductImages;
+using EshopSolution.ViewModels.Catalog.ProductImages;
 using EshopSolution.Data.EF;
 using EshopSolution.Data.Entities;
 using EshopSolution.Utilities.Constants;
 using EshopSolution.Utilities.Exceptions;
-using EshopSolution.ViewModel.Catalog.Products;
-using EshopSolution.ViewModel.Common;
+using EshopSolution.ViewModels.Catalog.Products;
+using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
