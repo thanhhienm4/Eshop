@@ -1,0 +1,33 @@
+﻿@using EshopSolution.ViewModel.Catalog.Products
+@using EshopSolution.ViewModel.Common
+@model PageResult<ProductViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="tab-content">
+   
+
+    <div class="tab-pane  active" id="blockView">
+        <ul class="thumbnails">
+            @foreach (ProductViewModel item in Model.Item)
+            {
+                <li class="span3">
+                    <div class="thumbnail">
+                        <a href="product_details.html"><img src="@item.ThumbnailImage" alt=""></a>
+                        <div class="caption">
+                            <h5>@item.Name</h5>
+                            <p>
+                                @item.Description
+                            </p>
+                            <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#"><localize>Add to</localize> <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">@((int)item.Price)</a></h4>
+                        </div>
+                    </div>
+                </li>
+            }
+
+
+        </ul>
+        <hr class="soft">
+    </div>
+</div>

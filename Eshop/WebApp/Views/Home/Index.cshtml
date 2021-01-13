@@ -1,9 +1,10 @@
 ﻿@model  EshopSolution.WebApp.Models.HomeViewModel
 @using EshopSolution.ViewModel.Catalog.Products 
 @{
-    ViewData["Title"] = "Delete";
+
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 @section slider{
     <div id="carouselBlk">
         <div id="myCarousel" class="carousel slide">
@@ -59,7 +60,7 @@
                                             <a href="product_details.html"><img src="@item.ThumbnailImage" alt="@item.Name"></a>
                                             <div class="caption">
                                                 <h5>@item.Name</h5>
-                                                <h4><a class="btn" href="product_details.html"><localize>VIEW</localize></a> <span class="pull-right">@((int)item.Price)</span></h4>
+                                                <h4><a class="btn" href=""><localize>VIEW</localize></a> <span class="pull-right">@((int)item.Price)</span></h4>
                                             </div>
                                         </div>
                                     </li>

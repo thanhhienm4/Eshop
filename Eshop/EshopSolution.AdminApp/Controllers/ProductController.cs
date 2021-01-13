@@ -29,7 +29,7 @@ namespace EshopSolution.AdminApp.Controllers
         [Authorize]
         public async Task<IActionResult> Index(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 5)
         {
-            var request = new GetManageProductPagingRequest()
+            var request = new ProductPagingRequest()
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,

@@ -133,6 +133,10 @@
     <value>All</value>
     <comment>Home/Index</comment>
   </data>
+  <data name="categoryUrl" xml:space="preserve">
+    <value>category</value>
+    <comment>SliderBar/Default</comment>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
     <comment>View/Layout</comment>

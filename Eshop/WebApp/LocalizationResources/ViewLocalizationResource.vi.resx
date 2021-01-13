@@ -133,6 +133,10 @@
     <value>Tất cả</value>
     <comment>Home/Index</comment>
   </data>
+  <data name="categoryUrl" xml:space="preserve">
+    <value>danh-muc</value>
+    <comment>SlideBar/Default</comment>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Đóng</value>
     <comment>View/Layout</comment>

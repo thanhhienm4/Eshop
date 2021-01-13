@@ -206,7 +206,7 @@ namespace EshopSolution.Application.Cacalog.Products
             await _context.SaveChangesAsync();
         }
 
-        public async Task<ApiResult<PageResult<ProductViewModel>>> GetAllPaging(GetManageProductPagingRequest request)
+        public async Task<ApiResult<PageResult<ProductViewModel>>> GetAllPaging(ProductPagingRequest request)
         {
             //1.Select
             var query = from p in _context.Products
@@ -214,8 +214,12 @@ namespace EshopSolution.Application.Cacalog.Products
                         from pt in ppt.DefaultIfEmpty()
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
                         from pic in ppic.DefaultIfEmpty()
+                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
+                        from pi in ppi.DefaultIfEmpty()
+                        where pt.LanguageId == request.LanguageId && (pi.IsDefault == true || pi == null)
 
-                        select new { p, pt, pic };
+                        select new { p, pt, pic , pi };
+
 
             //2.Filter
             //find whit category
@@ -253,6 +257,8 @@ namespace EshopSolution.Application.Cacalog.Products
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
+                    ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.pi.ImagePath}"
                 }).Distinct().ToListAsync();
 
             //4.Select and Projection
@@ -266,6 +272,7 @@ namespace EshopSolution.Application.Cacalog.Products
 
             return new ApiSuccessResult<PageResult<ProductViewModel>>(pageResult);
         }
+        
 
         private async Task<string> SaveFile(IFormFile file)
         {
@@ -394,48 +401,48 @@ namespace EshopSolution.Application.Cacalog.Products
             return new ApiSuccessResult<List<ProductImageViewModel>>(listPIVM);
         }
 
-        public async Task<ApiResult<PageResult<ProductViewModel>>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
-        {
-            var query = from p in _context.Products
-                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId into ppt
-                        from pt in ppt.DefaultIfEmpty()
-                        where (pt.LanguageId == languageId || pt == null)
-                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId
-                        join c in _context.Categories on pic.CategoryId equals c.Id
+        //public async Task<ApiResult<PageResult<ProductViewModel>>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
+        //{
+        //    var query = from p in _context.Products
+        //                join pt in _context.ProductTranslations on p.Id equals pt.ProductId into ppt
+        //                from pt in ppt.DefaultIfEmpty()
+        //                where (pt.LanguageId == languageId || pt == null)
+        //                join pic in _context.ProductInCategories on p.Id equals pic.ProductId
+        //                join c in _context.Categories on pic.CategoryId equals c.Id
                        
-                        select new { p, pt, pic };
+        //                select new { p, pt, pic };
 
-            if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
-            {
-                query = query.Where(p => p.pic.CategoryId == request.CategoryId);
-            }
-            int totalRow = await query.CountAsync();
-            var data = query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
-                .Select(x => new ProductViewModel()
-                {
-                    Price = x.p.Price,
-                    OriginalPrice = x.p.OriginalPrice,
-                    Stock = x.p.Stock,
-                    ViewCount = x.p.ViewCount,
-                    DateCreated = x.p.DateCreated,
-                    ProductId = x.p.Id,
-                    Name = x.pt.Name == null ? SystemConstants.NotAvailable : x.pt.Name,
-                    Description = x.pt.Description== null ? SystemConstants.NotAvailable : x.pt.Description,
-                    Details = x.pt.Details== null ? SystemConstants.NotAvailable : x.pt.Details,
-                    SeoDescription = x.pt.SeoDescription== null ? SystemConstants.NotAvailable : x.pt.SeoDescription,
-                    SeoTitle =x.pt.SeoTitle== null ? SystemConstants.NotAvailable : x.pt.SeoTitle,
-                    SeoAlias = x.pt.SeoAlias== null ? SystemConstants.NotAvailable : x.pt.SeoAlias
-                });
-            var pageResult = new PageResult<ProductViewModel>()
-            {
-                Item = (List<ProductViewModel>)data,
-                TotalRecord = totalRow,
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize
-            };
+        //    if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
+        //    {
+        //        query = query.Where(p => p.pic.CategoryId == request.CategoryId);
+        //    }
+        //    int totalRow = await query.CountAsync();
+        //    var data = query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
+        //        .Select(x => new ProductViewModel()
+        //        {
+        //            Price = x.p.Price,
+        //            OriginalPrice = x.p.OriginalPrice,
+        //            Stock = x.p.Stock,
+        //            ViewCount = x.p.ViewCount,
+        //            DateCreated = x.p.DateCreated,
+        //            ProductId = x.p.Id,
+        //            Name = x.pt.Name == null ? SystemConstants.NotAvailable : x.pt.Name,
+        //            Description = x.pt.Description== null ? SystemConstants.NotAvailable : x.pt.Description,
+        //            Details = x.pt.Details== null ? SystemConstants.NotAvailable : x.pt.Details,
+        //            SeoDescription = x.pt.SeoDescription== null ? SystemConstants.NotAvailable : x.pt.SeoDescription,
+        //            SeoTitle =x.pt.SeoTitle== null ? SystemConstants.NotAvailable : x.pt.SeoTitle,
+        //            SeoAlias = x.pt.SeoAlias== null ? SystemConstants.NotAvailable : x.pt.SeoAlias
+        //        });
+        //    var pageResult = new PageResult<ProductViewModel>()
+        //    {
+        //        Item = (List<ProductViewModel>)data,
+        //        TotalRecord = totalRow,
+        //        PageIndex = request.PageIndex,
+        //        PageSize = request.PageSize
+        //    };
 
-            return new ApiSuccessResult<PageResult<ProductViewModel>>(pageResult);
-        }
+        //    return new ApiSuccessResult<PageResult<ProductViewModel>>(pageResult);
+        //}
 
         public async Task<ApiResult<bool>> CategoryAssign(CategoryAssignRequest request)
         {
