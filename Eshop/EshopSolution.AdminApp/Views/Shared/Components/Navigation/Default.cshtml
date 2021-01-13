@@ -15,7 +15,8 @@
     <form class="d-none d-md-inline-block form-inline  mr-md-3 my-2 my-md-0"
          action="/Home/Language"  method="post" id="frmOnChangeLanguage">
         <div class="input-group">
-            <select class="form-control" asp-items="new @SelectList(Model.Languages,"Id","Name")" asp-for="CurrentLanguageId" onchange="this.form.submit()">
+            <input type="hidden" name="CurrentUrl" value="@Context.Request.Path" readonly="readonly"/>
+            <select class="form-control" onchange="this.form.submit()" asp-for="CurrentLanguageId"   asp-items="new @SelectList(Model.Languages,"Id","Name")">
             </select>
         </div>
     </form>

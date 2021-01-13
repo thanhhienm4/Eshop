@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using EshopSolution.ApiIntergate;
 using System;
 using EshopSolution.WebApp.LocalizationResources;
+using Newtonsoft.Json.Serialization;
 
 namespace EshopSolution.WebApp
 {
@@ -79,6 +80,22 @@ namespace EshopSolution.WebApp
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{culture=vi}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "Product Category En",
+                    pattern: "{culture}/Category/{id}", new
+                    {
+                        controller = "Product",
+                        action = "Category"
+                    });
+
+                endpoints.MapControllerRoute(
+                  name: "Product Category Vn",
+                  pattern: "{culture}/danh-muc/{id}", new
+                  {
+                      controller = "Product",
+                      action = "Category"
+                  });
             });
         }
     }

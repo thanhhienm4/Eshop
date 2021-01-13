@@ -1,10 +1,13 @@
 ﻿@model List<EshopSolution.ViewModel.Catalog.Categories.CategoryViewModel>
 @using EshopSolution.ViewModel.Catalog.Categories
+@using LazZiya.ExpressLocalization
+@inject ISharedCultureLocalizer _loc
+
 @{
-    ViewData["Title"] = "Default";
+    string culture = CultureInfo.CurrentCulture.Name;
 }
 <div id="sidebar" class="span3">
-    <div class="well well-small"><a id="myCart" href="product_summary.html"><img src="/themes/images/ico-cart.png" alt="cart">3 Items in your cart  <span class="badge badge-warning pull-right">$155.00</span></a></div>
+    <div class="well well-small"><a id="myCart" href="product_summary.html"><img src= "https://localhost:5002/themes/images/carousel/4.png" alt="cart">3 Items in your cart  <span class="badge badge-warning pull-right">$155.00</span></a></div>
     <ul id="sideManu" class="nav nav-tabs nav-stacked">
         @{
             Dictionary<int, CategoryViewModel> categories = new Dictionary<int, CategoryViewModel>();
@@ -25,11 +28,11 @@
                 }
                 else
                 {
-                    if(!childs.ContainsKey(item.ParentId.GetValueOrDefault()))
+                    if (!childs.ContainsKey(item.ParentId.GetValueOrDefault()))
                     {
                         childs.Add(item.ParentId.GetValueOrDefault(), new List<int>());
                     }
-                    childs[item.ParentId.GetValueOrDefault()].Add(item.Id);  
+                    childs[item.ParentId.GetValueOrDefault()].Add(item.Id);
                 }
 
                 ischecked.Add(item.Id, false);
@@ -44,7 +47,7 @@
                 if (ischecked[id] == false)
                 {
                     ischecked[id] = true;
-                    if ( childs.ContainsKey(id))
+                    if (childs.ContainsKey(id))
                     {
                         <li class="subMenu open">
                             <a>@categories[id].Name</a>
@@ -58,12 +61,12 @@
                     }
                     else
                     {
-                        <li><a class="active" href="products.html"><i class="icon-chevron-right"></i>@categories[id].Name </a></li>
+                        <li><a class="active" href="/@culture/@_loc["categoryUrl"]/@id"><i class="icon-chevron-right"></i>@categories[id].Name </a></li>
                     }
                 }
             }
 
-            foreach(int id in parents)
+            foreach (int id in parents)
             {
                 recursiveCategories(id);
             }
@@ -73,24 +76,24 @@
     </ul>
     <br />
     @*<div class="thumbnail">
-        <img src="/themes/images/products/panasonic.jpg" alt="Bootshop panasonoc New camera" />
-        <div class="caption">
-            <h5>Panasonic</h5>
-            <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-        </div>
-    </div><br />
-    <div class="thumbnail">
-        <img src="/themes/images/products/kindle.png" title="Bootshop New Kindel" alt="Bootshop Kindel">
-        <div class="caption">
-            <h5>Kindle</h5>
-            <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-        </div>
-    </div><br />
-    <div class="thumbnail">
-        <img src="/themes/images/payment_methods.png" title="Bootshop Payment Methods" alt="Payments Methods">
-        <div class="caption">
-            <h5>Payment Methods</h5>
-        </div>
-    </div>*@
+            <img src="/themes/images/products/panasonic.jpg" alt="Bootshop panasonoc New camera" />
+            <div class="caption">
+                <h5>Panasonic</h5>
+                <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
+            </div>
+        </div><br />
+        <div class="thumbnail">
+            <img src="/themes/images/products/kindle.png" title="Bootshop New Kindel" alt="Bootshop Kindel">
+            <div class="caption">
+                <h5>Kindle</h5>
+                <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
+            </div>
+        </div><br />
+        <div class="thumbnail">
+            <img src="/themes/images/payment_methods.png" title="Bootshop Payment Methods" alt="Payments Methods">
+            <div class="caption">
+                <h5>Payment Methods</h5>
+            </div>
+        </div>*@
 </div>
 

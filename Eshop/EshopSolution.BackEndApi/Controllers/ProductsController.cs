@@ -20,7 +20,8 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpGet("{categoryId}/paging/")]
-        public async Task<IActionResult> GetAllPaging(int categoryId, [FromQuery] GetManageProductPagingRequest request)
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllPaging(int categoryId, [FromQuery] ProductPagingRequest request)
         {
             request.CategoryId = categoryId;
             return Ok(await _productService.GetAllPaging(request));
@@ -37,16 +38,16 @@ namespace EshopSolution.BackEndApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{categoryId}/products/{languageId}")]
-        public async Task<IActionResult> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
-        {
-            var result = await _productService.GetAllByCategoryId(languageId, request);
-            if (result.IsSuccessed == false)
-            {
-                return BadRequest("Can't find product");
-            }
-            return Ok(result);
-        }
+        //[HttpGet("{categoryId}/products/{languageId}")]
+        //public async Task<IActionResult> GetAllByCategoryId(string languageId, ProductPagingRequest request)
+        //{
+        //    var result = await _productService.GetAllByCategoryId(languageId, request);
+        //    if (result.IsSuccessed == false)
+        //    {
+        //        return BadRequest("Can't find product");
+        //    }
+        //    return Ok(result);
+        //}
 
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)

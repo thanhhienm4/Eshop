@@ -133,6 +133,10 @@
     <value>All</value>
     <comment>Home/Index</comment>
   </data>
+  <data name="categoryUrl" xml:space="preserve">
+    <value>category</value>
+    <comment>SliderBar/Default</comment>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
     <comment>View/Layout</comment>
@@ -159,6 +163,10 @@
   </data>
   <data name="Items in your cart" xml:space="preserve">
     <value>Items in your cart</value>
+    <comment>Home/Index</comment>
+  </data>
+  <data name="Latest Products" xml:space="preserve">
+    <value>Latest Products</value>
     <comment>Home/Index</comment>
   </data>
   <data name="Login" xml:space="preserve">

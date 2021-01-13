@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using EshopSolution.ViewModel.Common;
+using EshopSolution.Utilities.Constants;
 
 namespace EshopSolution.Application.Unilities.Slides
 {
@@ -24,7 +25,7 @@ namespace EshopSolution.Application.Unilities.Slides
                 Id = x.Id,
                 Desciption = x.Desciption,
                 Name = x.Name,
-                Url = x.Url,
+                Url = $"{SystemConstants.ServerSettings.ServerBackEnd}/"+x.Url,
                 Image = x.Image
             }).ToListAsync();
 

@@ -133,6 +133,10 @@
     <value>Tất cả</value>
     <comment>Home/Index</comment>
   </data>
+  <data name="categoryUrl" xml:space="preserve">
+    <value>danh-muc</value>
+    <comment>SlideBar/Default</comment>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Đóng</value>
     <comment>View/Layout</comment>
@@ -159,6 +163,10 @@
   </data>
   <data name="Items in your cart" xml:space="preserve">
     <value>Sản phẩm trong giỏ hàng</value>
+    <comment>Home/Index</comment>
+  </data>
+  <data name="Latest Products" xml:space="preserve">
+    <value>Sản phẩm mới nhất</value>
     <comment>Home/Index</comment>
   </data>
   <data name="Login" xml:space="preserve">

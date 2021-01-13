@@ -7,7 +7,7 @@ namespace EshopSolution.ApiIntergate
 {
     public interface IProductApiClient
     {
-        Task<ApiResult<PageResult<ProductViewModel>>> GetProductPaging(GetManageProductPagingRequest request);
+        Task<ApiResult<PageResult<ProductViewModel>>> GetProductPaging(ProductPagingRequest request);
 
         Task<ApiResult<bool>> Create(ProductCreateRequest request);
 

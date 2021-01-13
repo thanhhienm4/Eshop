@@ -28,6 +28,7 @@ namespace EshopSolution.ApiIntergate
         public async Task<ApiResult<bool>> Update(int id, ProductUpdateRequest request)
         {
             return await PutAsync<ApiResult<bool>>($"/api/Products/{id}/update", request);
+
         }
 
         public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
@@ -99,7 +100,7 @@ namespace EshopSolution.ApiIntergate
             return await GetAsync<ApiResult<ProductViewModel>>($"/api/Products/{id}/{languageId}");
         }
 
-        public async Task<ApiResult<PageResult<ProductViewModel>>> GetProductPaging(GetManageProductPagingRequest request)
+        public async Task<ApiResult<PageResult<ProductViewModel>>> GetProductPaging(ProductPagingRequest request)
         {
             return await GetAsync<ApiResult<PageResult<ProductViewModel>>>($"/api/Products/{request.CategoryId}/paging?PageIndex=" +
                $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&" +

@@ -14,7 +14,7 @@ namespace EshopSolution.Application
 
         Task<ApiResult<bool>> Delete(int ProductId);
 
-        Task<ApiResult<PageResult<ProductViewModel>>> GetAllPaging(GetManageProductPagingRequest request);
+        Task<ApiResult<PageResult<ProductViewModel>>> GetAllPaging(ProductPagingRequest request);
 
         Task<ApiResult<bool>> UpdatePrice(int productId, decimal newPrice);
 
@@ -34,7 +34,7 @@ namespace EshopSolution.Application
 
         Task<ApiResult<List<ProductImageViewModel>>> GetListImages(int productId);
 
-        Task<ApiResult<PageResult<ProductViewModel>>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
+        //Task<ApiResult<PageResult<ProductViewModel>>> GetAllByCategoryId(string languageId, ProductPagingRequest request);
 
         Task<ApiResult<bool>> CategoryAssign(CategoryAssignRequest request);
 
