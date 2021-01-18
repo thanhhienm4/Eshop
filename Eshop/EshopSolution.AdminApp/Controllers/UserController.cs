@@ -7,7 +7,13 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
@@ -15,15 +21,14 @@ namespace EshopSolution.AdminApp.Controllers
     public class UserController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
-
-        //private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
         private readonly IRoleApiClient _roleApiClient;
 
-        public UserController(IUserApiClient userApiClient, IRoleApiClient roleApiClient)
+        public UserController(IUserApiClient userApiClient, IRoleApiClient roleApiClient, IConfiguration configuration)
         {
             _userApiClient = userApiClient;
             _roleApiClient = roleApiClient;
-            //_configuration = configuration;
+            _configuration = configuration;
         }
 
         [Authorize]
@@ -50,7 +55,7 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -229,5 +234,6 @@ namespace EshopSolution.AdminApp.Controllers
 
             return roleAssignRequest;
         }
+
     }
 }

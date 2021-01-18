@@ -40,5 +40,6 @@ namespace EshopSolution.Application
 
         Task<ApiResult<List<ProductViewModel>>> GetFeaturedProducts(string languageId, int number);
         Task<ApiResult<List<ProductViewModel>>> GetLatestProducts(string languageId, int number);
+        Task<ApiResult<ProductDetailViewModel>> GetProductDetail(string languageId, int id);
     }
 }

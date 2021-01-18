@@ -1,7 +1,9 @@
-﻿@model  EshopSolution.WebApp.Models.HomeViewModel
-@using EshopSolution.ViewModels.Catalog.Products 
+﻿@model EshopSolution.WebApp.Models.HomeViewModel
+@using EshopSolution.ViewModels.Catalog.Products
+@using LazZiya.ExpressLocalization
+@inject ISharedCultureLocalizer _loc
 @{
-
+    var culture = CultureInfo.CurrentCulture.Name;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -42,7 +44,7 @@
                     @for (int index = 0; index < Model.FeaturedProducts.Count; index++)
                     {
                         productViewModels.Add(Model.FeaturedProducts[index]);
-                        if (index % 4 == 3 || index == Model.FeaturedProducts.Count-1)
+                        if (index % 4 == 3 || index == Model.FeaturedProducts.Count - 1)
                         {
                             listOfFeaturedProduct.Add(productViewModels);
                             productViewModels = new List<ProductViewModel>();
@@ -57,11 +59,11 @@
                                     <li class="span3">
                                         <div class="thumbnail">
                                             <i class="tag"></i>
-                                            <a href="product_details.html"><img src="@item.ThumbnailImage" alt="@item.Name"></a>
+                                            <a href="/@culture/@_loc["detail"]/@item.ProductId"><img src="@item.ThumbnailImage"alt="@item.Name" ></a>
                                             <div class="caption">
                                                 <h5>@item.Name</h5>
-                                                <h4><a class="btn" href=""><localize>VIEW</localize></a> <span class="pull-right">@((int)item.Price)</span></h4>
-                                            </div>
+                                                <h4><a class="btn" href="/@culture/@_loc["detail"]/@item.ProductId"><localize>VIEW</localize></a> <span class="pull-right">@((int)item.Price)</span></h4>
+                                            </div>                                                                                                              
                                         </div>
                                     </li>
                                 }
@@ -83,13 +85,13 @@
         {
             <li class="span3">
                 <div class="thumbnail">
-                    <a href="product_details.html"><img src="@item.ThumbnailImage" alt="@item.Name" /></a>
+                    <a href="/@culture/@_loc["detail"]/@item.ProductId"><img src="@item.ThumbnailImage" alt="@item.Name" /></a>
                     <div class="caption">
                         <h5>@item.Name</h5>
                         <p>
                             @item.Description
                         </p>
-                        <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#"><localize>Add to</localize> <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">@((int)item.Price)</a></h4>
+                        <h4 style="text-align:center"><a class="btn" href="/@culture/@_loc["detail"]/@item.ProductId"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#"><localize>Add to</localize> <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">@((int)item.Price)</a></h4>
                     </div>
                 </div>
             </li>

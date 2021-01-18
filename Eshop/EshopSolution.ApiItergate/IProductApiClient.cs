@@ -20,5 +20,6 @@ namespace EshopSolution.ApiIntergate
         Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
         Task<List<ProductViewModel>> GetFeaturedProducts(string languuageId, int take);
         Task<List<ProductViewModel>> GetLatestProducts(string languuageId, int take);
+        Task<ProductDetailViewModel> GetProductDetail(string languageId, int id);
     }
 }

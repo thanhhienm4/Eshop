@@ -114,6 +114,10 @@ namespace EshopSolution.ApiIntergate
         {
             return (await GetAsync<ApiResult<List<ProductViewModel>>>($"/api/Products/latest/{languageId}/{take}")).ResultObj;
         }
+        public async Task<ProductDetailViewModel> GetProductDetail(string languageId, int id)
+        {
+            return (await GetAsync<ApiResult<ProductDetailViewModel>>($"/api/Products/Detail/{languageId}/{id}")).ResultObj;
+        }
 
 
     }

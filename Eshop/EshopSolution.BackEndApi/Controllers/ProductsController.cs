@@ -189,5 +189,18 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("detail/{languageId}/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetDetailProduct(string languageId, int id)
+        {
+            var result = await _productService.GetProductDetail(languageId,id);
+            if (result.IsSuccessed == false)
+            {
+                return BadRequest("Can't find product");
+
+            }
+            return Ok(result);
+        }
+
     }
 }

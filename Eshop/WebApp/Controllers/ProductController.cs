@@ -30,5 +30,10 @@ namespace EshopSolution.WebApp.Controllers
    
             return View(data.ResultObj);
         }
+        public async Task<IActionResult> Detail(string culture,int id)
+        {
+            ProductDetailViewModel productDetailViewModel = await _productApiClient.GetProductDetail(culture,id);
+            return View(productDetailViewModel);
+        }
     }
 }

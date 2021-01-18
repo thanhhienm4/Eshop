@@ -149,6 +149,10 @@
     <value>Delivery</value>
     <comment>View/Layout</comment>
   </data>
+  <data name="detail" xml:space="preserve">
+    <value>detail</value>
+    <comment>Product/Category</comment>
+  </data>
   <data name="DISCOUNT" xml:space="preserve">
     <value>DISCOUNT</value>
     <comment>View/Layout</comment>
@@ -156,6 +160,10 @@
   <data name="Featured Products" xml:space="preserve">
     <value>Featured Products</value>
     <comment>Home/Index</comment>
+  </data>
+  <data name="fff" xml:space="preserve">
+    <value>detail</value>
+    <comment>vi</comment>
   </data>
   <data name="Go" xml:space="preserve">
     <value>Go</value>

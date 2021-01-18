@@ -1,6 +1,7 @@
 ﻿@using EshopSolution.ViewModels.Catalog.Products
 @using EshopSolution.ViewModels.Catalog
 @using LazZiya.ExpressLocalization
+@model ProductDetailViewModel
 @inject ISharedCultureLocalizer _loc
 @{
     ViewData["Title"] = "Detail";
@@ -10,13 +11,13 @@
 <div class="span9">
     <ul class="breadcrumb">
         <li><a href="/"><localize>Home</localize></a> <span class="divider">/</span></li>
-        <li><a href="/@_loc["CategoryUrl"]/@Model.Category.Id">@Model.Category.Name</a> <span class="divider">/</span></li>
+        @*<li><a href="/@_loc["CategoryUrl"]/@Model.Category.Id">@Model.Category.Name</a> <span class="divider">/</span></li>*@
         <li class="active">product Details</li>
     </ul>
     <div class="row">
         <div id="gallery" class="span3">
-            <a href="themes/images/products/large/f1.jpg" title="Fujifilm FinePix S2950 Digital Camera">
-                <img src="themes/images/products/large/3.jpg" style="width:100%" alt="Fujifilm FinePix S2950 Digital Camera" />
+            <a href="@Model.Product.ThumbnailImage" title="@Model.Product.Name">
+                <img src="@Model.Product.ThumbnailImage" style="width:100%" alt="@Model.Product.Name" />
             </a>
             <div id="differentview" class="moreOptopm carousel slide">
                 <div class="carousel-inner">
