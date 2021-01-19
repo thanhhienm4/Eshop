@@ -7,25 +7,9 @@
 
 
 <div class="row">
-    <div class="span4">
-        <div class="well">
-            <h5>CREATE YOUR ACCOUNT</h5><br />
-            Enter your e-mail address to create an account.<br /><br /><br />
-            <form action="register.html">
-                <div class="control-group">
-                    <label class="control-label" for="inputEmail0">E-mail address</label>
-                    <div class="controls">
-                        <input class="span3" type="text" id="inputEmail0" placeholder="Email">
-                    </div>
-                </div>
-                <div class="controls">
-                    <button type="submit" class="btn block">Create Your Account</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    
     <div class="span1"> &nbsp;</div>
-    <div class="span4">
+    <div class="span9">
         <div class="well">
             <h5>ALREADY REGISTERED ?</h5>
             <form action="/@culture/User/Login" method="post">
@@ -42,16 +26,17 @@
                     <div asp-validation-summary="All" class="text-danger"></div>
                 </div>
 
-                <div class="form-group">
-                    <div class="custom-control custom-checkbox">
-                        <input class="custom-control-input" asp-for="RememberMe" type="checkbox" /> 
-                        <label class="custom-control-label">Nhớ mật khẩu</label>
-                    </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="RememberMe" /> <localize>Remember me</localize>
+                    </label>
                 </div>
                 <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
                     <a class="small" href="/User/ForgotPassword">Bạn quên mật khẩu?</a>
                     <button class="btn btn-primary" type="submit">Đăng nhập</button>
+
                 </div>
+                <a class="small" href="/@culture/User/Create">Tạo mới tài khoản </a>
             </form>
         </div>
     </div>

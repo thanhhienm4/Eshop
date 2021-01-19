@@ -13,6 +13,8 @@ using EshopSolution.WebApp.LocalizationResources;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Configuration;
+using FluentValidation.AspNetCore;
+using EshopSolution.ViewModels.System.Users;
 
 namespace EshopSolution.WebApp
 {
@@ -65,6 +67,7 @@ namespace EshopSolution.WebApp
                 options.AccessDeniedPath = "/Account/Forbident";
                 options.LogoutPath = "/{culture}/User/Logout";
             });
+            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

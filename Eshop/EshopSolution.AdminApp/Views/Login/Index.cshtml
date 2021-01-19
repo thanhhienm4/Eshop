@@ -40,11 +40,10 @@
                                             <div asp-validation-summary="All" class="text-danger"></div>
                                         </div>
 
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox">
-                                                <input class="custom-control-input" asp-for="RememberMe" type="checkbox" />
-                                                <label class="custom-control-label">Nhớ mật khẩu</label>
-                                            </div>
+                                        <div class="form-group form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" asp-for="RememberMe" /> Lưu đăng nhập  
+                                            </label>
                                         </div>
                                         <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
                                             <a class="small" href="/User/ForgotPassword">Bạn quên mật khẩu?</a>
