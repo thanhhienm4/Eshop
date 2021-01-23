@@ -59,11 +59,11 @@
                                     <li class="span3">
                                         <div class="thumbnail">
                                             <i class="tag"></i>
-                                            <a href="/@culture/@_loc["detail"]/@item.ProductId"><img src="@item.ThumbnailImage"alt="@item.Name" ></a>
+                                            <a href="/@culture/@_loc["detail"]/@item.ProductId"><img src="@item.ThumbnailImage" alt="@item.Name"></a>
                                             <div class="caption">
                                                 <h5>@item.Name</h5>
                                                 <h4><a class="btn" href="/@culture/@_loc["detail"]/@item.ProductId"><localize>VIEW</localize></a> <span class="pull-right">@((int)item.Price)</span></h4>
-                                            </div>                                                                                                              
+                                            </div>
                                         </div>
                                     </li>
                                 }
@@ -91,7 +91,16 @@
                         <p>
                             @item.Description
                         </p>
-                        <h4 style="text-align:center"><a class="btn" href="/@culture/@_loc["detail"]/@item.ProductId"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#"><localize>Add to</localize> <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">@((int)item.Price)</a></h4>
+                        <h4 style="text-align:center">
+                            <a class="btn" href="/@culture/@_loc["detail"]/@item.ProductId">
+                                <i class="icon-zoom-in"></i>
+                            </a>
+                            <a class="btn btn-add-cart" href="#" data-id="@item.ProductId">
+                                <localize>Add to</localize>
+                                <i class="icon-shopping-cart"></i>
+                            </a>
+                            <a class="btn success" >@((int)item.Price)</a>
+                        </h4>
                     </div>
                 </div>
             </li>

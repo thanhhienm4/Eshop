@@ -5,82 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\cart.js" />
-    <Content Remove="wwwroot\js\site.js" />
-    <Content Remove="wwwroot\lib\bootstrap\js\bootstrap.min.js" />
-    <Content Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
-    <Content Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
-    <Content Remove="wwwroot\lib\jquery-validation\dist\additional-methods.js" />
-    <Content Remove="wwwroot\lib\jquery-validation\dist\additional-methods.min.js" />
-    <Content Remove="wwwroot\lib\jquery-validation\dist\jquery.validate.js" />
-    <Content Remove="wwwroot\lib\jquery-validation\dist\jquery.validate.min.js" />
-    <Content Remove="wwwroot\lib\jquery-validation\LICENSE.md" />
-    <Content Remove="wwwroot\lib\jquery\dist\jquery.js" />
-    <Content Remove="wwwroot\lib\jquery\dist\jquery.min.js" />
-    <Content Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
-    <Content Remove="wwwroot\themes\font\fontawesome-webfont.svg" />
-    <Content Remove="wwwroot\themes\js\bootshop.js" />
-    <Content Remove="wwwroot\themes\js\bootstrap.min.js" />
-    <Content Remove="wwwroot\themes\js\google-code-prettify\prettify.js" />
-    <Content Remove="wwwroot\themes\js\jquery.js" />
-    <Content Remove="wwwroot\themes\js\jquery.lightbox-0.5.js" />
-    <Content Remove="wwwroot\themes\js\less.js" />
-    <Content Remove="wwwroot\themes\less\accordion.less" />
-    <Content Remove="wwwroot\themes\less\alerts.less" />
-    <Content Remove="wwwroot\themes\less\amelia.less" />
-    <Content Remove="wwwroot\themes\less\amelia\bootswatch.less" />
-    <Content Remove="wwwroot\themes\less\amelia\variables.less" />
-    <Content Remove="wwwroot\themes\less\bootshop.less" />
-    <Content Remove="wwwroot\themes\less\bootshop\main.less" />
-    <Content Remove="wwwroot\themes\less\bootshop\variables.less" />
-    <Content Remove="wwwroot\themes\less\bootstrap.less" />
-    <Content Remove="wwwroot\themes\less\breadcrumbs.less" />
-    <Content Remove="wwwroot\themes\less\button-groups.less" />
-    <Content Remove="wwwroot\themes\less\buttons.less" />
-    <Content Remove="wwwroot\themes\less\carousel.less" />
-    <Content Remove="wwwroot\themes\less\classified.less" />
-    <Content Remove="wwwroot\themes\less\close.less" />
-    <Content Remove="wwwroot\themes\less\code.less" />
-    <Content Remove="wwwroot\themes\less\component-animations.less" />
-    <Content Remove="wwwroot\themes\less\dropdowns.less" />
-    <Content Remove="wwwroot\themes\less\font-awesome-ie7.less" />
-    <Content Remove="wwwroot\themes\less\font-awesome.less" />
-    <Content Remove="wwwroot\themes\less\forms.less" />
-    <Content Remove="wwwroot\themes\less\grid.less" />
-    <Content Remove="wwwroot\themes\less\hero-unit.less" />
-    <Content Remove="wwwroot\themes\less\labels-badges.less" />
-    <Content Remove="wwwroot\themes\less\layouts.less" />
-    <Content Remove="wwwroot\themes\less\mixins.less" />
-    <Content Remove="wwwroot\themes\less\modals.less" />
-    <Content Remove="wwwroot\themes\less\navbar.less" />
-    <Content Remove="wwwroot\themes\less\navs.less" />
-    <Content Remove="wwwroot\themes\less\pager.less" />
-    <Content Remove="wwwroot\themes\less\pagination.less" />
-    <Content Remove="wwwroot\themes\less\popovers.less" />
-    <Content Remove="wwwroot\themes\less\progress-bars.less" />
-    <Content Remove="wwwroot\themes\less\reset.less" />
-    <Content Remove="wwwroot\themes\less\responsive-1200px-min.less" />
-    <Content Remove="wwwroot\themes\less\responsive-767px-max.less" />
-    <Content Remove="wwwroot\themes\less\responsive-768px-979px.less" />
-    <Content Remove="wwwroot\themes\less\responsive-navbar.less" />
-    <Content Remove="wwwroot\themes\less\responsive-utilities.less" />
-    <Content Remove="wwwroot\themes\less\responsive.less" />
-    <Content Remove="wwwroot\themes\less\scaffolding.less" />
-    <Content Remove="wwwroot\themes\less\simplex.less" />
-    <Content Remove="wwwroot\themes\less\simplex\bootswatch.less" />
-    <Content Remove="wwwroot\themes\less\simplex\variables.less" />
-    <Content Remove="wwwroot\themes\less\sprites.less" />
-    <Content Remove="wwwroot\themes\less\tables.less" />
-    <Content Remove="wwwroot\themes\less\thumbnails.less" />
-    <Content Remove="wwwroot\themes\less\tooltip.less" />
-    <Content Remove="wwwroot\themes\less\type.less" />
-    <Content Remove="wwwroot\themes\less\utilities.less" />
-    <Content Remove="wwwroot\themes\less\variables.less" />
-    <Content Remove="wwwroot\themes\less\wells.less" />
-    <Content Remove="wwwroot\themes\switch\theamswitcher.js" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Remove="LocalizationResources\ViewLocalizationResource.en.resx" />
   </ItemGroup>
 
@@ -93,7 +17,22 @@
     <None Include="wwwroot\js\bootstrap.min.js" />
     <None Include="wwwroot\js\cart.js" />
     <None Include="wwwroot\js\site.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map" />
     <None Include="wwwroot\lib\bootstrap\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\bootstrap\LICENSE" />
     <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
     <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
     <None Include="wwwroot\lib\jquery-validation\dist\additional-methods.js" />
@@ -104,6 +43,7 @@
     <None Include="wwwroot\lib\jquery\dist\jquery.js" />
     <None Include="wwwroot\lib\jquery\dist\jquery.min.js" />
     <None Include="wwwroot\lib\jquery\dist\jquery.min.map" />
+    <None Include="wwwroot\themes\bootstrap\js\bootstrap.min.js" />
     <None Include="wwwroot\themes\font\fontawesome-webfont.svg" />
     <None Include="wwwroot\themes\js\bootshop.js" />
     <None Include="wwwroot\themes\js\bootstrap.min.js" />

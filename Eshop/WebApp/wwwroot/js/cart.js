@@ -1,83 +1,106 @@
 ﻿var CartController = function () {
     this.initialize = function () {
-        loadData();
-
-        registerEvents();
+        RegisterEvent();
+        loadCart();
     }
+    function loadCart() {
+        const culture = $('#culture').val();
+        $.ajax({
+            type: "GET",
+            url: "/" + culture + '/Cart/GetListCart',
+            data: {
+                languageId: culture
+            },
+            success: function (res) {
+                console.log(res);
+                var html = "";
+                var total = 0;
+                $.each(res, function (i, item) {
+                    html += "<tr>\r\n<td><img width =\"60\" src=" + item.image + " /><\/td>\r\n"
+                        + "<td>" + item.description + "<\/td>\r\n"
+                        + "<td>\r\n\t<div class=\"input-append\">\r\n\t\t<input id=\"input-quantity-" + item.id + "\" class=\"input-quantity\" data-id=\""+item.id+ "\" pattern=\"[0-9]{0,}\" style =\"max-width:34px\" placeholder=\"1\" value=\"" + item.quantity + "\" size =\"16\" type=\"number\">\r\n\t\t"
+                        + "<button class=\"btn btn-minus-quantity\" type=\"button\" data-id=" +item.id +"  id=\"btn btn-minus-"+item.id+"\">\r\n\t\t\t<i class=\"icon-minus\"><\/i>\r\n\t\t<\/button>\r\n\t\t"
+                        + "<button class=\"btn btn-add-quantity\" type=\"button\" data-id=" +item.id +"  id=\"btn btn-add-"+item.id+"\">\r\n\t\t\t<i class=\"icon-plus\"><\/i>\r\n\t\t<\/button>\r\n\t\t" 
+                        + "<button class=\"btn btn-danger\" type=\"button\"data-id="+  item.id +" id=\"btn btn-remove-"+item.id+"\">\r\n\t\t\t<i class=\"icon-remove icon-white\"><\/i>\r\n\t\t<\/button>\r\n\t<\/div>\r\n<\/td>"
+                        + "<td>" + numberWithCommas(item.price) + "<\/td>\r\n"
+                        + "< td > $25.00 <\/td>\r\n"
+                        + "<td>$15.00<\/td>\r\n"
+                        + "<td>" + numberWithCommas(item.price * item.quantity) + "<\/td>\r\n<\/tr>";
+                    total += item.price * item.quantity;
+                });
+                $("#cart-body").html(html);
+                $("#total-price").text(numberWithCommas(total).toString());
+                $("#number-items-cart").text(res.length);
+                $("#number-items").text(res.length);
+              
 
-    function registerEvents() {
-        $('body').on('click', '.btn-plus', function (e) {
-            e.preventDefault();
-            const id = $(this).data('id');
-            const quantity = parseInt($('#txt_quantity_' + id).val()) + 1;
-            updateCart(id, quantity);
-        });
 
-        $('body').on('click', '.btn-minus', function (e) {
-            e.preventDefault();
-            const id = $(this).data('id');
-            const quantity = parseInt($('#txt_quantity_' + id).val()) - 1;
-            updateCart(id, quantity);
-        });
-        $('body').on('click', '.btn-remove', function (e) {
-            e.preventDefault();
-            const id = $(this).data('id');
-            updateCart(id, 0);
+
+
+            }
         });
     }
-
-    function updateCart(id, quantity) {
-        const culture = $('#hidCulture').val();
+    function UpdateQuantity(id, quantity) {
+        var culture = $('#culture').val();
         $.ajax({
             type: "POST",
-            url: "/" + culture + '/Cart/UpdateCart',
+            url: '/' + culture + '/Cart/UpdateCart',
             data: {
                 id: id,
                 quantity: quantity
             },
             success: function (res) {
-                $('#lbl_number_items_header').text(res.length);
-                loadData();
-            },
-            error: function (err) {
-                console.log(err);
+                $("#number-items").text(res.length);
+                loadCart();
             }
+
         });
     }
-
-    function loadData() {
-        const culture = $('#hidCulture').val();
-        $.ajax({
-            type: "GET",
-            url: "/" + culture + '/Cart/GetListItems',
-            success: function (res) {
-                if (res.length === 0) {
-                    $('#tbl_cart').hide();
+    function RegisterEvent() {
+        $('body').on('click', '.btn-add-cart', function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            var culture = $('#culture').val();
+            $.ajax({
+                type: "POST",
+                url: '/' + culture+ '/Cart/AddToCart',
+                data: {
+                    id: id
+                },
+                success: function (res) {
+                    $("#number-items").text(res.length);
                 }
-                var html = '';
-                var total = 0;
 
-                $.each(res, function (i, item) {
-                    var amount = item.price * item.quantity;
-                    html += "<tr>"
-                        + "<td> <img width=\"60\" src=\"" + $('#hidBaseAddress').val() + item.image + "\" alt=\"\" /></td>"
-                        + "<td>" + item.description + "</td>"
-                        + "<td><div class=\"input-append\"><input class=\"span1\" style=\"max-width: 34px\" placeholder=\"1\" id=\"txt_quantity_" + item.productId + "\" value=\"" + item.quantity + "\" size=\"16\" type=\"text\">"
-                        + "<button class=\"btn btn-minus\" data-id=\"" + item.productId + "\" type =\"button\"> <i class=\"icon-minus\"></i></button>"
-                        + "<button class=\"btn btn-plus\" type=\"button\" data-id=\"" + item.productId + "\"><i class=\"icon-plus\"></i></button>"
-                        + "<button class=\"btn btn-danger btn-remove\" type=\"button\" data-id=\"" + item.productId + "\"><i class=\"icon-remove icon-white\"></i></button>"
-                        + "</div>"
-                        + "</td>"
-
-                        + "<td>" + numberWithCommas(item.price) + "</td>"
-                        + "<td>" + numberWithCommas(amount) + "</td>"
-                        + "</tr>";
-                    total += amount;
-                });
-                $('#cart_body').html(html);
-                $('#lbl_number_of_items').text(res.length);
-                $('#lbl_total').text(numberWithCommas(total));
-            }
+            });
         });
+        $('body').on('change', '.input-quantity', function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            var quantity = $(this).val();
+            UpdateQuantity(id, quantity);
+            
+        });
+        $('body').on('click', '.btn-add-quantity', function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            var quantity = parseInt($("#input-quantity-"+id).val()) + 1;
+            UpdateQuantity(id, quantity);
+
+        });
+        $('body').on('click', '.btn-minus-quantity', function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            var quantity = parseInt($("#input-quantity-" + id).val()) - 1;
+            UpdateQuantity(id, quantity);
+
+        });
+        $('body').on('click', '.btn-danger', function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            var quantity = 0;
+            UpdateQuantity(id, quantity);
+
+        });
+
     }
 }

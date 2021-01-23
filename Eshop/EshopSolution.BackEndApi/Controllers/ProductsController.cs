@@ -26,7 +26,7 @@ namespace EshopSolution.BackEndApi.Controllers
             request.CategoryId = categoryId;
             return Ok(await _productService.GetAllPaging(request));
         }
-
+        [AllowAnonymous]
         [HttpGet("{productId}/{languageId}")]
         public async Task<IActionResult> GetById(int productId, string languageId)
         {

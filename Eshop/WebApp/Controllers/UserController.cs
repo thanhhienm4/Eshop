@@ -61,8 +61,15 @@ namespace EshopSolution.WebApp.Controllers
             var result = await _userApiClient.Register(request);
             if (result.IsSuccessed)
             {
-                TempData["Result"] = "Tạo mới thành công";
-                return RedirectToAction("Index", "Home");
+                 return await Login(new LoginRequest()
+                {
+                    UserName = request.UserName,
+                    Password = request.Password,
+                    RememberMe = true
+                });
+
+               
+
             }
             ModelState.AddModelError("", result.Message);
             return View(request);

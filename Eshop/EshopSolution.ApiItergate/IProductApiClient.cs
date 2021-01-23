@@ -1,4 +1,5 @@
-﻿using EshopSolution.ViewModels.Catalog.Products;
+﻿using EshopSolution.Utilities.Constants;
+using EshopSolution.ViewModels.Catalog.Products;
 using EshopSolution.ViewModels.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace EshopSolution.ApiIntergate
 
         Task<ApiResult<bool>> Update(int id, ProductUpdateRequest request);
 
-        Task<ApiResult<ProductViewModel>> GetById(int id, string LanguageId);
+        Task<ApiResult<ProductViewModel>> GetById(int id, string LanguageId = SystemConstants.AppSettings.DefaultLangaueId);
 
         Task<ApiResult<bool>> Delete(int id);
 

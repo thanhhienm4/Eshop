@@ -11,6 +11,7 @@
             public const string BaseAddress = "BaseAddress";
             public const string Token = "Token";
             public const string Bearer = "Bearer";
+            public const string CartSession = "CartSession";
         }
         public static class ProductSettings
         {

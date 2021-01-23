@@ -95,7 +95,7 @@ namespace EshopSolution.ApiIntergate
             return await DeleteAsync<ApiResult<bool>>($"/api/Products/{id}");
         }
 
-        public async Task<ApiResult<ProductViewModel>> GetById(int id, string languageId)
+        public async Task<ApiResult<ProductViewModel>> GetById(int id, string languageId = SystemConstants.AppSettings.DefaultLangaueId)
         {
             return await GetAsync<ApiResult<ProductViewModel>>($"/api/Products/{id}/{languageId}");
         }
