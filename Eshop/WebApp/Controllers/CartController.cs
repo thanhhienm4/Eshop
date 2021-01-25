@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using EshopSolution.ApiIntergate;
+using EshopSolution.Data.Entities;
 using EshopSolution.Utilities.Constants;
+using EshopSolution.ViewModels.Sale;
 using EshopSolution.ViewModels.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -15,10 +20,18 @@ namespace EshopSolution.WebApp.Controllers
     public class CartController : Controller
     {
         private readonly IProductApiClient _productApiClient;
-        public CartController(IProductApiClient productApiClient)
+        private readonly IOrderApiClient _orderApiClient;
+        private readonly IUserApiClient _userApiClient;
+
+        public CartController(IProductApiClient productApiClient, IOrderApiClient orderApiClient,
+            IUserApiClient userApiClient)
         {
             _productApiClient = productApiClient;
+            _orderApiClient = orderApiClient;
+            _userApiClient = userApiClient;
+        
         }
+        
         public IActionResult Index()
         {
             return View();
@@ -107,8 +120,6 @@ namespace EshopSolution.WebApp.Controllers
                 }
                     
             }
-
-
             HttpContext.Session.SetString(SystemConstants.AppSettings.CartSession,
                 JsonConvert.SerializeObject(listCart));
 
@@ -139,6 +150,51 @@ namespace EshopSolution.WebApp.Controllers
             return Ok(listCart);
 
 
+        }
+        [HttpGet]
+        public async Task<IActionResult> Checkout() 
+        {
+
+
+            var request = new OrderCreateRequest
+            {
+                ListCart = await GetListCart(CultureInfo.CurrentCulture.Name),
+                //UserId = (Guid)await _userApiClient.GetUserId()
+                
+            };
+            return View(request);
+            
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Checkout(OrderCreateRequest request)
+        {
+            request.ListCart = await GetListCart(CultureInfo.CurrentCulture.Name);
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+            else
+            {
+                
+                var result = await _orderApiClient.Create(request);
+                if (result.IsSuccessed)
+                    return RedirectToAction("Index", "Home");
+                
+            }
+            TempData["SuccessMsg"] = "Order puschased successful";
+            return View(request);
+            
+
+
+        }
+        
+        [HttpDelete]
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            var result = _orderApiClient.Remove(id);
+            return View();
         }
     }
 }

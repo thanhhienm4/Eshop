@@ -12,7 +12,8 @@ namespace EshopSolution.Data.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.ShipAddress).IsRequired().IsUnicode(true);
             builder.Property(x => x.ShipName).IsRequired().IsUnicode(true);
-            builder.Property(x => x.ShipAddress).IsRequired().IsUnicode(true);
+            builder.Property(x => x.ShipEmail).IsRequired().IsUnicode(true);
+            builder.HasOne(x => x.AppUser).WithMany(x => x.Orders).HasForeignKey(x => x.UserId);
         }
     }
 }

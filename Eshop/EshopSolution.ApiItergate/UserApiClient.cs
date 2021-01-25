@@ -51,5 +51,9 @@ namespace EshopSolution.ApiIntergate
         {
             return await PutAsync<ApiResult<bool>>($"/api/Users/{id}/roles", request);
         }
+        public async Task<Guid> GetUserId()
+        {
+            return await GetAsync<Guid> ("/api/users/GetUserId");
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using EshopSolution.Data.Entities;
 using EshopSolution.ViewModels.Common;
 using EshopSolution.ViewModels.System.Users;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -45,6 +46,7 @@ namespace EshopSolution.Application.System.Users
             }
             var claims = new[]
             {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.GivenName,user.FirstName),
                 new Claim(ClaimTypes.Email, user.Email),
@@ -56,7 +58,7 @@ namespace EshopSolution.Application.System.Users
             var token = new JwtSecurityToken(_configuration["Tokens:Issuer"],
               _configuration["Tokens:Issuer"],
               claims,
-              expires: DateTime.Now.AddMinutes(180),
+              expires: DateTime.Now.AddYears(1),
               signingCredentials: credentials);
 
             return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
@@ -225,6 +227,11 @@ namespace EshopSolution.Application.System.Users
             }
 
             return new ApiSuccessResult<bool>();
+        }
+        public async Task<Guid> GetUserId(ClaimsPrincipal claimsPrincipal)
+        {
+            var user = await _userManager.GetUserAsync(claimsPrincipal);
+            return user.Id;
         }
     }
 }

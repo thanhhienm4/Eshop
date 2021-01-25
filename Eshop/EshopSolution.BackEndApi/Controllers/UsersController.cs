@@ -123,5 +123,11 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return BadRequest(result);
         }
+        [HttpGet("GetUserId")]
+        public async Task<IActionResult> GetUserId()
+        {
+            var userId = await  _userService.GetUserId(HttpContext.User);
+            return Ok(userId);
+        }
     }
 }

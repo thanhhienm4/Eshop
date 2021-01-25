@@ -20,5 +20,7 @@ namespace EshopSolution.ApiIntergate
         Task<ApiResult<bool>> Delete(DeleteRequest request);
 
         Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
+
+        Task<Guid> GetUserId();
     }
 }

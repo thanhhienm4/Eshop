@@ -15,6 +15,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Configuration;
 using FluentValidation.AspNetCore;
 using EshopSolution.ViewModels.System.Users;
+using EshopSolution.Data.Entities;
+using Microsoft.AspNetCore.Identity;
+using EshopSolution.Data.EF;
+using Microsoft.EntityFrameworkCore;
+using EshopSolution.Utilities.Constants;
 
 namespace EshopSolution.WebApp
 {
@@ -36,7 +41,8 @@ namespace EshopSolution.WebApp
                 new CultureInfo("en"),
                 new CultureInfo("vi"),
             };
-            
+           services.AddDbContext<EshopDbContext>(options =>
+           options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
             services.AddMvc().AddRazorRuntimeCompilation();
             services.AddControllersWithViews()
                .AddExpressLocalization<ExpressLocalizationResource, ViewLocalizationResource>(
@@ -54,12 +60,14 @@ namespace EshopSolution.WebApp
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
+            
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<ISlideApiClient, SlideApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddTransient<IUserApiClient,UserApiClient>();
             services.AddTransient<IRoleApiClient, RoleApiClient>();
+            services.AddTransient<IOrderApiClient, OrderApiClient>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {

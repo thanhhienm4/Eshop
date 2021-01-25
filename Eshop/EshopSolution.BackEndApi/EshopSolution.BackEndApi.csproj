@@ -166,6 +166,7 @@
 	</ItemGroup>
 
   <ItemGroup>
+	<ProjectReference Include="..\EshopSolution.ApiItergate\EshopSolution.ApiIntergate.csproj" />
 	<ProjectReference Include="..\EshopSolution.Application\EshopSolution.Application.csproj" />
 	<ProjectReference Include="..\EshopSolution.Data\EshopSolution.Data.csproj" />
 	<ProjectReference Include="..\EshopSolution.Utilities\EshopSolution.Utilities.csproj" />

@@ -155,7 +155,7 @@ namespace EshopSolution.WebApp.Controllers
             var userPrincipal = ValidateToken(respond.ResultObj);
             var authProperties = new AuthenticationProperties()
             {
-                ExpiresUtc = DateTimeOffset.Now.AddMinutes(30),
+                ExpiresUtc = DateTimeOffset.Now.AddDays(30),
                 IsPersistent = true
             };
             HttpContext.Session.SetString(SystemConstants.AppSettings.Token, respond.ResultObj);
