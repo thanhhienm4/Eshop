@@ -55,6 +55,18 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return BadRequest();
         }
+        [HttpGet("GetListActiveOrder/{languageId}")]
+        public async Task<IActionResult> GetListActiveOrder(string languageId)
+        {
+            Guid userId = await _userService.GetUserId(HttpContext.User);
+            var result = await _orderSevice.GetListActiveOrder(userId, languageId);
+            if(result.IsSuccessed)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
+
+        }
        
     }
 }

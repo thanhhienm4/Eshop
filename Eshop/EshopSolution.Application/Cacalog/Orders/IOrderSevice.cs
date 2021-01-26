@@ -11,7 +11,8 @@ namespace EshopSolution.Application.Cacalog.Orders
     {
         Task<ApiResult<bool>> Create(OrderCreateRequest request);
 
-        //Task<ApiResult<bool>> Update(ProductUpdateRequest request);
+        Task<ApiResult<List<OrderViewModel>>> GetListActiveOrder(Guid userId,string langugeId);
+        Task<ApiResult<List<OrderViewModel>>> GetHistoryOrder(Guid userId, string languageId);
 
         Task<ApiResult<bool>> Delete(int orderId);
 

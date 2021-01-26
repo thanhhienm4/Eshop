@@ -16,7 +16,7 @@ namespace EshopSolution.ViewModels.Sale
         public string ShipEmail { set; get; }
         public string ShipPhoneNumber { set; get; }
         public OrderStatus Status { set; get; }
-        public List<CartViewModel> ListCart { get; set; }
+        public List<OrderDetailViewModel> ListCart { get; set; }
 
 
     }

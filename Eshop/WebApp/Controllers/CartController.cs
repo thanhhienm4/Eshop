@@ -37,19 +37,19 @@ namespace EshopSolution.WebApp.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<List<CartViewModel>> GetListCart(string languageId)
+        public async Task<List<OrderDetailViewModel>> GetListCart(string languageId)
         {
 
-            List<CartViewModel> listCart = null;
+            List<OrderDetailViewModel> listCart = null;
             string json = HttpContext.Session.GetString(SystemConstants.AppSettings.CartSession);
             if (json != null)
-                listCart = JsonConvert.DeserializeObject<List<CartViewModel>>(json);
+                listCart = JsonConvert.DeserializeObject<List<OrderDetailViewModel>>(json);
             if (listCart == null)
-                listCart = new List<CartViewModel>();
+                listCart = new List<OrderDetailViewModel>();
 
             foreach(var cart in listCart)
             {
-                var productData = await _productApiClient.GetById(cart.Id, languageId);
+                var productData = await _productApiClient.GetById(cart.ProductId, languageId);
                 if (!productData.IsSuccessed)
                 {
                     listCart.Remove(cart);
@@ -72,22 +72,22 @@ namespace EshopSolution.WebApp.Controllers
             {
                 RedirectToAction("Error", "Home");
             }
-            List<CartViewModel> listCart = null;
+            List<OrderDetailViewModel> listCart = null;
             string json = HttpContext.Session.GetString(SystemConstants.AppSettings.CartSession);
             if(json != null)
-                listCart= JsonConvert.DeserializeObject<List<CartViewModel>>(json);
+                listCart= JsonConvert.DeserializeObject<List<OrderDetailViewModel>>(json);
             if(listCart == null)
-                listCart = new List<CartViewModel>();
+                listCart = new List<OrderDetailViewModel>();
 
-            if(listCart.Any(cart => cart.Id==id))
+            if(listCart.Any(cart => cart.ProductId==id))
             {
-                listCart.Where(cart => cart.Id == id).FirstOrDefault().Quantity += 1;
+                listCart.Where(cart => cart.ProductId == id).FirstOrDefault().Quantity += 1;
             }else
             {
                 var product = productData.ResultObj;
-                listCart.Add(new CartViewModel()
+                listCart.Add(new OrderDetailViewModel()
                 {
-                    Id = product.ProductId,
+                    ProductId = product.ProductId,
                     Quantity = 1,
                     Image = product.ThumbnailImage,
                     Price = product.Price
@@ -104,16 +104,16 @@ namespace EshopSolution.WebApp.Controllers
         }
         public IActionResult RemoveCart(int id)
         {
-            List<CartViewModel> listCart = null;
+            List<OrderDetailViewModel> listCart = null;
             string json = HttpContext.Session.GetString(SystemConstants.AppSettings.CartSession);
             if (json != null)
-                listCart = JsonConvert.DeserializeObject<List<CartViewModel>>(json);
+                listCart = JsonConvert.DeserializeObject<List<OrderDetailViewModel>>(json);
             if (listCart == null)
-                listCart = new List<CartViewModel>();
+                listCart = new List<OrderDetailViewModel>();
 
             foreach(var cart in listCart)
             {
-                if (cart.Id == id)
+                if (cart.ProductId == id)
                 {
                     listCart.Remove(cart);
                     break;
@@ -131,16 +131,16 @@ namespace EshopSolution.WebApp.Controllers
             {
                 return RemoveCart(id);
             }
-            List<CartViewModel> listCart = null;
+            List<OrderDetailViewModel> listCart = null;
             string json = HttpContext.Session.GetString(SystemConstants.AppSettings.CartSession);
             if (json != null)
-                listCart = JsonConvert.DeserializeObject<List<CartViewModel>>(json);
+                listCart = JsonConvert.DeserializeObject<List<OrderDetailViewModel>>(json);
             if (listCart == null)
-                listCart = new List<CartViewModel>();
+                listCart = new List<OrderDetailViewModel>();
 
-            if (listCart.Any(cart => cart.Id == id))
+            if (listCart.Any(cart => cart.ProductId == id))
             {
-                listCart.Where(cart => cart.Id == id).FirstOrDefault().Quantity = quantity;
+                listCart.Where(cart => cart.ProductId == id).FirstOrDefault().Quantity = quantity;
             }
             
 
@@ -154,8 +154,6 @@ namespace EshopSolution.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Checkout() 
         {
-
-
             var request = new OrderCreateRequest
             {
                 ListCart = await GetListCart(CultureInfo.CurrentCulture.Name),
@@ -179,7 +177,7 @@ namespace EshopSolution.WebApp.Controllers
                 
                 var result = await _orderApiClient.Create(request);
                 if (result.IsSuccessed)
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("History");
                 
             }
             TempData["SuccessMsg"] = "Order puschased successful";
@@ -195,6 +193,14 @@ namespace EshopSolution.WebApp.Controllers
         {
             var result = _orderApiClient.Remove(id);
             return View();
+        }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> HistoryAsync()
+        {
+            string culture = CultureInfo.CurrentCulture.Name;
+            var result = (await _orderApiClient.GetListActiveModel(culture)).ResultObj;
+            return View(result);
         }
     }
 }

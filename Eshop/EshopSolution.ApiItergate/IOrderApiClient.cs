@@ -12,6 +12,7 @@ namespace EshopSolution.ApiIntergate
     {
         Task<ApiResult<bool>> Create(OrderCreateRequest request);
         Task<ApiResult<bool>> Remove(int id);
+        Task<ApiResult<List<OrderViewModel>>> GetListActiveModel(string langugeId);
 
     }
 }

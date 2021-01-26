@@ -22,6 +22,11 @@ namespace EshopSolution.ApiIntergate
             return await PostAsync<ApiResult<bool>>($"/api/Orders/Create", request);
         }
 
+        public async Task<ApiResult<List<OrderViewModel>>> GetListActiveModel(string languageId)
+        {
+            return await GetAsync<ApiResult<List<OrderViewModel>>>($"/api/Orders/GetListActiveOrder/{languageId}");
+        }
+
         public async Task<ApiResult<bool>> Remove(int id)
         {
             return await DeleteAsync<ApiResult<bool>>($"/api/Orders/Delete/{id}");
