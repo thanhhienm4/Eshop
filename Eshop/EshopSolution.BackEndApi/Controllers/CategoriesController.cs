@@ -9,7 +9,7 @@ namespace EshopSolution.BackEndApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class CategoriesController : Controller
     {
         private readonly ICategoryService _categoryService;
@@ -20,6 +20,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpGet("Paging")]
+        [AllowAnonymous]
         public async Task<IActionResult> getAllPaging([FromQuery] GetManageCategoryPagingRequest request)
         {
             var data = await _categoryService.GetAllPaging(request);
@@ -35,6 +36,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpGet("GetById/{id}/{languageId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id, string languageId)
         {
             var data = await _categoryService.GetById(id, languageId);
@@ -47,6 +49,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> Delete(int id)
         {
             var data = await _categoryService.Delete(id);
@@ -54,6 +57,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPut("update")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> Update([FromBody] CategoryUpdateRequest request)
         {
             var data = await _categoryService.Update(request);
@@ -61,6 +65,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> Create([FromBody] CategoryCreateRequest request)
         {
             var data = await _categoryService.Create(request);

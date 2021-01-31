@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -33,6 +34,7 @@ namespace EshopSolution.Application.System.Users
 
         public async Task<ApiResult<string>> Authenticate(LoginRequest request)
         {
+            
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null)
             {
@@ -44,14 +46,16 @@ namespace EshopSolution.Application.System.Users
             {
                 return new ApiErrorResult<string>("Mật khẩu không chính xác");
             }
-            var claims = new[]
+            var claims = new []
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.GivenName,user.FirstName),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, string.Join(";",roles))
+                new Claim(ClaimTypes.Role,string.Join(";",roles))
+                
             };
+            
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 

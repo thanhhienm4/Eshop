@@ -1,15 +1,16 @@
 ﻿using EshopSolution.Application.System.Users;
+using EshopSolution.Utilities.Constants;
 using EshopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EshopSolution.BackEndApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -54,6 +55,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpGet("paging")]
+        [Authorize(Policy ="Admin")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
         {
             if (ModelState.IsValid == false)
@@ -65,6 +67,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPut("{id}/update")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateRequest request)
         {
             if (ModelState.IsValid == false)
@@ -80,6 +83,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpGet("{id}/getbyid")]
+        [Authorize(Policy ="Access")]
         public async Task<IActionResult> GetById(Guid id)
         {
             if (ModelState.IsValid == false)
@@ -95,6 +99,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpDelete("{Id}")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> Delete(Guid Id)
         {
             if (ModelState.IsValid == false)
@@ -110,6 +115,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPut("{id}/roles")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> RoleAssign(Guid id, [FromBody] RoleAssignRequest request)
         {
             if (ModelState.IsValid == false)
@@ -124,10 +130,21 @@ namespace EshopSolution.BackEndApi.Controllers
             return BadRequest(result);
         }
         [HttpGet("GetUserId")]
+        [Authorize(Policy = "Access")]
         public async Task<IActionResult> GetUserId()
         {
-            var userId = await  _userService.GetUserId(HttpContext.User);
-            return Ok(userId);
+
+            
+            return Ok(Guid.Parse(HttpContext.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == SystemConstants.Token.Issuer).Value.ToString()) );
+
+            //if (User.HasClaim(c => c.Type == ClaimTypes.NameIdentifier))
+            //{
+            //    return Ok(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).ToString());
+            //}
+            //return BadRequest();
+
+
+
         }
     }
 }

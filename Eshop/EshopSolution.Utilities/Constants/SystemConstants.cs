@@ -23,5 +23,9 @@
         {
             public const string ServerBackEnd = "https://localhost:5002";
         }
+        public static class Token
+        {
+            public const string Issuer = "Asp.netcore111111111111111111";
+        }
     }
 }

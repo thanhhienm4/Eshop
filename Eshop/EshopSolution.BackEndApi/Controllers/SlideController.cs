@@ -8,7 +8,7 @@ namespace EshopSolution.BackEndApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+
     public class SlideController : ControllerBase
     {
         private readonly ISlideService _slideService;
@@ -19,6 +19,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpGet("GetAll")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             var slides = await _slideService.GetAll();

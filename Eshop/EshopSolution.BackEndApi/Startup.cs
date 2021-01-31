@@ -9,12 +9,14 @@ using EshopSolution.Application.Unilities.Slides;
 using EshopSolution.Data.EF;
 using EshopSolution.Data.Entities;
 using EshopSolution.Utilities.Constants;
+using EshopSolution.Utilities.Role;
 using EshopSolution.ViewModels.Catalog.Products;
 using EshopSolution.ViewModels.Sale;
 using EshopSolution.ViewModels.System.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +28,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace EshopSolution.BackEndApi
 {
@@ -42,6 +45,7 @@ namespace EshopSolution.BackEndApi
         public void ConfigureServices(IServiceCollection services)
         {
             IdentityModelEventSource.ShowPII = true;
+
             services.AddDbContext<EshopDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
             services.AddControllers().AddFluentValidation();
@@ -59,7 +63,7 @@ namespace EshopSolution.BackEndApi
                 .AddEntityFrameworkStores<EshopDbContext>()
                 .AddDefaultTokenProviders();
             //Declare
-
+            services.AddSingleton<IAuthorizationHandler, RoleHandler>();
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
@@ -119,6 +123,7 @@ namespace EshopSolution.BackEndApi
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                
             })
             .AddJwtBearer(options =>
             {
@@ -135,6 +140,12 @@ namespace EshopSolution.BackEndApi
                     ClockSkew = System.TimeSpan.Zero,
                     IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
                 };
+
+            });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Access", policy => policy.Requirements.Add(new RoleRequirement("customer")));
+                options.AddPolicy("Edit", policy => policy.Requirements.Add(new RoleRequirement("admin;customer")));
             });
         }
 

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using EshopSolution.ApiIntergate;
 using EshopSolution.Application.Cacalog.Orders;
 using EshopSolution.Application.System.Users;
+using EshopSolution.Utilities.Constants;
 using EshopSolution.ViewModels.Sale;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +16,6 @@ namespace EshopSolution.BackEndApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly IOrderSevice _orderSevice;
@@ -26,6 +27,9 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPost("Create")]
+
+        [Authorize(Policy ="Access")]
+        
         public async Task<IActionResult> Create([FromBody] OrderCreateRequest request)
         {
             if(!ModelState.IsValid)
@@ -42,6 +46,8 @@ namespace EshopSolution.BackEndApi.Controllers
             return BadRequest(result);
         }
         [HttpDelete("Delete/{id}")]
+        [Authorize(Policy = "Access")]
+        //[Authorize(Policy = "Customer")]
         public async Task<IActionResult> Delete(int id)
         {
             if (!ModelState.IsValid)
@@ -55,10 +61,15 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return BadRequest();
         }
+        
         [HttpGet("GetListActiveOrder/{languageId}")]
+        [Authorize(Policy = "Access")]
         public async Task<IActionResult> GetListActiveOrder(string languageId)
+        
         {
-            Guid userId = await _userService.GetUserId(HttpContext.User);
+
+
+            Guid userId =  Guid.Parse(HttpContext.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == SystemConstants.Token.Issuer).Value.ToString());         
             var result = await _orderSevice.GetListActiveOrder(userId, languageId);
             if(result.IsSuccessed)
             {
