@@ -144,8 +144,8 @@ namespace EshopSolution.BackEndApi
             });
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Access", policy => policy.Requirements.Add(new RoleRequirement("customer")));
-                options.AddPolicy("Edit", policy => policy.Requirements.Add(new RoleRequirement("admin;customer")));
+                options.AddPolicy("Access", policy => policy.Requirements.Add(new RoleRequirement("admin;customer")));
+                options.AddPolicy("Edit", policy => policy.Requirements.Add(new RoleRequirement("admin")));
             });
         }
 

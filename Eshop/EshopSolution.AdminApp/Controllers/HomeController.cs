@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace EshopSolution.AdminApp.Controllers
 {
-    [Authorize]
+    
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
@@ -17,7 +17,8 @@ namespace EshopSolution.AdminApp.Controllers
         {
             _logger = logger;
         }
-
+        [HttpGet]
+        [Authorize(Policy = "Edit")]
         public IActionResult Index()
         {
             var user = User.Identity.Name;

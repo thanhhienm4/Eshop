@@ -55,7 +55,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpGet("paging")]
-        [Authorize(Policy ="Admin")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
         {
             if (ModelState.IsValid == false)
@@ -67,7 +67,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPut("{id}/update")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateRequest request)
         {
             if (ModelState.IsValid == false)

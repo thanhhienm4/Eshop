@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
 {
-    [Authorize]
+    [Authorize(Policy ="Edit")]
     public class CategoryController : BaseController
     {
         private readonly ICategoryApiClient _categoryApiCilent;

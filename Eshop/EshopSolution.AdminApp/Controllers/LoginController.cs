@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
 {
+    [AllowAnonymous]
     public class LoginController : Controller
     {
         private readonly IUserApiClient _userApiClient;
@@ -29,7 +30,7 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        
         public async Task<IActionResult> Index()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -52,7 +53,7 @@ namespace EshopSolution.AdminApp.Controllers
             var userPrincipal = this.ValidateToken(respond.ResultObj);
             var authProperties = new AuthenticationProperties()
             {
-                ExpiresUtc = DateTimeOffset.Now.AddMinutes(10),
+                ExpiresUtc = DateTimeOffset.Now.AddMonths(1),
                 IsPersistent = true
             };
             HttpContext.Session.SetString(SystemConstants.AppSettings.Token, respond.ResultObj);
