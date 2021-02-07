@@ -35,6 +35,7 @@ namespace EshopSolution.AdminApp
                         options.LoginPath = "/Login/Index";
                         options.AccessDeniedPath = "/User/Forbident";
                         options.LogoutPath = "/User/Logout";
+
                     });
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddTransient<IRoleApiClient, RoleApiClient>();

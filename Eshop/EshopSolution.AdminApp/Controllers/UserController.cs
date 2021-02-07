@@ -39,7 +39,7 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(ModelState);
             }
-            var session = HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
+           
             var request = new GetUserPagingRequest()
             {
                 Keyword = keyword,
@@ -61,6 +61,10 @@ namespace EshopSolution.AdminApp.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Remove(SystemConstants.AppSettings.Token);
+            if(Request.Cookies[SystemConstants.AppSettings.Bearer]!=null)
+            {
+                Response.Cookies.Delete(SystemConstants.AppSettings.Bearer);
+            }
             return RedirectToAction("Index", "Login");
         }
 

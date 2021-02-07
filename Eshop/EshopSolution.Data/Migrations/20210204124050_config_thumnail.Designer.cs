@@ -4,14 +4,16 @@ using EshopSolution.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EshopSolution.Data.Migrations
 {
     [DbContext(typeof(EshopDbContext))]
-    partial class EshopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210204124050_config_thumnail")]
+    partial class config_thumnail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,7 +80,7 @@ namespace EshopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "7e2b12ae-89cf-4e99-abb3-ce9afd3cfa9e",
+                            ConcurrencyStamp = "2d1e27a8-490b-41ef-8011-859196d2adc6",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -93,9 +95,6 @@ namespace EshopSolution.Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
@@ -168,7 +167,7 @@ namespace EshopSolution.Data.Migrations
                             LockoutEnd = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             NormalizedEmail = "Mistakem4@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDG25sst2upHd9mcW4JjwnDgxIXtpzh4e5phtF6+2Ot4G1EHgwmQUFR75JlLj0OfXQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKfmpA83T5WIirpPLlA/FHzRFd1G1GOcScXoZzFcpL/77c9O/O1GpZqd2YxodwV2tA==",
                             PhoneNumber = "0912413908",
                             PhoneNumberConfirmed = true,
                             SecurityStamp = "",
@@ -507,7 +506,7 @@ namespace EshopSolution.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2021, 2, 5, 22, 37, 36, 747, DateTimeKind.Local).AddTicks(3184),
+                            DateCreated = new DateTime(2021, 2, 4, 19, 40, 45, 487, DateTimeKind.Local).AddTicks(2616),
                             IsFeatured = false,
                             OriginalPrice = 100000m,
                             Price = 200000m,

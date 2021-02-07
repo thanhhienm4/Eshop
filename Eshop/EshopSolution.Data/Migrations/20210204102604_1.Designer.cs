@@ -4,14 +4,16 @@ using EshopSolution.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EshopSolution.Data.Migrations
 {
     [DbContext(typeof(EshopDbContext))]
-    partial class EshopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210204102604_1")]
+    partial class _1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,7 +80,7 @@ namespace EshopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "7e2b12ae-89cf-4e99-abb3-ce9afd3cfa9e",
+                            ConcurrencyStamp = "6c5a407e-ddd3-4cfb-a370-6909320a7b5c",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -93,9 +95,6 @@ namespace EshopSolution.Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
@@ -168,7 +167,7 @@ namespace EshopSolution.Data.Migrations
                             LockoutEnd = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             NormalizedEmail = "Mistakem4@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDG25sst2upHd9mcW4JjwnDgxIXtpzh4e5phtF6+2Ot4G1EHgwmQUFR75JlLj0OfXQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEJZjHofPxBQ3QASMfj/b5KZiMkNxvGLcu5s0zaWilzJxocJ7aX/e+JSTtukVbTNFA==",
                             PhoneNumber = "0912413908",
                             PhoneNumberConfirmed = true,
                             SecurityStamp = "",
@@ -487,9 +486,6 @@ namespace EshopSolution.Data.Migrations
                     b.Property<int>("Stock")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ThumnailId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ViewCount")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -497,17 +493,13 @@ namespace EshopSolution.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ThumnailId")
-                        .IsUnique()
-                        .HasFilter("[ThumnailId] IS NOT NULL");
-
                     b.ToTable("Products");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2021, 2, 5, 22, 37, 36, 747, DateTimeKind.Local).AddTicks(3184),
+                            DateCreated = new DateTime(2021, 2, 4, 17, 26, 1, 699, DateTimeKind.Local).AddTicks(8458),
                             IsFeatured = false,
                             OriginalPrice = 100000m,
                             Price = 200000m,
@@ -947,13 +939,6 @@ namespace EshopSolution.Data.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EshopSolution.Data.Entities.Product", b =>
-                {
-                    b.HasOne("EshopSolution.Data.Entities.ProductImage", "Thumnail")
-                        .WithOne("ProductThumnail")
-                        .HasForeignKey("EshopSolution.Data.Entities.Product", "ThumnailId");
                 });
 
             modelBuilder.Entity("EshopSolution.Data.Entities.ProductImage", b =>
