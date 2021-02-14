@@ -1,32 +1,38 @@
 ﻿using EshopSolution.ApiIntergate;
 using EshopSolution.Utilities.Constants;
-using EshopSolution.ViewModel.Common;
-using EshopSolution.ViewModel.System.Users;
+using EshopSolution.ViewModels.Common;
+using EshopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
 {
+    [Authorize(Policy = "Edit")]
     public class UserController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
-
-        //private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
         private readonly IRoleApiClient _roleApiClient;
 
-        public UserController(IUserApiClient userApiClient, IRoleApiClient roleApiClient)
+        public UserController(IUserApiClient userApiClient, IRoleApiClient roleApiClient, IConfiguration configuration)
         {
             _userApiClient = userApiClient;
             _roleApiClient = roleApiClient;
-            //_configuration = configuration;
+            _configuration = configuration;
         }
 
-        [Authorize]
+
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 3)
         {
             if (!ModelState.IsValid)
@@ -50,7 +56,7 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -65,7 +71,6 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Create(RegisterRequest request)
         {
             if (!ModelState.IsValid)
@@ -83,7 +88,6 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> Edit(Guid id)
         {
             if (!ModelState.IsValid)
@@ -109,7 +113,6 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Edit(UpdateRequest request)
         {
             if (!ModelState.IsValid)
@@ -127,7 +130,6 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> Details(Guid id)
         {
             if (!ModelState.IsValid)
@@ -164,7 +166,6 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Delete(DeleteRequest request)
         {
             if (!ModelState.IsValid)
@@ -194,7 +195,6 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> RoleAssign(RoleAssignRequest request)
         {
             if (!ModelState.IsValid)
@@ -229,5 +229,13 @@ namespace EshopSolution.AdminApp.Controllers
 
             return roleAssignRequest;
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Forbident()
+        {
+            return View();
+        }
+
     }
 }

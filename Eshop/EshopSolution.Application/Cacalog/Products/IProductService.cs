@@ -1,6 +1,6 @@
-﻿using eShopSolution.ViewModels.Catalog.ProductImages;
-using EshopSolution.ViewModel.Catalog.Products;
-using EshopSolution.ViewModel.Common;
+﻿using EshopSolution.ViewModels.Catalog.ProductImages;
+using EshopSolution.ViewModels.Catalog.Products;
+using EshopSolution.ViewModels.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -40,5 +40,6 @@ namespace EshopSolution.Application
 
         Task<ApiResult<List<ProductViewModel>>> GetFeaturedProducts(string languageId, int number);
         Task<ApiResult<List<ProductViewModel>>> GetLatestProducts(string languageId, int number);
+        Task<ApiResult<ProductDetailViewModel>> GetProductDetail(string languageId, int id);
     }
 }

@@ -1,12 +1,12 @@
 ﻿using EshopSolution.ApiIntergate;
-using EshopSolution.ViewModel.Catalog.Categories;
+using EshopSolution.ViewModels.Catalog.Categories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
 {
-    [Authorize]
+    [Authorize(Policy ="Edit")]
     public class CategoryController : BaseController
     {
         private readonly ICategoryApiClient _categoryApiCilent;

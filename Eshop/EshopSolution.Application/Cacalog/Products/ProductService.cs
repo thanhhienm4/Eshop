@@ -1,11 +1,11 @@
 ﻿using eShopSolution.Application.Common;
-using eShopSolution.ViewModels.Catalog.ProductImages;
+using EshopSolution.ViewModels.Catalog.ProductImages;
 using EshopSolution.Data.EF;
 using EshopSolution.Data.Entities;
 using EshopSolution.Utilities.Constants;
 using EshopSolution.Utilities.Exceptions;
-using EshopSolution.ViewModel.Catalog.Products;
-using EshopSolution.ViewModel.Common;
+using EshopSolution.ViewModels.Catalog.Products;
+using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -344,6 +344,7 @@ namespace EshopSolution.Application.Cacalog.Products
             var proudctTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(pt => pt.ProductId == productId && pt.LanguageId == languageId);
             if (product == null)
                 throw new EshopException($"Can't find product with id {productId}");
+            var thumnailImage = _context.ProductImages.Where(x => x.IsDefault == true && x.ProductId == productId).Select(x => x.ImagePath).FirstOrDefault();
             var productViewModel = new ProductViewModel()
             {
                 ProductId = product.Id,
@@ -360,7 +361,9 @@ namespace EshopSolution.Application.Cacalog.Products
                 SeoTitle = proudctTranslation == null ? "" : proudctTranslation.SeoDescription,
                 SeoAlias = proudctTranslation == null ? "" : proudctTranslation.SeoAlias,
                 LanguageId = proudctTranslation == null ? "" : proudctTranslation.LanguageId,
-                Categories = await GetCategoryOfProductId(productId, languageId)
+                Categories = await GetCategoryOfProductId(productId, languageId),
+                ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{thumnailImage}"
             };
             return new ApiSuccessResult<ProductViewModel>(productViewModel);
         }
@@ -555,6 +558,59 @@ namespace EshopSolution.Application.Cacalog.Products
                 }).Distinct().Take(number).ToListAsync();
 
             return new ApiSuccessResult<List<ProductViewModel>>(data);
+        }
+        public async Task<List<ProductViewModel>> GetRelatedProducts(string languageId,int productId)
+        {
+            var query = from p in _context.Products
+                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId into ppt
+                        from pt in ppt.DefaultIfEmpty()
+                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId 
+                        where pic.ProductId == productId
+                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
+                        from pi in ppi.DefaultIfEmpty()
+                        where pt.LanguageId == languageId && (pi.IsDefault == true || pi == null)
+
+                        select new { p, pt, pic, pi };
+
+            List<ProductViewModel> result = await query.Take(SystemConstants.ProductSettings.NumberOfRelatedProducts).OrderBy(x => x.p.ViewCount)
+                .Select(x => new ProductViewModel()
+                {
+                    ProductId = x.p.Id,
+                    Name = string.IsNullOrEmpty(x.pt.Name) ? SystemConstants.NotAvailable : x.pt.Name,
+                    Description = string.IsNullOrEmpty(x.pt.Description) ? SystemConstants.NotAvailable : x.pt.Description,
+                    Details = string.IsNullOrEmpty(x.pt.Details) ? SystemConstants.NotAvailable : x.pt.Details,
+                    LanguageId = x.pt.LanguageId,
+                    OriginalPrice = x.p.Price,
+                    Price = x.p.Price,
+                    SeoAlias = string.IsNullOrEmpty(x.pt.SeoAlias) ? SystemConstants.NotAvailable : x.pt.SeoAlias,
+                    SeoDescription = string.IsNullOrEmpty(x.pt.SeoDescription) ? SystemConstants.NotAvailable : x.pt.SeoDescription,
+                    SeoTitle = string.IsNullOrEmpty(x.pt.SeoTitle) ? SystemConstants.NotAvailable : x.pt.SeoTitle,
+                    Stock = x.p.Stock,
+                    ViewCount = x.p.ViewCount,
+                    DateCreated = x.p.DateCreated,
+                    ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.pi.ImagePath}"
+                }).Distinct().ToListAsync();
+            return result == null ? new List<ProductViewModel>() : result;
+
+
+
+        }
+        public async Task<ApiResult<ProductDetailViewModel>> GetProductDetail(string languageId, int id)
+
+        {
+            var apiProductResult = await GetById(id, languageId);
+            if(apiProductResult.IsSuccessed == false)
+            {
+                return new ApiErrorResult<ProductDetailViewModel>("Không tìm thấy sản phẩm");
+            }
+            return new ApiSuccessResult<ProductDetailViewModel>(new ProductDetailViewModel()
+            {
+                Product = apiProductResult.ResultObj,
+                RetalatedProducts = await GetRelatedProducts(languageId, id)
+            })  ; 
+            
+
         }
 
 

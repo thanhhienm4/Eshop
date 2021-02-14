@@ -1,7 +1,9 @@
 using EshopSolution.ApiIntergate;
-using EshopSolution.ViewModel.System.Users;
+using EshopSolution.Utilities.Role;
+using EshopSolution.ViewModels.System.Users;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -31,7 +33,7 @@ namespace EshopSolution.AdminApp
                     .AddCookie(options =>
                     {
                         options.LoginPath = "/Login/Index";
-                        options.AccessDeniedPath = "/Account/Forbident";
+                        options.AccessDeniedPath = "/User/Forbident";
                         options.LogoutPath = "/User/Logout";
                     });
             services.AddTransient<IUserApiClient, UserApiClient>();
@@ -39,6 +41,7 @@ namespace EshopSolution.AdminApp
             services.AddTransient<ILanguageApiClient, LanguageApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
+            services.AddSingleton<IAuthorizationHandler, RoleHandler>();
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -46,6 +49,11 @@ namespace EshopSolution.AdminApp
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Edit", policy => policy.Requirements.Add(new RoleRequirement("admin")));
+            });
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

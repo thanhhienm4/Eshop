@@ -1,4 +1,4 @@
-﻿using EshopSolution.ViewModel.System.Languages;
+﻿using EshopSolution.ViewModels.System.Languages;
 using System.Collections.Generic;
 
 namespace EshopSolution.AdminApp.Models

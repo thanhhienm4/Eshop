@@ -1,5 +1,5 @@
-﻿using EshopSolution.ViewModel.Common;
-using EshopSolution.ViewModel.System.Languages;
+﻿using EshopSolution.ViewModels.Common;
+using EshopSolution.ViewModels.System.Languages;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

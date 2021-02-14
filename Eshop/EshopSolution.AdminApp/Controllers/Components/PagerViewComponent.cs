@@ -1,4 +1,4 @@
-﻿using EshopSolution.ViewModel.Common;
+﻿using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

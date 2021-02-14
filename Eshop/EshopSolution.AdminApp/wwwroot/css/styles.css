@@ -294,7 +294,10 @@ input[type=checkbox] {
     box-sizing: border-box;
     padding: 0;
 }
-
+.aligncenter {
+    width: 100%;
+    text-align: center;
+}
 textarea {
     overflow: auto;
     resize: vertical;

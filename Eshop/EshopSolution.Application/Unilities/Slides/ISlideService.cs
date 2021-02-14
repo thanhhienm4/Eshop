@@ -1,5 +1,5 @@
-﻿using EshopSolution.ViewModel.Common;
-using EshopSolution.ViewModel.Utilities.Slides;
+﻿using EshopSolution.ViewModels.Common;
+using EshopSolution.ViewModels.Utilities.Slides;
 using System;
 using System.Collections.Generic;
 using System.Text;

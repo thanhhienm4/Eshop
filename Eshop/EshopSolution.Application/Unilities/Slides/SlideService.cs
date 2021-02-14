@@ -1,12 +1,12 @@
 ﻿using EshopSolution.Data.EF;
-using EshopSolution.ViewModel.Utilities.Slides;
+using EshopSolution.ViewModels.Utilities.Slides;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using EshopSolution.ViewModel.Common;
+using EshopSolution.ViewModels.Common;
 using EshopSolution.Utilities.Constants;
 
 namespace EshopSolution.Application.Unilities.Slides

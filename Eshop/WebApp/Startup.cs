@@ -11,6 +11,15 @@ using EshopSolution.ApiIntergate;
 using System;
 using EshopSolution.WebApp.LocalizationResources;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Configuration;
+using FluentValidation.AspNetCore;
+using EshopSolution.ViewModels.System.Users;
+using EshopSolution.Data.Entities;
+using Microsoft.AspNetCore.Identity;
+using EshopSolution.Data.EF;
+using Microsoft.EntityFrameworkCore;
+using EshopSolution.Utilities.Constants;
 
 namespace EshopSolution.WebApp
 {
@@ -32,9 +41,10 @@ namespace EshopSolution.WebApp
                 new CultureInfo("en"),
                 new CultureInfo("vi"),
             };
+           services.AddDbContext<EshopDbContext>(options =>
+           options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
             services.AddMvc().AddRazorRuntimeCompilation();
             services.AddControllersWithViews()
-            //services.AddRazorPages()
                .AddExpressLocalization<ExpressLocalizationResource, ViewLocalizationResource>(
                 ops =>
                 {
@@ -50,10 +60,22 @@ namespace EshopSolution.WebApp
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
+            
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<ISlideApiClient, SlideApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
+            services.AddTransient<IUserApiClient,UserApiClient>();
+            services.AddTransient<IRoleApiClient, RoleApiClient>();
+            services.AddTransient<IOrderApiClient, OrderApiClient>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/{culture}/User/Login";
+                options.AccessDeniedPath = "/Account/Forbident";
+                options.LogoutPath = "/{culture}/User/Logout";
+            });
+            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,17 +91,16 @@ namespace EshopSolution.WebApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
+
             app.UseRouting();
             app.UseAuthorization();
             app.UseSession();
             app.UseRequestLocalization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{culture=vi}/{controller=Home}/{action=Index}/{id?}");
+
 
                 endpoints.MapControllerRoute(
                     name: "Product Category En",
@@ -90,12 +111,32 @@ namespace EshopSolution.WebApp
                     });
 
                 endpoints.MapControllerRoute(
-                  name: "Product Category Vn",
+                  name: "Product Category Vi",
                   pattern: "{culture}/danh-muc/{id}", new
                   {
                       controller = "Product",
                       action = "Category"
                   });
+
+                endpoints.MapControllerRoute(
+                name: "Product Detail Vi",
+                pattern: "{culture}/chi-tiet/{id}", new
+                {
+                    controller = "Product",
+                    action = "Detail"
+                });
+
+                endpoints.MapControllerRoute(
+                name: "Product Detail En",
+                pattern: "{culture}/detail/{id}", new
+                {
+                    controller = "Product",
+                    action = "Detail"
+                });
+
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{culture=vi}/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

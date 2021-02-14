@@ -1,5 +1,5 @@
 ﻿using EshopSolution.Data.Entities;
-using EshopSolution.ViewModel.System.Users;
+using EshopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;

@@ -1,5 +1,5 @@
-﻿using EshopSolution.ViewModel.Common;
-using EshopSolution.ViewModel.System.Users;
+﻿using EshopSolution.ViewModels.Common;
+using EshopSolution.ViewModels.System.Users;
 using System;
 using System.Threading.Tasks;
 
@@ -20,5 +20,7 @@ namespace EshopSolution.ApiIntergate
         Task<ApiResult<bool>> Delete(DeleteRequest request);
 
         Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
+
+        Task<Guid> GetUserId();
     }
 }

@@ -78,7 +78,7 @@ namespace EshopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "c5966c62-3e42-456a-b624-7ef68a1e9bf7",
+                            ConcurrencyStamp = "b5d7b1f7-9a76-4fcc-a8af-71c90ae5ecd0",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -165,7 +165,7 @@ namespace EshopSolution.Data.Migrations
                             LockoutEnd = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             NormalizedEmail = "Mistakem4@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGxS1L4q3AHAC+WE34w3cRo5SGMAtZnVoIM9jNkkrhSg5T43TuAY6JSdEw3ZBkPTzw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIITlz37XZk2raeRqxiuTz6gk5fEu17KlnBubzxiEex1IXiSqCHA+D4m3Jnu8aYCzQ==",
                             PhoneNumber = "0912413908",
                             PhoneNumberConfirmed = true,
                             SecurityStamp = "",
@@ -407,9 +407,6 @@ namespace EshopSolution.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<Guid?>("AppUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -419,6 +416,8 @@ namespace EshopSolution.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShipEmail")
+                        .IsRequired()
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShipName")
@@ -437,7 +436,7 @@ namespace EshopSolution.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -473,7 +472,7 @@ namespace EshopSolution.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("IsFeatured")
+                    b.Property<bool>("IsFeatured")
                         .HasColumnType("bit");
 
                     b.Property<decimal>("OriginalPrice")
@@ -498,7 +497,8 @@ namespace EshopSolution.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2021, 1, 7, 12, 41, 15, 487, DateTimeKind.Local).AddTicks(4724),
+                            DateCreated = new DateTime(2021, 1, 25, 19, 13, 15, 976, DateTimeKind.Local).AddTicks(728),
+                            IsFeatured = false,
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,
@@ -574,9 +574,12 @@ namespace EshopSolution.Data.Migrations
                         .UseIdentityColumn(1, 1);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Details")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -916,7 +919,9 @@ namespace EshopSolution.Data.Migrations
                 {
                     b.HasOne("EshopSolution.Data.Entities.AppUser", "AppUser")
                         .WithMany("Orders")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EshopSolution.Data.Entities.OrderDetail", b =>

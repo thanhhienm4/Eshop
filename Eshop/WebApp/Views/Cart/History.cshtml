@@ -1,0 +1,21 @@
+﻿@using EshopSolution.ViewModels.Sale
+@model List<OrderViewModel>
+@{
+    ViewData["Title"] = "History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="/">Home</a> <span class="divider">/</span></li>
+        <li class="active">History</li>
+    </ul>
+    @foreach(var order in Model)
+    {
+        <div class="card">
+            <h3>@order.OrderId</h3>
+            <hr>
+            <div>@order.ShipAddress</div>            
+        </div>
+    }
+</div>
+

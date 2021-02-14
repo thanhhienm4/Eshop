@@ -1,6 +1,6 @@
 ﻿using EshopSolution.Utilities.Constants;
-using EshopSolution.ViewModel.Common;
-using EshopSolution.ViewModel.System.Users;
+using EshopSolution.ViewModels.Common;
+using EshopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;

@@ -149,6 +149,10 @@
     <value>Vận chuyển</value>
     <comment>View/Layout</comment>
   </data>
+  <data name="detail" xml:space="preserve">
+    <value>chi-tiet</value>
+    <comment>Product/Category</comment>
+  </data>
   <data name="DISCOUNT" xml:space="preserve">
     <value>Giảm giá</value>
     <comment>View/Layout</comment>

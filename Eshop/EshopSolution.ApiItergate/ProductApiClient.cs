@@ -1,6 +1,6 @@
 ﻿using EshopSolution.Utilities.Constants;
-using EshopSolution.ViewModel.Catalog.Products;
-using EshopSolution.ViewModel.Common;
+using EshopSolution.ViewModels.Catalog.Products;
+using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -95,7 +95,7 @@ namespace EshopSolution.ApiIntergate
             return await DeleteAsync<ApiResult<bool>>($"/api/Products/{id}");
         }
 
-        public async Task<ApiResult<ProductViewModel>> GetById(int id, string languageId)
+        public async Task<ApiResult<ProductViewModel>> GetById(int id, string languageId = SystemConstants.AppSettings.DefaultLangaueId)
         {
             return await GetAsync<ApiResult<ProductViewModel>>($"/api/Products/{id}/{languageId}");
         }
@@ -113,6 +113,10 @@ namespace EshopSolution.ApiIntergate
         public async Task<List<ProductViewModel>> GetLatestProducts(string languageId, int take)
         {
             return (await GetAsync<ApiResult<List<ProductViewModel>>>($"/api/Products/latest/{languageId}/{take}")).ResultObj;
+        }
+        public async Task<ProductDetailViewModel> GetProductDetail(string languageId, int id)
+        {
+            return (await GetAsync<ApiResult<ProductDetailViewModel>>($"/api/Products/Detail/{languageId}/{id}")).ResultObj;
         }
 
 

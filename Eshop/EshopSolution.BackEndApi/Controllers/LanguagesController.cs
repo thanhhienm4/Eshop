@@ -1,4 +1,5 @@
 ﻿using EshopSolution.Application.System.Languages;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpGet("getall")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             var languages = await _languageService.GetAll();

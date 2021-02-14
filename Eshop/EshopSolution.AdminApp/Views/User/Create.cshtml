@@ -1,4 +1,4 @@
-﻿@model EshopSolution.ViewModel.System.Users.RegisterRequest
+﻿@model EshopSolution.ViewModels.System.Users.RegisterRequest
 
 @{
     ViewData["Title"] = "Tạo mới người dùng";
@@ -8,8 +8,7 @@
         <div class="container-fluid">
             <div class="card-body">
                 <h1>Tạo mới người dùng</h1>
-                <div class="row">
-                    <div class="col-md-4">
+                
                         <div>
                             <a class="btn btn-success" asp-action="Index" asp-controller="User">
                               Về danh sách
@@ -28,6 +27,7 @@
                                 <input asp-for="LastName" class="form-control" />
                                 <span asp-validation-for="LastName" class="text-danger"></span>
                             </div>
+                            
                             <div class="form-group">
                                 <label asp-for="Dob" class="control-label"></label>
                                 <input asp-for="Dob" class="form-control" />
@@ -63,8 +63,8 @@
                                 <input type="submit" value="Create" class="btn btn-primary" />
                             </div>
                         </form>
-                    </div>
-                </div>
+                  
+                
 
                 <div>
                     <a asp-action="Index">Back to List</a>

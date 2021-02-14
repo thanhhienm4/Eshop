@@ -1,7 +1,7 @@
 ﻿using EshopSolution.ApiIntergate;
-using EshopSolution.ViewModel.Catalog.Categories;
-using EshopSolution.ViewModel.Catalog.Products;
-using EshopSolution.ViewModel.Common;
+using EshopSolution.ViewModels.Catalog.Categories;
+using EshopSolution.ViewModels.Catalog.Products;
+using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.AdminApp.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "Edit")]
     public class ProductController : BaseController
     {
         private readonly IProductApiClient _productApiClient;
@@ -26,7 +26,6 @@ namespace EshopSolution.AdminApp.Controllers
             _languageApiClient = languageApiClient;
         }
 
-        [Authorize]
         public async Task<IActionResult> Index(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 5)
         {
             var request = new ProductPagingRequest()
@@ -233,5 +232,6 @@ namespace EshopSolution.AdminApp.Controllers
             }
             return categoryAssignRequest;
         }
+
     }
 }

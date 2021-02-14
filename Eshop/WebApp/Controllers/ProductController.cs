@@ -1,5 +1,5 @@
 ﻿using EshopSolution.ApiIntergate;
-using EshopSolution.ViewModel.Catalog.Products;
+using EshopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -29,6 +29,11 @@ namespace EshopSolution.WebApp.Controllers
             var data = await _productApiClient.GetProductPaging(productPagingRequest);
    
             return View(data.ResultObj);
+        }
+        public async Task<IActionResult> Detail(string culture,int id)
+        {
+            ProductDetailViewModel productDetailViewModel = await _productApiClient.GetProductDetail(culture,id);
+            return View(productDetailViewModel);
         }
     }
 }

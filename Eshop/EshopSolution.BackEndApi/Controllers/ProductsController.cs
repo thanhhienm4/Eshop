@@ -1,6 +1,6 @@
-﻿using eShopSolution.ViewModels.Catalog.ProductImages;
+﻿using EshopSolution.ViewModels.Catalog.ProductImages;
 using EshopSolution.Application;
-using EshopSolution.ViewModel.Catalog.Products;
+using EshopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -9,7 +9,6 @@ namespace EshopSolution.BackEndApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -26,7 +25,7 @@ namespace EshopSolution.BackEndApi.Controllers
             request.CategoryId = categoryId;
             return Ok(await _productService.GetAllPaging(request));
         }
-
+        [AllowAnonymous]
         [HttpGet("{productId}/{languageId}")]
         public async Task<IActionResult> GetById(int productId, string languageId)
         {
@@ -50,6 +49,7 @@ namespace EshopSolution.BackEndApi.Controllers
         //}
 
         [HttpPost("create")]
+        [Authorize(Policy ="Edit")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (ModelState.IsValid == false)
@@ -65,6 +65,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPut("{productId}/update")]
+        [Authorize(Policy ="Edit")]
         public async Task<IActionResult> Update(int productId, [FromBody] ProductUpdateRequest request)
         {
             if (ModelState.IsValid == false)
@@ -80,6 +81,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpDelete("{productId}")]
+        [Authorize(Policy ="Edit")]
         public async Task<IActionResult> Delete(int productId)
         {
             var result = await _productService.Delete(productId);
@@ -91,6 +93,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPatch("{productId}/{newPrice}")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> UpdatePrice(int productId, decimal newPrice)
         {
             var result = await _productService.UpdatePrice(productId, newPrice);
@@ -102,6 +105,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPost("{productId}/images")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> CreateImage(int productId, [FromForm] ProductImageCreateRequest request)
         {
             if (ModelState.IsValid == false)
@@ -119,6 +123,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPut("{productId}/images/{imageId}")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> UpdateImage(int imageId, [FromForm] ProductImageUpdateRequest request)
         {
             if (ModelState.IsValid == false)
@@ -135,6 +140,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpDelete("{productId}/images/{imageId}")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> DeleteImage([FromForm] int imageId)
         {
             var result = await _productService.DeleteImages(imageId);
@@ -146,6 +152,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpGet("{productId}/images/{imageId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetImageById(int imageId)
         {
             var result = await _productService.GetImageById(imageId);
@@ -157,6 +164,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPut("{productId}/categories")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> CategoryAssign(int productId, [FromBody] CategoryAssignRequest request)
         {
             var result = await _productService.CategoryAssign(request);
@@ -189,5 +197,18 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("detail/{languageId}/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetDetailProduct(string languageId, int id)
+        {
+            var result = await _productService.GetProductDetail(languageId,id);
+            if (result.IsSuccessed == false)
+            {
+                return BadRequest("Can't find product");
+
+            }
+            return Ok(result);
+        }
+
     }
 }

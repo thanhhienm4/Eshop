@@ -1,11 +1,13 @@
 ﻿using EshopSolution.Data.Entities;
-using EshopSolution.ViewModel.Common;
-using EshopSolution.ViewModel.System.Users;
+using EshopSolution.ViewModels.Common;
+using EshopSolution.ViewModels.System.Users;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -32,6 +34,7 @@ namespace EshopSolution.Application.System.Users
 
         public async Task<ApiResult<string>> Authenticate(LoginRequest request)
         {
+            
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null)
             {
@@ -43,20 +46,23 @@ namespace EshopSolution.Application.System.Users
             {
                 return new ApiErrorResult<string>("Mật khẩu không chính xác");
             }
-            var claims = new[]
+            var claims = new []
             {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.GivenName,user.FirstName),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, string.Join(";",roles))
+                new Claim(ClaimTypes.Role,string.Join(";",roles))
+                
             };
+            
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(_configuration["Tokens:Issuer"],
               _configuration["Tokens:Issuer"],
               claims,
-              expires: DateTime.Now.AddMinutes(180),
+              expires: DateTime.Now.AddYears(1),
               signingCredentials: credentials);
 
             return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
@@ -225,6 +231,11 @@ namespace EshopSolution.Application.System.Users
             }
 
             return new ApiSuccessResult<bool>();
+        }
+        public async Task<Guid> GetUserId(ClaimsPrincipal claimsPrincipal)
+        {
+            var user = await _userManager.GetUserAsync(claimsPrincipal);
+            return user.Id;
         }
     }
 }

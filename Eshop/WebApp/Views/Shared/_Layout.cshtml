@@ -1,7 +1,4 @@
-﻿@addTagHelper *, LazZiya.TagHelpers
-@addTagHelper *, LazZiya.ExpressLocalization
-@using System.Globalization
-@{
+﻿@{
     var culture = CultureInfo.CurrentCulture.Name;
 }
 <!DOCTYPE html>
@@ -28,21 +25,43 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/themes/images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="/themes/images/ico/apple-touch-icon-57-precomposed.png">
     <style type="text/css" id="enject"></style>
+    <style>
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 <body>
+    
     <div id="header">
         <div class="container">
             <div id="welcomeLine" class="row">
-                <div class="span6"><localize>Welcome!</localize><strong>User</strong></div>
+                <div class="span6">
+                    <localize>Welcome!</localize>
+                    @if (User.Identity.IsAuthenticated == true)
+                    {
+                        <strong>@User.Identity.Name</strong>
+                    }
+
+                </div>
                 <div class="span6">
                     <div class="pull-right">
                         <div class="row">
                             <language-nav language-label="NativeName"
                                           cookie-handler-url="@(Url.Action("SetCultureCookie", "Home", new { area= "", cltr="{0}", returnUrl="{1}" }))">
                             </language-nav>
+                            <a href="/@culture/Cart/Index"><span class="btn btn-mini btn-primary"><i class="icon-shopping-cart icon-white"></i> [ <span id="number-items">0</span> ] Itemes in your cart </span> </a>
+                            <input type="hidden" id="culture" value="@culture" />
 
-                            
-                      </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -68,34 +87,28 @@
                         <button type="submit" id="submitButton" class="btn btn-primary">Go</button>
                     </form>
                     <ul id="topMenu" class="nav pull-right">
-                        <li class=""><a asp-route-culture="@culture" localize-content >Specials Offer</a></li>
-                        <li class=""><a asp-route-culture="@culture" localize-content >Delivery</a></li>
-                        <li class=""><a asp-route-culture="@culture" localize-content >Contact</a></li>
+                        <li class=""><a asp-route-culture="@culture" localize-content>Specials Offer</a></li>
+                        <li class=""><a asp-route-culture="@culture" localize-content>Delivery</a></li>
+                        <li class=""><a asp-route-culture="@culture" localize-content>Contact</a></li>
                         <li class="">
-                            <a href="#login" role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success"><Localize>Login</Localize></span></a>
-                            <div id="login" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h3>Login Block</h3>
-                                </div>
-                                <div class="modal-body">
-                                    <form class="form-horizontal loginFrm">
-                                        <div class="control-group">
-                                            <input type="text" id="inputEmail" placeholder="Email">
-                                        </div>
-                                        <div class="control-group">
-                                            <input type="password" id="inputPassword" placeholder="Password">
-                                        </div>
-                                        <div class="control-group">
-                                            <label class="checkbox">
-                                                <input type="checkbox"> Remember me
-                                            </label>
-                                        </div>
+                            @{
+                                if (User.Identity.IsAuthenticated)
+                                {
+                                    <form action="/@culture/User/Logout" method="post">
+                                        <button type="submit" style="padding-right:0;margin-top:10px;margin-bottom:0px;background:transparent;border:none;">
+                                            <span class="btn btn-large btn-success"><localize>Logout</localize></span>
+                                        </button>
                                     </form>
-                                    <button type="submit" class="btn btn-success"><localize>Sign in</localize></button>
-                                    <button class="btn" data-dismiss="modal" aria-hidden="true"><localize>Close</localize></button>
-                                </div>
-                            </div>
+
+                                }
+                                else
+                                {
+
+                                    <a href="/@culture/User/Login" role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success"><Localize>Login</Localize></span></a>
+                                }
+
+                            }
+
                         </li>
                     </ul>
                 </div>
@@ -159,6 +172,14 @@
 
     <script src="/themes/js/bootshop.js"></script>
     <script src="/themes/js/jquery.lightbox-0.5.js"></script>
+    <script src="/js/site.js"></script>
+    <script>
+        var site = new SiteController();
+        site.initialize();
+    </script>
+    @RenderSection("scripts", required: false);
+
+
 
     <!-- Themes switcher section ============================================================================================= -->
     <div id="secectionBox">

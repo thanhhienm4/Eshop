@@ -29,7 +29,7 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var msg = _loc.GetLocalizedString("Vietnamese");
+            //var msg = _loc.GetLocalizedString("Vietnamese");
             string culture = CultureInfo.CurrentCulture.Name;
             var viewModel = new HomeViewModel()
             {

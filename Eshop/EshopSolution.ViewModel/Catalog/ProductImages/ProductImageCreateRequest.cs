@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace eShopSolution.ViewModels.Catalog.ProductImages
+namespace EshopSolution.ViewModels.Catalog.ProductImages
 {
     public class ProductImageCreateRequest
     {

@@ -1,6 +1,7 @@
-﻿using EshopSolution.ViewModel.Common;
-using EshopSolution.ViewModel.System.Users;
+﻿using EshopSolution.ViewModels.Common;
+using EshopSolution.ViewModels.System.Users;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EshopSolution.Application.System.Users
@@ -20,5 +21,7 @@ namespace EshopSolution.Application.System.Users
         Task<ApiResult<UserViewModel>> GetById(Guid id);
 
         Task<ApiResult<bool>> Delete(Guid Id);
+
+        Task<Guid> GetUserId(ClaimsPrincipal claimsPrincipal);
     }
 }
