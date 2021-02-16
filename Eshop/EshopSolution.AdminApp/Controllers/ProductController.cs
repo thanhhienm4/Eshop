@@ -233,5 +233,10 @@ namespace EshopSolution.AdminApp.Controllers
             return categoryAssignRequest;
         }
 
+        public async Task<IActionResult> UpdateProductImages (int id)
+        {
+            var listImages =await _productApiClient.GetproductImages(id);
+            return View(listImages);
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace EshopSolution.AdminApp.Controllers
         {
             var sessions = context.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
             if (sessions == null)
-            {
+                    {
                 string token = Request.Cookies[SystemConstants.AppSettings.Bearer];
                 if(token==null)
                     context.Result = new RedirectToActionResult("Index", "Login", null);

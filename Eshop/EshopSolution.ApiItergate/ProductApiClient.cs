@@ -1,4 +1,5 @@
 ﻿using EshopSolution.Utilities.Constants;
+using EshopSolution.ViewModels.Catalog.ProductImages;
 using EshopSolution.ViewModels.Catalog.Products;
 using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
@@ -117,6 +118,10 @@ namespace EshopSolution.ApiIntergate
         public async Task<ProductDetailViewModel> GetProductDetail(string languageId, int id)
         {
             return (await GetAsync<ApiResult<ProductDetailViewModel>>($"/api/Products/Detail/{languageId}/{id}")).ResultObj;
+        }
+        public async Task<List<ProductImageViewModel>> GetproductImages(int id)
+        {
+            return (await GetAsync<ApiResult<List<ProductImageViewModel>>>($"api/products/{id}/images")).ResultObj;
         }
 
 

@@ -396,7 +396,8 @@ namespace EshopSolution.Application.Cacalog.Products
                     DateCreated = i.DateCreated,
                     FileSize = i.FileSize,
                     Id = i.Id,
-                    ImagePath = i.ImagePath,
+                    ImagePath = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{i.ImagePath}",
                     IsDefault = i.IsDefault,
                     ProductId = i.ProductId,
                     SortOrder = i.SortOrder

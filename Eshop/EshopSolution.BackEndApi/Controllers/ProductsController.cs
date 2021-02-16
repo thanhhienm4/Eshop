@@ -49,7 +49,7 @@ namespace EshopSolution.BackEndApi.Controllers
         //}
 
         [HttpPost("create")]
-        [Authorize(Policy ="Edit")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (ModelState.IsValid == false)
@@ -65,7 +65,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpPut("{productId}/update")]
-        [Authorize(Policy ="Edit")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> Update(int productId, [FromBody] ProductUpdateRequest request)
         {
             if (ModelState.IsValid == false)
@@ -81,7 +81,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
 
         [HttpDelete("{productId}")]
-        [Authorize(Policy ="Edit")]
+        [Authorize(Policy = "Edit")]
         public async Task<IActionResult> Delete(int productId)
         {
             var result = await _productService.Delete(productId);
@@ -201,7 +201,7 @@ namespace EshopSolution.BackEndApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetDetailProduct(string languageId, int id)
         {
-            var result = await _productService.GetProductDetail(languageId,id);
+            var result = await _productService.GetProductDetail(languageId, id);
             if (result.IsSuccessed == false)
             {
                 return BadRequest("Can't find product");
@@ -209,6 +209,19 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("{id}/images")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetImages(int id)
+        {
+            var result = await _productService.GetListImages(id);
+            if(result.IsSuccessed == false)
+            {
+                return BadRequest("Can't find product");
+            }
+            return Ok(result);
+        }
+
+
 
     }
 }
