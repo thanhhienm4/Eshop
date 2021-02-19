@@ -34,14 +34,7 @@ namespace EshopSolution.ApiIntergate
 
         public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
         {
-            var sessions = _httpContextAccessor
-                .HttpContext
-                .Session
-                .GetString(SystemConstants.AppSettings.Token);
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(SystemConstants.ServerSettings.ServerBackEnd);
-            client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, sessions);
+            HttpClient client = GetHttpClient();
 
             var requestContent = new MultipartFormDataContent();
 
@@ -124,6 +117,51 @@ namespace EshopSolution.ApiIntergate
             return (await GetAsync<ApiResult<List<ProductImageViewModel>>>($"api/products/{id}/images")).ResultObj;
         }
 
+        public async Task<ApiResult<bool>> AddImage(ProductImageCreateRequest request)
+        {
+            HttpClient client = GetHttpClient();
+            var requestContent = new MultipartFormDataContent();
+            if(request.ImageFile!=null)
+            {
+                byte[] data;
+                var br = new BinaryReader(request.ImageFile.OpenReadStream());
+                data = br.ReadBytes((int)request.ImageFile.OpenReadStream().Length);
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                
 
+                requestContent.Add(bytes, "ImageFile",request.ImageFile.FileName);
+                if (string.IsNullOrWhiteSpace(request.Caption))
+                    request.Caption = "";
+
+                requestContent.Add(new StringContent(request.Caption),"Caption");
+
+                requestContent.Add(new StringContent(request.IsDefault.ToString()), "IsDefault");
+
+                requestContent.Add(new StringContent(request.ProductId.ToString()), "ProductId");
+
+                requestContent.Add(new StringContent(request.SortOrder.ToString()), "SortOrder");
+
+                var response = await client.PostAsync($"/api/products/addImage", requestContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiSuccessResult<bool>(response.IsSuccessStatusCode);
+                }
+                return new ApiErrorResult<bool>();
+
+            }
+            return new ApiErrorResult<bool>();
+
+        }
+
+        public async Task<ApiResult<bool>> UpdateImage(ProductImageUpdateRequest request)
+        {
+            return await PutAsync<ApiResult<bool>>($"/api/Products/updateImage", request);
+        }
+
+        public async Task<ApiResult<bool>> DeleteImage(int imageId)
+        {
+            return await DeleteAsync<ApiResult<bool>> ($"/api/Products/deleteimage/{imageId}");
+        }
     }
 }

@@ -20,11 +20,11 @@ namespace EshopSolution.Application
 
         Task<ApiResult<bool>> UpdateStock(int productId, int addedQuantity);
 
-        Task<ApiResult<bool>> AddImages(int productId, ProductImageCreateRequest request);
+        Task<ApiResult<bool>> AddImages(ProductImageCreateRequest request);
 
         Task<ApiResult<bool>> DeleteImages(int imageId);
 
-        Task<ApiResult<bool>> UpdateImages(int imageId, ProductImageUpdateRequest request);
+        Task<ApiResult<bool>> UpdateImages(ProductImageUpdateRequest request);
 
         Task AddViewCount(int productId);
 

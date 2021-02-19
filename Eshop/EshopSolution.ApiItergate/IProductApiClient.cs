@@ -24,6 +24,10 @@ namespace EshopSolution.ApiIntergate
         Task<List<ProductViewModel>> GetLatestProducts(string languuageId, int take);
         Task<ProductDetailViewModel> GetProductDetail(string languageId, int id);
         Task<List<ProductImageViewModel>> GetproductImages(int id);
+        Task<ApiResult<bool>> AddImage(ProductImageCreateRequest request);
+        Task<ApiResult<bool>> UpdateImage(ProductImageUpdateRequest request);
+        Task<ApiResult<bool>> DeleteImage(int id);
+
 
     }
 }

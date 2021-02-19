@@ -25,6 +25,7 @@ namespace EshopSolution.BackEndApi.Controllers
             request.CategoryId = categoryId;
             return Ok(await _productService.GetAllPaging(request));
         }
+
         [AllowAnonymous]
         [HttpGet("{productId}/{languageId}")]
         public async Task<IActionResult> GetById(int productId, string languageId)
@@ -104,15 +105,15 @@ namespace EshopSolution.BackEndApi.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{productId}/images")]
+        [HttpPost("addImage")]
         [Authorize(Policy = "Edit")]
-        public async Task<IActionResult> CreateImage(int productId, [FromForm] ProductImageCreateRequest request)
+        public async Task<IActionResult> CreateImage( [FromForm] ProductImageCreateRequest request)
         {
             if (ModelState.IsValid == false)
             {
                 return BadRequest();
             }
-            var result = await _productService.AddImages(productId, request);
+            var result = await _productService.AddImages( request);
             if (result.IsSuccessed == false)
             {
                 return BadRequest("Can't add image to product");
@@ -122,15 +123,15 @@ namespace EshopSolution.BackEndApi.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{productId}/images/{imageId}")]
+        [HttpPut("updateImage")]
         [Authorize(Policy = "Edit")]
-        public async Task<IActionResult> UpdateImage(int imageId, [FromForm] ProductImageUpdateRequest request)
+        public async Task<IActionResult> UpdateImage([FromForm] ProductImageUpdateRequest request)
         {
             if (ModelState.IsValid == false)
             {
                 return BadRequest();
             }
-            var result = await _productService.UpdateImages(imageId, request);
+            var result = await _productService.UpdateImages(request);
             if (result.IsSuccessed == false)
             {
                 return BadRequest(result);
@@ -139,9 +140,9 @@ namespace EshopSolution.BackEndApi.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("{productId}/images/{imageId}")]
+        [HttpDelete("deleteimage/{imageId}")]
         [Authorize(Policy = "Edit")]
-        public async Task<IActionResult> DeleteImage([FromForm] int imageId)
+        public async Task<IActionResult> DeleteImage( int imageId)
         {
             var result = await _productService.DeleteImages(imageId);
             if (result.IsSuccessed == false)

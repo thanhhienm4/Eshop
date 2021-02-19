@@ -1,5 +1,6 @@
 ﻿using EshopSolution.ApiIntergate;
 using EshopSolution.ViewModels.Catalog.Categories;
+using EshopSolution.ViewModels.Catalog.ProductImages;
 using EshopSolution.ViewModels.Catalog.Products;
 using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
@@ -236,7 +237,37 @@ namespace EshopSolution.AdminApp.Controllers
         public async Task<IActionResult> UpdateProductImages (int id)
         {
             var listImages =await _productApiClient.GetproductImages(id);
+            ViewBag.ProductId = id;
             return View(listImages);
+        }
+        [HttpPost]
+        public async Task<bool> AddImage(ProductImageCreateRequest request)
+        {
+            var result = await _productApiClient.AddImage(request);
+            if (result.IsSuccessed == true)
+                return true;
+            else
+                return false;
+        }
+
+        [HttpPost]
+        public async Task<bool> UpdateImage (ProductImageUpdateRequest request)
+        {
+            var result = await _productApiClient.UpdateImage(request);
+            if (result.IsSuccessed == true)
+                return true;
+            else
+                return false;
+        }
+
+        [HttpPost]
+        public async Task<bool> DeleteImage(int imageId)
+        {
+            var result = await _productApiClient.DeleteImage(imageId);
+            if (result.IsSuccessed == true)
+                return true;
+            else
+                return false;
         }
     }
 }

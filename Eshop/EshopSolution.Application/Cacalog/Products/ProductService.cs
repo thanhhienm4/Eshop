@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 
 namespace EshopSolution.Application.Cacalog.Products
 {
@@ -29,6 +30,7 @@ namespace EshopSolution.Application.Cacalog.Products
             _context = context;
             _storageService = storageService;
             _categoryService = categoryService;
+            
         }
 
         public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
@@ -282,15 +284,15 @@ namespace EshopSolution.Application.Cacalog.Products
             return fileName;
         }
 
-        public async Task<ApiResult<bool>> AddImages(int productId, ProductImageCreateRequest request)
+        public async Task<ApiResult<bool>> AddImages(ProductImageCreateRequest request)
         {
-            var product = await _context.Products.FindAsync(productId);
+            var product = await _context.Products.FindAsync(request.ProductId);
             if (product == null)
-                throw new EshopException($"Can't find Product with Id {productId}");
+                throw new EshopException($"Can't find Product with Id {request.ProductId}");
             var productImage = new ProductImage()
             {
                 Caption = request.Caption,
-                ProductId = productId,
+                ProductId = request.ProductId,
                 IsDefault = request.IsDefault,
                 SortOrder = request.SortOrder,
                 DateCreated = DateTime.Now
@@ -314,17 +316,18 @@ namespace EshopSolution.Application.Cacalog.Products
             else
             {
                 _context.ProductImages.Remove(image);
+                await _storageService.DeleteFileAsync(image.ImagePath);
                 if (_context.SaveChanges() == 0)
                     return new ApiErrorResult<bool>();
                 return new ApiSuccessResult<bool>();
             }
         }
 
-        public async Task<ApiResult<bool>> UpdateImages(int imageId, ProductImageUpdateRequest request)
+        public async Task<ApiResult<bool>> UpdateImages( ProductImageUpdateRequest request)
         {
-            var productImage = await _context.ProductImages.FindAsync(imageId);
+            var productImage = await _context.ProductImages.FindAsync(request.imageId);
             if (productImage == null)
-                throw new EshopException($"Can't find ProductImage with Id {imageId}");
+                throw new EshopException($"Can't find ProductImage with Id {request.imageId}");
             else
             {
                 productImage.Caption = request.Caption;
