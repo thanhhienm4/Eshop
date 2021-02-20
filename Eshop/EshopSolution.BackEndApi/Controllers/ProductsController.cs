@@ -125,7 +125,7 @@ namespace EshopSolution.BackEndApi.Controllers
 
         [HttpPut("updateImage")]
         [Authorize(Policy = "Edit")]
-        public async Task<IActionResult> UpdateImage([FromForm] ProductImageUpdateRequest request)
+        public async Task<IActionResult> UpdateImage([FromBody] ProductImageUpdateRequest request)
         {
             if (ModelState.IsValid == false)
             {
@@ -221,7 +221,27 @@ namespace EshopSolution.BackEndApi.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("images/{imageId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetImage(int imageId)
+        {
+            var result = await _productService.GetImageById(imageId);
+            if(result.IsSuccessed == false)
+            {
+                return BadRequest("Can't find image");
+            }
+            return Ok(result);
 
+        }
+        [HttpPut("{productId}/updatethumnail/{imageId}")]
+        [Authorize(Policy = "Edit")]
+        public async Task<IActionResult> UpdateThumnail(int productId, int imageId)
+        {
+            var result = await _productService.UpdateThumnail(productId, imageId);
+            if (result.IsSuccessed == false)
+                return BadRequest(result.Message);
+            return Ok(result);
+        }
 
 
     }

@@ -1,5 +1,5 @@
-﻿@using EshopSolution.ViewModels.Catalog.ProductImages
-@model List<ProductImageViewModel>
+﻿@using EshopSolution.ViewModels.Common
+@model List<ImageViewModel>
 @{
     ViewData["Title"] = "UpdateProductImages";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -26,61 +26,72 @@
             }
 </style>
 
+<br />
+<div class="d-flex justify-content-center">
+    <h3>Cập nhật hình ảnh</h3>
+</div>
+<div>
+    <a href="/Product/Edit/@ViewBag.ProductId">Quay lại</a>
 
+</div>
+<br />
+<div class="row">
 
+    <div class="col-md">
+        <img id="expandImg" class="img-fluid" style="border-radius:8px" />
 
-<div id="layoutSidenav">
-    <div class="container-fluid">
-        <div class="card-body">
-            <div class="align-items-center">               
-                <h1>Cập nhật hình ảnh</h1>
-                <div class="row">
-
-                    <div class="col-md">
-                        <img id="expandImg" class="img-fluid" height="350px"/>
-                        <div class="row">
-                            @foreach (var image in Model)
-                            {
-                                <div class="column">
-                                    <img src="@image.ImagePath" class="img-fluid" alt="@image.Caption" data-id="@image.Id" onclick="extend(this) " />
-                                </div>
-
-                            }
-
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <button class="btn btn-primary" id="btnAddImgae" data-toggle="modal" data-target="#addImageModal">THêm ảnh</button>
-                        </div>
-
-
-                    </div>
-                    <div class="col-md">
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <div class="form-group">
-
-                            <label class="control-label">Chú Thích</label>
-                            <input id="inputEditCaption" type="text" class="form-control" />
-
-
-
-                        </div>
-                        <br />
-                        <div class="d-flex justify-content-center">
-                            <button class="btn btn-primary"> Cập nhật</button>
-                            &nbsp;
-                            <button type="button" class="btn btn-secondary" onclick="deleteImage()">Xóa</button>
-                        </div>
-                    </div>
-
+        <div class="row">
+            @foreach (var image in Model)
+            {
+                <div class="column">
+                    <img src="@image.ImagePath" class="img-fluid" alt="@image.Caption" data-id="@image.Id" onclick="extend(this)" id="@image.Id" />
                 </div>
 
-            </div>
+            }
+
         </div>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-primary" id="btnAddImgae" data-toggle="modal" data-target="#addImageModal">THêm ảnh</button>
+        </div>
+
+
     </div>
+    <div class="col-md">
+        <br />
+        <br />
+        <br />
+        <br />
+        <div class="form-group">
+
+            <label class="control-label">Chú Thích</label>
+            <input id="inputEditCaption" type="text" class="form-control" />
+
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-primary" onclick="setThumnail()">Đặt làm ảnh đại diện</button>
+        </div>
+        <br />
+        <div class="d-flex justify-content-center">
+
+            <button class="btn btn-primary" onclick="updateImage() "> Cập nhật</button>
+            &nbsp;
+            <button type="button" class="btn btn-secondary" onclick="deleteImage()">Xóa</button>
+        </div>
+        <br />
+        <div class="d-flex justify-content-center">
+            <div id="notification" class="alert alert-success">
+
+            </div>
+            <script>
+                $("#notification").fadeOut('Slow');
+            </script>
+        </div>
+
+    </div>
+
 </div>
+
 
 <!--Add image modal-->
 <div class="modal fade" id="addImageModal">
@@ -100,15 +111,15 @@
 
             <div class="modal-body">
                 <div class="col-md">
-                    <img id="imageAdd" class="img-fluid"/>
-                    <input type="file" id="inputImage" onchange="loadImageAdd(this.files[0])" accept="image/*" name="Chọn ảnh"/>
+                    <img id="imageAdd" class="img-fluid" />
+                    <input type="file" id="inputImage" onchange="loadImageAdd(this.files[0])" accept="image/*" name="Chọn ảnh" />
                     <br />
 
                 </div>
                 <div class="col-md">
                     <div class="form-group">
-                        <label  class="control-label">Ghi chú</label>
-                        <input class="form-control" type="text" id="captionImage"/>
+                        <label class="control-label">Ghi chú</label>
+                        <input class="form-control" type="text" id="captionImage" />
                     </div>
                 </div>
             </div>
@@ -120,13 +131,28 @@
 
     </div>
 </div>
+<input id="first_image" value="@Model[0].Id" hidden />
 
 <script>
+    var id = @Model[0].Id;
+    var imageET = document.getElementById(id);
+        extend(imageET);
+
     function extend(img) {
         var expandImg = document.getElementById("expandImg");
         expandImg.src = img.src;
         expandImg.parentElement.style.display = "Block";
         $(expandImg).attr("data-id", $(img).attr("data-id"));
+        $.ajax({
+            type: "POST",
+            data:
+                { id: $(expandImg).attr("data-id") }
+            ,
+            url: "/Product/GetImageById",
+            success: function (res) {
+                $("#inputEditCaption").val(res.caption);
+            }
+        });
 
 
     }
@@ -136,10 +162,32 @@
     function closeModal() {
         document.getElementById("addImageModal").style.display = "none";
     }
+    function setThumnail() {
+        var productId = @ViewBag.ProductId;
+        var imageId = $("#expandImg").attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: "/Product/UpdateThumnail",
+            data: {
+                productId: productId,
+                imageId: imageId
+            },
+            success: function () {
+                $("#notification").html("Cập nhật thành công");
+                $("#notification").fadeIn();
+                hideNotification();
+            }
+        })
+    }
 
+    function hideNotification() {
+        setTimeout(function () {
+            $("#notification").fadeOut('Slow');
+        }, 2000);
+    }
 
     function addImage() {
-       
+
         var caption = document.getElementById("captionImage").value;
         var file = document.getElementById("inputImage").files[0];
         var request = new FormData;
@@ -155,18 +203,38 @@
             data: request,
             contentType: false,
             processData: false,
-          
+
             success: function (res) {
                 console.log("success");
                 $('#addImageModal').modal('hide');
                 location.reload();
+
             }
 
         });
 
 
+
+
     }
-    
+    function updateImage() {
+        var caption = $("#inputEditCaption").val();
+        var imageId = $("#expandImg").attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '/Product/UpdateImage',
+            data: {
+                caption: caption,
+                imageId: imageId
+            },
+            success: function () {
+
+                $("#notification").html("Cập nhật thành công");
+                $("#notification").fadeIn();
+                hideNotification();
+            }
+        });
+    }
     function deleteImage() {
         var imageId = $("#expandImg").attr("data-id");
         if (imageId != null) {
@@ -184,10 +252,11 @@
         } else {
             alert("Chưa có ảnh được chọn");
         }
-        
-        
+
+
 
     }
+
 </script>
 
 

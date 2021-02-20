@@ -333,8 +333,11 @@ namespace EshopSolution.Application.Cacalog.Products
                 productImage.Caption = request.Caption;
                 productImage.IsDefault = request.IsDefault;
                 productImage.SortOrder = request.SortOrder;
-                productImage.FileSize = request.ImageFile.Length;
-                productImage.ImagePath = await this.SaveFile(request.ImageFile);
+
+               
+                var productImages = _context.ProductImages.ToList();
+                
+
                 if (_context.SaveChanges() == 0)
                     return new ApiErrorResult<bool>();
                 return new ApiSuccessResult<bool>();
@@ -390,22 +393,17 @@ namespace EshopSolution.Application.Cacalog.Products
             return new ApiSuccessResult<ProductImageViewModel>(pIVM);
         }
 
-        public async Task<ApiResult<List<ProductImageViewModel>>> GetListImages(int productId)
+        public async Task<ApiResult<List<ImageViewModel>>> GetListImages(int productId)
         {
             var listPIVM = await _context.ProductImages.Where(x => x.ProductId == productId)
-                .Select(i => new ProductImageViewModel()
+                .Select(i => new ImageViewModel()
                 {
-                    Caption = i.Caption,
-                    DateCreated = i.DateCreated,
-                    FileSize = i.FileSize,
+                    Caption = i.Caption,                  
                     Id = i.Id,
                     ImagePath = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
                     $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{i.ImagePath}",
-                    IsDefault = i.IsDefault,
-                    ProductId = i.ProductId,
-                    SortOrder = i.SortOrder
                 }).ToListAsync();
-            return new ApiSuccessResult<List<ProductImageViewModel>>(listPIVM);
+            return new ApiSuccessResult<List<ImageViewModel>>(listPIVM);
         }
 
         //public async Task<ApiResult<PageResult<ProductViewModel>>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
@@ -614,6 +612,19 @@ namespace EshopSolution.Application.Cacalog.Products
                 RetalatedProducts = await GetRelatedProducts(languageId, id)
             })  ; 
             
+
+        }
+        public async Task<ApiResult<bool>> UpdateThumnail(int productId, int imageId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+                return new ApiErrorResult<bool>("Không tìm thấy sản phẩm");
+            if (await _context.ProductImages.FindAsync(imageId) == null)
+                return new ApiErrorResult<bool>("Không tìm thấy ảnh");
+
+            product.ThumnailId = imageId;
+            _context.SaveChanges();
+            return new ApiSuccessResult<bool>();
 
         }
 

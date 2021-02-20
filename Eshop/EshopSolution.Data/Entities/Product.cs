@@ -10,7 +10,7 @@ namespace EshopSolution.Data.Entities
         public bool IsFeatured { set; get; }
         public decimal OriginalPrice { set; get; }
 
-        public int? ThumnailId { get; set;}
+        
         public int Stock { set; get; }
         public int ViewCount { set; get; }
         public DateTime DateCreated { set; get; }
@@ -26,5 +26,6 @@ namespace EshopSolution.Data.Entities
         public List<ProductImage> ProductImages { get; set; }
 
         public ProductImage Thumnail { get; set; }
+        public int? ThumnailId { get; set; } 
     }
 }

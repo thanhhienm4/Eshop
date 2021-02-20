@@ -112,9 +112,9 @@ namespace EshopSolution.ApiIntergate
         {
             return (await GetAsync<ApiResult<ProductDetailViewModel>>($"/api/Products/Detail/{languageId}/{id}")).ResultObj;
         }
-        public async Task<List<ProductImageViewModel>> GetproductImages(int id)
+        public async Task<List<ImageViewModel>> GetproductImages(int id)
         {
-            return (await GetAsync<ApiResult<List<ProductImageViewModel>>>($"api/products/{id}/images")).ResultObj;
+            return (await GetAsync<ApiResult<List<ImageViewModel>>>($"api/products/{id}/images")).ResultObj;
         }
 
         public async Task<ApiResult<bool>> AddImage(ProductImageCreateRequest request)
@@ -162,6 +162,14 @@ namespace EshopSolution.ApiIntergate
         public async Task<ApiResult<bool>> DeleteImage(int imageId)
         {
             return await DeleteAsync<ApiResult<bool>> ($"/api/Products/deleteimage/{imageId}");
+        }
+        public async Task<ProductImageViewModel> GetProductImage(int imageId)
+        {
+            return (await GetAsync<ApiResult<ProductImageViewModel>>($"api/products/images/{imageId}")).ResultObj;
+        }
+        public async Task<bool> UpdateThumnail(int productId,int imageId)
+        {
+            return (await PutAsync<ApiResult<bool>>($"api/products/{productId}/updatethumnail/{imageId}",null)).ResultObj;
         }
     }
 }

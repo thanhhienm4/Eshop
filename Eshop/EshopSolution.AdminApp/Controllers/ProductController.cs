@@ -269,5 +269,17 @@ namespace EshopSolution.AdminApp.Controllers
             else
                 return false;
         }
+        [HttpPost]
+        public async Task<ProductImageViewModel> GetImageById(int id)
+        {
+            var result = await _productApiClient.GetProductImage(id);
+            return result;
+        }
+        [HttpPost]
+        public async Task<bool> UpdateThumnail(int productId,int imageId)
+        {
+            var result = await _productApiClient.UpdateThumnail(productId, imageId);
+            return result;
+        }
     }
 }

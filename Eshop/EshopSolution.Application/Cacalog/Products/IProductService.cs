@@ -32,7 +32,7 @@ namespace EshopSolution.Application
 
         Task<ApiResult<ProductImageViewModel>> GetImageById(int imageId);
 
-        Task<ApiResult<List<ProductImageViewModel>>> GetListImages(int productId);
+        Task<ApiResult<List<ImageViewModel>>> GetListImages(int productId);
 
         //Task<ApiResult<PageResult<ProductViewModel>>> GetAllByCategoryId(string languageId, ProductPagingRequest request);
 
@@ -41,5 +41,6 @@ namespace EshopSolution.Application
         Task<ApiResult<List<ProductViewModel>>> GetFeaturedProducts(string languageId, int number);
         Task<ApiResult<List<ProductViewModel>>> GetLatestProducts(string languageId, int number);
         Task<ApiResult<ProductDetailViewModel>> GetProductDetail(string languageId, int id);
+        Task<ApiResult<bool>> UpdateThumnail(int productId, int imageId);
     }
 }

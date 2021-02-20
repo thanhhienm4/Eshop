@@ -15,6 +15,7 @@ namespace EshopSolution.Data.Configurations
             builder.Property(x => x.Stock).IsRequired();
             builder.Property(x => x.ViewCount).IsRequired().HasDefaultValue(0);
             builder.HasOne(x => x.Thumnail).WithOne(x => x.ProductThumnail).HasForeignKey<Product>(x => x.ThumnailId);
+
         }
     }
 }
