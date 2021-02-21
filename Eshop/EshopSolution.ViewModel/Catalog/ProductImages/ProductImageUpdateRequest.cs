@@ -8,7 +8,6 @@ namespace EshopSolution.ViewModels.Catalog.ProductImages
 
         public string Caption { get; set; }
 
-        public bool IsDefault { get; set; }
 
         public int SortOrder { get; set; }
 

@@ -34,7 +34,10 @@
 </head>
 <body class="sb-nav-fixed">
     <div class="card-body">
-        <h1>Danh sách sản phẩm </h1>
+        <div class="d-flex justify-content-center">
+            <h3>Danh sách sản phẩm </h3>
+        </div>
+
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6 col-xs-12">
@@ -43,22 +46,20 @@
                 <div class="col-md-6 col-xs-12">
                     <form asp-action="Index" method="get">
                         <div class="row">
-                            @*<from asp-action="Index" method="get">*@
-                                @*<div class="row">*@
-                                    <div class="col-md-4">
-                                        <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <select name="categoryId" onchange="this.form.submit()" asp-items="@ViewBag.Categories" class="form-control">
-                                            <option>--Chọn danh mục--</option>
-                                        </select>
-                                    </div>
-                                    <div class="cold-md-3">
-                                        <button type="submit" class="btn btn-primary">Tìm</button>
-                                        <button type="button" onclick="window.location.href='/Product/Index'" class="btn btn-dark">Reset</button>
-                                    </div>
-                                @*</div>*@
-                            @*</from>*@
+
+                            <div class="col-md-4">
+                                <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
+                            </div>
+                            <div class="col-md-4">
+                                <select name="categoryId" onchange="this.form.submit()" asp-items="@ViewBag.Categories" class="form-control">
+                                    <option>--Chọn danh mục--</option>
+                                </select>
+                            </div>
+                            <div class="cold-md-3">
+                                <button type="submit" class="btn btn-primary">Tìm</button>
+                                <button type="button" onclick="window.location.href='/Product/Index'" class="btn btn-dark">Reset</button>
+                            </div>
+
                         </div>
                     </form>
                 </div>
@@ -103,7 +104,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.ProductId)
                             </td>
-                            <td>
+                            <td id="name_@item.ProductId">
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
                             <td>
@@ -119,8 +120,8 @@
                             <td>
                                 @Html.ActionLink("Chỉnh sửa", "Edit", new { id = item.ProductId }) |
                                 @Html.ActionLink("Chi tiết", "Details", new { id = item.ProductId }) |
-                                @Html.ActionLink("Xóa", "Delete", new { id = item.ProductId }) |
-                                @Html.ActionLink("Gán danh mục","CategoryAssign", new { id = item.ProductId})
+                                <a href="" data-toggle="modal" data-name="@item.Name" data-target="#deleteProductModal" onclick="holdData(this)" data-id="@item.ProductId">Xóa</a> |
+                                @Html.ActionLink("Gán danh mục", "CategoryAssign", new { id = item.ProductId })
                             </td>
                         </tr>
                     }
@@ -129,5 +130,67 @@
             @await Component.InvokeAsync("Pager", Model)
         </div>
     </div>
+    <input id="nameProduct" hidden />
+    <input id="idProduct" hidden />
+
+    <!--Modal delete product -->
+    <div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="d-flex justify-content-center">
+                        <h5 id="ModalLabel">Thông báo</h5>
+                    </div>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="deleteMeg"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteProduct()">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function holdData(item) {
+            var name = $(item).attr("data-name");
+            var id = $(item).attr("data-id");
+            $("#nameProduct").val(name);
+            $("#idProduct").val(id);
+            $("#deleteMeg").text("Bạn muốn xóa " + name);
+
+        }
+        $(function () {
+
+            $("#deleteProductModal").on('show.bs.modal', function () {
+                name = $("#nameProduct").val();
+                
+            });
+
+
+        });
+        function deleteProduct() {
+            var productId = $("#idProduct").val();
+            $.ajax({
+                type: "POST",
+                url: "/Product/Delete",
+                data: { id: productId },
+                success: function(){
+                    location.reload();
+                }
+            })
+        }
+
+    </script>
 </body>
+
+   
+    
+
 </html>

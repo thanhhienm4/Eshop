@@ -41,13 +41,17 @@
         <img id="expandImg" class="img-fluid" style="border-radius:8px" />
 
         <div class="row">
-            @foreach (var image in Model)
-            {
-                <div class="column">
-                    <img src="@image.ImagePath" class="img-fluid" alt="@image.Caption" data-id="@image.Id" onclick="extend(this)" id="@image.Id" />
-                </div>
+            @{
+                if (Model != null && Model.Count != 0)
+                    foreach (var image in Model)
+                    {
+                        <div class="column">
+                            <img src="@image.ImagePath" class="img-fluid" alt="@image.Caption" data-id="@image.Id" onclick="extend(this)" id="@image.Id" />
+                        </div>
 
+                    }
             }
+
 
         </div>
         <div class="d-flex justify-content-center">
@@ -89,6 +93,11 @@
         </div>
 
     </div>
+    @if(Model.Count>0)
+    {
+        <input id="firstImage" value="@Model[0].Id" hidden/>
+    }
+
 
 </div>
 
@@ -131,12 +140,12 @@
 
     </div>
 </div>
-<input id="first_image" value="@Model[0].Id" hidden />
 
 <script>
-    var id = @Model[0].Id;
+
+    id = $("#firstImage").val();
     var imageET = document.getElementById(id);
-        extend(imageET);
+    extend(imageET);
 
     function extend(img) {
         var expandImg = document.getElementById("expandImg");
@@ -195,7 +204,6 @@
         request.append("ProductId", @ViewBag.ProductId);
         request.append("Caption", caption);
         request.append("SortOrder", 0);
-        request.append("IsDefault", false);
 
         $.ajax({
             type: "POST",

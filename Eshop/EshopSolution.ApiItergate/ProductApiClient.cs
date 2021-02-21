@@ -134,8 +134,7 @@ namespace EshopSolution.ApiIntergate
                     request.Caption = "";
 
                 requestContent.Add(new StringContent(request.Caption),"Caption");
-
-                requestContent.Add(new StringContent(request.IsDefault.ToString()), "IsDefault");
+              
 
                 requestContent.Add(new StringContent(request.ProductId.ToString()), "ProductId");
 

@@ -106,7 +106,9 @@ namespace EshopSolution.AdminApp.Controllers
                     SeoTitle = result.ResultObj.SeoTitle,
                     LanguageId = result.ResultObj.LanguageId,
                     SeoAlias = result.ResultObj.SeoAlias,
-                    isFeatured = result.ResultObj.IsFeatured
+                    isFeatured = result.ResultObj.IsFeatured,
+                    Price = result.ResultObj.Price,
+                    OriginalPrice = result.ResultObj.Price
                 };
                 //updateRequest.ThumbnailImage. = result.ResultObj.ThumbnailImage;
 
@@ -152,38 +154,22 @@ namespace EshopSolution.AdminApp.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(int Id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-            var result = await _productApiClient.GetById(Id, GetLanguageId());
-
-            if (result.IsSuccessed)
-            {
-                return View(new ProductDeleteRequest(Id));
-            }
-
-            return RedirectToAction("Error", "Home");
-        }
+       
+       
 
         [HttpPost]
-        public async Task<IActionResult> Delete(ProductDeleteRequest request)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(request.Id);
-            }
-            var result = await _productApiClient.Delete(request.Id);
+            
+            var result = await _productApiClient.Delete(id);
             if (result.IsSuccessed)
             {
                 TempData["Result"] = "Xóa thành công";
-                return RedirectToAction("Index", "Product");
+                return Ok();
+                //return RedirectToAction("Index", "Product");
             }
             ModelState.AddModelError("", result.Message);
-            return View(request.Id);
+            return BadRequest();
         }
 
         [HttpGet]

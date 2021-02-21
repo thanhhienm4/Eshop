@@ -5,7 +5,6 @@ using System.Collections.Generic;
 namespace EshopSolution.ViewModels.Catalog.Products
 {
     public class ProductViewModel
-
     {
         public decimal Price { set; get; }
         public decimal OriginalPrice { set; get; }

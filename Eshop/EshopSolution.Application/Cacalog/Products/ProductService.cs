@@ -87,7 +87,6 @@ namespace EshopSolution.Application.Cacalog.Products
                         DateCreated = DateTime.Now,
                         FileSize = request.ThumbnailImage.Length,
                         ImagePath =  await this.SaveFile(request.ThumbnailImage),
-                        IsDefault = true,
                         SortOrder = 1
                     }
                 };
@@ -122,7 +121,8 @@ namespace EshopSolution.Application.Cacalog.Products
                 SeoAlias = request.SeoAlias,
                 SeoTitle = request.SeoTitle,
                 SeoDescription = request.SeoDescription,
-                LanguageId = request.LanguageId
+                LanguageId = request.LanguageId,
+                
                 };
                 await _context.ProductTranslations.AddAsync(productTranslation);
                
@@ -138,19 +138,10 @@ namespace EshopSolution.Application.Cacalog.Products
 
             }
             product.IsFeatured = request.isFeatured;
+            product.Price = request.Price;
+            product.OriginalPrice = request.Price;
 
             //3.Save
-            if (request.ThumbnailImage != null)
-            {
-                var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == product.Id && x.IsDefault == true);
-                if (thumbnailImage != null)
-                {
-                    thumbnailImage.FileSize = request.ThumbnailImage.Length;
-                    thumbnailImage.ImagePath = await this.SaveFile(request.ThumbnailImage);
-                    _context.ProductImages.Update(thumbnailImage);
-                }
-            }
-            _context.Products.Update(product);
             
             if (_context.SaveChanges() == 0)
             {
@@ -162,15 +153,24 @@ namespace EshopSolution.Application.Cacalog.Products
         public async Task<ApiResult<bool>> Delete(int ProductId)
         {
             var product = await _context.Products.FindAsync(ProductId);
+            product.ThumnailId = null;
+            _context.Products.Update(product);
+
             var images = _context.ProductImages.Where(x => x.ProductId == product.Id);
             foreach (var image in images)
             {
                 await _storageService.DeleteFileAsync(image.ImagePath);
             }
+            _context.ProductImages.RemoveRange(images);
+            _context.SaveChanges();
+
+            
             _context.Products.Remove(product);
+            
+
             if (_context.SaveChanges() == 0)
             {
-                return new ApiErrorResult<bool>("Can't not delete product");
+                return new ApiErrorResult<bool>("không thể xóa");
             }
             return new ApiSuccessResult<bool>();
         }
@@ -216,11 +216,10 @@ namespace EshopSolution.Application.Cacalog.Products
                         from pt in ppt.DefaultIfEmpty()
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
                         from pic in ppic.DefaultIfEmpty()
-                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
-                        from pi in ppi.DefaultIfEmpty()
-                        where pt.LanguageId == request.LanguageId && (pi.IsDefault == true || pi == null)
+                      
+                        where pt.LanguageId == request.LanguageId
 
-                        select new { p, pt, pic , pi };
+                        select new { p, pt, pic  };
 
 
             //2.Filter
@@ -260,7 +259,7 @@ namespace EshopSolution.Application.Cacalog.Products
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
                     ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
-                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.pi.ImagePath}"
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.p.ThumnailId}"
                 }).Distinct().ToListAsync();
 
             //4.Select and Projection
@@ -293,7 +292,6 @@ namespace EshopSolution.Application.Cacalog.Products
             {
                 Caption = request.Caption,
                 ProductId = request.ProductId,
-                IsDefault = request.IsDefault,
                 SortOrder = request.SortOrder,
                 DateCreated = DateTime.Now
             };
@@ -331,7 +329,6 @@ namespace EshopSolution.Application.Cacalog.Products
             else
             {
                 productImage.Caption = request.Caption;
-                productImage.IsDefault = request.IsDefault;
                 productImage.SortOrder = request.SortOrder;
 
                
@@ -350,7 +347,7 @@ namespace EshopSolution.Application.Cacalog.Products
             var proudctTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(pt => pt.ProductId == productId && pt.LanguageId == languageId);
             if (product == null)
                 throw new EshopException($"Can't find product with id {productId}");
-            var thumnailImage = _context.ProductImages.Where(x => x.IsDefault == true && x.ProductId == productId).Select(x => x.ImagePath).FirstOrDefault();
+           
             var productViewModel = new ProductViewModel()
             {
                 ProductId = product.Id,
@@ -369,7 +366,7 @@ namespace EshopSolution.Application.Cacalog.Products
                 LanguageId = proudctTranslation == null ? "" : proudctTranslation.LanguageId,
                 Categories = await GetCategoryOfProductId(productId, languageId),
                 ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
-                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{thumnailImage}"
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{product.ThumnailId}"
             };
             return new ApiSuccessResult<ProductViewModel>(productViewModel);
         }
@@ -385,7 +382,6 @@ namespace EshopSolution.Application.Cacalog.Products
                 ProductId = productImage.ProductId,
                 ImagePath = productImage.ImagePath,
                 Caption = productImage.Caption,
-                IsDefault = productImage.IsDefault,
                 DateCreated = productImage.DateCreated,
                 SortOrder = productImage.SortOrder,
                 FileSize = productImage.FileSize
@@ -501,9 +497,8 @@ namespace EshopSolution.Application.Cacalog.Products
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
-                        from pi in ppi.DefaultIfEmpty()
-                        where p.IsFeatured == true && pt.LanguageId == languageId && (pi.IsDefault == true || pi == null)
-                        select new { p, pt, pi };
+                        
+                        select new { p, pt };
 
             var data = await query.OrderBy(x => x.p.ViewCount)
                 .Select(x => new ProductViewModel()
@@ -522,7 +517,7 @@ namespace EshopSolution.Application.Cacalog.Products
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
                     ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
-                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.pi.ImagePath}"
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.p.ThumnailId}"
 
                 }).Distinct().Take(number).ToListAsync();
 
@@ -534,9 +529,8 @@ namespace EshopSolution.Application.Cacalog.Products
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
-                        from pi in ppi.DefaultIfEmpty()
-                        where pt.LanguageId == languageId && (pi.IsDefault == true || pi == null)
-                        select new { p, pt, pi };
+            
+                        select new { p, pt };
 
             var data = await query.OrderBy(x => x.p.DateCreated)
                 .Select(x => new ProductViewModel()
@@ -555,7 +549,7 @@ namespace EshopSolution.Application.Cacalog.Products
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
                     ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
-                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.pi.ImagePath}"
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.p.ThumnailId}"
 
                 }).Distinct().Take(number).ToListAsync();
 
@@ -569,10 +563,9 @@ namespace EshopSolution.Application.Cacalog.Products
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId 
                         where pic.ProductId == productId
                         join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
-                        from pi in ppi.DefaultIfEmpty()
-                        where pt.LanguageId == languageId && (pi.IsDefault == true || pi == null)
+                        
 
-                        select new { p, pt, pic, pi };
+                        select new { p, pt, pic };
 
             List<ProductViewModel> result = await query.Take(SystemConstants.ProductSettings.NumberOfRelatedProducts).OrderBy(x => x.p.ViewCount)
                 .Select(x => new ProductViewModel()
@@ -591,7 +584,7 @@ namespace EshopSolution.Application.Cacalog.Products
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
                     ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
-                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.pi.ImagePath}"
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.p.ThumnailId}"
                 }).Distinct().ToListAsync();
             return result == null ? new List<ProductViewModel>() : result;
 
