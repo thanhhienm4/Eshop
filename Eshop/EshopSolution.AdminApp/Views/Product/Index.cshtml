@@ -118,10 +118,12 @@
                             </td>
 
                             <td>
-                                @Html.ActionLink("Chỉnh sửa", "Edit", new { id = item.ProductId }) |
-                                @Html.ActionLink("Chi tiết", "Details", new { id = item.ProductId }) |
-                                <a href="" data-toggle="modal" data-name="@item.Name" data-target="#deleteProductModal" onclick="holdData(this)" data-id="@item.ProductId">Xóa</a> |
-                                @Html.ActionLink("Gán danh mục", "CategoryAssign", new { id = item.ProductId })
+                                <div class="d-flex justify-content-center">
+                                    @Html.ActionLink("Chỉnh sửa", "Edit", new { id = item.ProductId }) &nbsp;|&nbsp;
+                                    @Html.ActionLink("Chi tiết", "Details", new { id = item.ProductId }) &nbsp;|&nbsp;
+                                    <a href="" data-toggle="modal" data-name="@item.Name" data-target="#deleteProductModal" onclick="holdData(this)" data-id="@item.ProductId">Xóa</a>&nbsp;|&nbsp;
+                                    @Html.ActionLink("Gán danh mục", "CategoryAssign", new { id = item.ProductId })
+                                </div>                              
                             </td>
                         </tr>
                     }
@@ -189,8 +191,4 @@
 
     </script>
 </body>
-
-   
-    
-
 </html>

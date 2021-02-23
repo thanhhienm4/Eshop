@@ -1,0 +1,116 @@
+﻿@model EshopSolution.ViewModels.Sale.OrderViewModel
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<div class="d-flex justify-content-center">
+    <h3>Chi tiết đơn hàng</h3>
+</div>
+<div>
+    <a asp-action="Index">Quay lại</a>
+</div>
+
+
+<div>
+
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OrderId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.OrderId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShipName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShipName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShipAddress)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShipAddress)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShipEmail)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShipEmail)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShipPhoneNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShipPhoneNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+    </dl>
+</div>
+<table class="table table-bordered">
+    <tr>
+        <th>
+            Mã
+        </th>
+        <th>
+            Tên
+        </th>
+        <th>
+            Số lượng
+        </th>
+        <th>
+            Đơn giá
+        </th>
+        <th>
+            Thành tiền
+        </th>
+    </tr>
+    @if (Model.ListCart != null && Model.ListCart.Count > 0)
+    {
+        int total = 0;
+        foreach (var item in Model.ListCart)
+        {
+            <tr>
+                <td>
+                    @item.ProductId
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Quantity
+                </td>
+                <td>
+                    @item.Price
+                </td>
+                <td>
+                    @{var num = (item.Quantity * (int)item.Price);
+                        total += num;}
+                    @num
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4"><strong>Tổng tiền</strong></td>
+                <td colspan="5">@total</td>
+            </tr>
+
+
+        }
+    }
+</table>

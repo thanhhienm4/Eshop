@@ -1,0 +1,101 @@
+﻿@using  EshopSolution.ViewModels.Sale;
+@using  EshopSolution.ViewModels.Common;
+@using  EshopSolution.Data.Entities;
+@model PageResult<OrderViewModel>;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<div class="d-flex justify-content-center">
+    <h3>Danh sách đơn hàng</h3>
+</div>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr >
+            
+            <th>
+                ID
+            </th>
+            <th>
+                Ngày mua 
+            </th>
+            <th>
+                Tên người nhận
+            </th>
+            <th>
+                Dịa chỉ
+            </th>
+            <th>
+                Mail
+            </th>
+            <th>
+                Số điện thoại
+            </th>
+            <th>
+                Trạng thái 
+            </th>
+            <th>
+                Chi tiết
+
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Item)
+        {
+            <tr >
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderId)
+                </td>
+                <td>
+                    @item.OrderDate.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShipName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShipAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShipEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShipPhoneNumber)
+                </td>
+                <td>
+                    <select data-id="@item.OrderId" class="custom-select" asp-for="@item.Status" asp-items="Html.GetEnumSelectList<OrderStatus>()" onchange="updateStatus(this) "></select>
+                </td>
+                <td>
+                   
+                    @Html.ActionLink("Chi tiết","Detail",new {orderId = item.OrderId})
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+  
+    function updateStatus(item) {
+        var orderId = $(item).attr("data-id");
+        var status = $(item).val();
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateStatus",
+            data: { orderId: orderId, status: status },
+            success: function () {
+                //location.reload();
+            }
+        })
+        
+    }
+</script>
+
+@await Component.InvokeAsync("Pager", Model)
