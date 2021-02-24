@@ -138,10 +138,10 @@ namespace EshopSolution.Application.Cacalog.Orders
                                                 || x.ShipAddress.Contains(request.Keyword)).ToList();
 
             if (request.FromDate != null)
-                orders = orders.Where(x => x.OrderDate >= request.FromDate).ToList();
+                orders = orders.Where(x => x.OrderDate.Date >= request.FromDate.Date).ToList();
 
             if (request.ToDate != null)
-                orders = orders.Where(x => x.OrderDate <= request.ToDate).ToList();
+                orders = orders.Where(x => x.OrderDate.Date <= request.ToDate.Date).ToList();
 
             //Paging
             int totaRow = orders.Count();

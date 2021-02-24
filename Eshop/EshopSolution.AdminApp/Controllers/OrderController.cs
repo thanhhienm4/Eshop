@@ -32,6 +32,10 @@ namespace EshopSolution.AdminApp.Controllers
 
             };
             var orders = (await _orderApiClient.GetAllPaging(request)).ResultObj;
+            ViewBag.FromDate = fromDate;
+            ViewBag.ToDate = toDate;
+            ViewBag.keyword = keyword;
+
             return View(orders);
         }
         [HttpPost]
@@ -39,7 +43,10 @@ namespace EshopSolution.AdminApp.Controllers
         {
             var result = await _orderApiClient.UpdateStatus(orderId, status);
             if (result.IsSuccessed == true)
+            {
                 return Ok(result);
+                
+            }
             else
                 return BadRequest(result);
         }

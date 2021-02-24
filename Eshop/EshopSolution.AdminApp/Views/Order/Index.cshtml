@@ -11,19 +11,54 @@
 <div class="d-flex justify-content-center">
     <h3>Danh sách đơn hàng</h3>
 </div>
+<style>
+    .dot {
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        display: inline-block;
+        color: red;
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+   
+</style>
+<>
+<a asp-action="Create">Create New</a>
+<div class="card-header">
+    <form asp-action="Index" method="get">
+        <div class=" row d-flex">
+            <div class="p-2">
+                <label>Từ ngày</label>
+                <input type="date" name="fromDate" id="fromDate" value="@ViewBag.FromDate.Date.ToString("yyyy-MM-dd")" />
+                <label>Đến ngày</label>
+                <input type="date" name="toDate" id="toDate" value="@ViewBag.ToDate.Date.ToString("yyyy-MM-dd")" />
+                @*<script>
+                        var formDate = newDate(@ViewBag.FromDate.Date.ToString("yyyy-MM-dd"));
+                        var toDate = new Date(@ViewBag.ToDate.Date.ToString("yyyy-MM-dd"));
+                        $("#fromDate").val(formDate);
+                        $("#toDate").val(toDate);
+                    </script>*@
+            </div>
+
+            <div class="ml-auto p-2">
+                <input type="text" name="keyword" value="@ViewBag.keyWord" />
+                <button type="submit" class="btn btn-primary">Tìm</button>
+                <button type="button" onclick="window.location.href='/Order/Index'" class="btn btn-dark">Reset</button>
+            </div>
+        </div>
+
+
+    </form>
+</div>
 <table class="table table-bordered">
     <thead>
-        <tr >
-            
+        <tr>
+
             <th>
                 ID
             </th>
             <th>
-                Ngày mua 
+                Ngày mua
             </th>
             <th>
                 Tên người nhận
@@ -38,7 +73,7 @@
                 Số điện thoại
             </th>
             <th>
-                Trạng thái 
+                Trạng thái
             </th>
             <th>
                 Chi tiết
@@ -50,7 +85,7 @@
     <tbody>
         @foreach (var item in Model.Item)
         {
-            <tr >
+            <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.OrderId)
                 </td>
@@ -70,22 +105,65 @@
                     @Html.DisplayFor(modelItem => item.ShipPhoneNumber)
                 </td>
                 <td>
-                    <select data-id="@item.OrderId" class="custom-select" asp-for="@item.Status" asp-items="Html.GetEnumSelectList<OrderStatus>()" onchange="updateStatus(this) "></select>
+                    <div class="row">
+                        <div class="col-2">
+                            <span class="dot" data-id="@item.OrderId" id="dot-@item.OrderId"></span>
+                        </div>
+                        <div class="col">
+                            <select id="status-@item.OrderId"  data-id="@item.OrderId" class="custom-select" asp-for="@item.Status" asp-items="Html.GetEnumSelectList<OrderStatus>()" onchange="updateStatus(this) "></select>
+                        </div>
+                    </div>
                 </td>
                 <td>
-                   
-                    @Html.ActionLink("Chi tiết","Detail",new {orderId = item.OrderId})
+
+                    @Html.ActionLink("Chi tiết", "Detail", new { orderId = item.OrderId })
                 </td>
 
             </tr>
         }
     </tbody>
 </table>
-<script>
-  
+<script src="~/js/Order.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        initPaint();
+    });
+</script>
+@*<script>
+    function paint(dot) {
+        var id = $(dot).attr("data-id");
+        var status = $("#status-" + id).val();
+        switch (status) {
+            case 0 :
+                dot.style.backgroundColor = "#ffc107";
+                break;
+            case 1 :
+                dot.style.backgroundColor = "#fd7e14";
+                break;
+            case 2 :
+                dot.style.backgroundColor = "#007bff";
+                break;
+            case 3:
+                dot.style.backgroundColor = "#28a745";
+                break;
+            case 4:
+                dot.style.backgroundColor = "#dc3545";
+                break;
+
+        }
+
+    }
+    function initPaint() {
+        var listDot = document.getElementsByClassName(dot);
+        for (var item in listDot) {
+            paint(item);
+        }
+    }
     function updateStatus(item) {
         var orderId = $(item).attr("data-id");
         var status = $(item).val();
+        var dot = document.getElementById(orderId);
+        paint(dot);
         $.ajax({
             type: "POST",
             url: "/Order/UpdateStatus",
@@ -94,8 +172,8 @@
                 //location.reload();
             }
         })
-        
+
     }
-</script>
+</script>*@
 
 @await Component.InvokeAsync("Pager", Model)
