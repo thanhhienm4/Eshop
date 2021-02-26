@@ -44,6 +44,7 @@ namespace EshopSolution.AdminApp
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddSingleton<IAuthorizationHandler, RoleHandler>();
             services.AddTransient<IOrderApiClient, OrderApiClient>();
+            services.AddTransient<IStatisticApiClient, StatisticApiClient>();
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);

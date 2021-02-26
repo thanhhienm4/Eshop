@@ -27,13 +27,14 @@ function updateStatus(item) {
     var orderId = $(item).attr("data-id");
     var status = $(item).val();
     var dot = document.getElementById("dot-"+ orderId);
-    paint(dot);
+    //paint(dot);
     $.ajax({
         type: "POST",
         url: "/Order/UpdateStatus",
         data: { orderId: orderId, status: status },
         success: function () {
             //location.reload();
+            paint(dot);
         }
     })
 }

@@ -22,8 +22,8 @@
 
    
 </style>
-<>
-<a asp-action="Create">Create New</a>
+
+<a href="/">Trang chủ</a>
 <div class="card-header">
     <form asp-action="Index" method="get">
         <div class=" row d-flex">
@@ -129,51 +129,5 @@
         initPaint();
     });
 </script>
-@*<script>
-    function paint(dot) {
-        var id = $(dot).attr("data-id");
-        var status = $("#status-" + id).val();
-        switch (status) {
-            case 0 :
-                dot.style.backgroundColor = "#ffc107";
-                break;
-            case 1 :
-                dot.style.backgroundColor = "#fd7e14";
-                break;
-            case 2 :
-                dot.style.backgroundColor = "#007bff";
-                break;
-            case 3:
-                dot.style.backgroundColor = "#28a745";
-                break;
-            case 4:
-                dot.style.backgroundColor = "#dc3545";
-                break;
-
-        }
-
-    }
-    function initPaint() {
-        var listDot = document.getElementsByClassName(dot);
-        for (var item in listDot) {
-            paint(item);
-        }
-    }
-    function updateStatus(item) {
-        var orderId = $(item).attr("data-id");
-        var status = $(item).val();
-        var dot = document.getElementById(orderId);
-        paint(dot);
-        $.ajax({
-            type: "POST",
-            url: "/Order/UpdateStatus",
-            data: { orderId: orderId, status: status },
-            success: function () {
-                //location.reload();
-            }
-        })
-
-    }
-</script>*@
 
 @await Component.InvokeAsync("Pager", Model)

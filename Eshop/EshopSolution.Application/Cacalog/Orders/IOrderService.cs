@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.Application.Cacalog.Orders
 {
-    public interface IOrderSevice
+    public interface IOrderService
     {
         Task<ApiResult<bool>> Create(OrderCreateRequest request);
         Task<ApiResult<List<OrderViewModel>>> GetListActiveOrder(Guid userId,string langugeId);
@@ -16,6 +16,6 @@ namespace EshopSolution.Application.Cacalog.Orders
         Task<ApiResult<PageResult<OrderViewModel>>> GetAllPaging(OrderPagingRequest request);
         Task<ApiResult<bool>> UpdateStatus(int orderId, int status);
         Task<ApiResult<OrderViewModel>> GetById(int orderId, string languageId);
-
+        decimal CalTotalPrice(int orderId);
     }
 }

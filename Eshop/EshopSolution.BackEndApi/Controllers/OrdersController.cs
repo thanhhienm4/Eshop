@@ -18,9 +18,9 @@ namespace EshopSolution.BackEndApi.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrderSevice _orderSevice;
+        private readonly IOrderService _orderSevice;
         private readonly IUserService _userService;
-        public OrdersController(IOrderSevice orderSevice,IUserService userService)
+        public OrdersController(IOrderService orderSevice,IUserService userService)
         {
             _orderSevice = orderSevice;
             _userService = userService;

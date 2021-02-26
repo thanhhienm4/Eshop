@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace EshopSolution.Application.Cacalog.Orders
 {
-    public class OrderService : IOrderSevice
+    public class OrderService : IOrderService
     {
         private readonly EshopDbContext _context;
         private readonly IProductService _productService;
@@ -201,6 +201,17 @@ namespace EshopSolution.Application.Cacalog.Orders
                 Status = order.Status
             };
             return new  ApiSuccessResult<OrderViewModel>(orderVM);
+        }
+        public decimal CalTotalPrice(int orderId)
+        {
+            var orderDetails = _context.OrderDetails.Where(x => x.OrderId == orderId).ToList();
+            decimal total = 0;
+            if(orderDetails!=null)
+                foreach(var orderDetail in orderDetails)
+                {
+                    total += orderDetail.Quantity * orderDetail.Price;
+                }
+            return total;
         }
 
 

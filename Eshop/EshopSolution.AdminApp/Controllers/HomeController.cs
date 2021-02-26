@@ -21,7 +21,7 @@ namespace EshopSolution.AdminApp.Controllers
         [Authorize(Policy = "Edit")]
         public IActionResult Index()
         {
-            var user = User.Identity.Name;
+            //var user = User.Identity.Name;
             return View();
         }
 
