@@ -149,41 +149,21 @@ namespace EshopSolution.AdminApp.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(Guid Id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-            var result = await _userApiClient.GetById(Id);
 
-            if (result.IsSuccessed)
-            {
-                return View(new DeleteRequest()
-                {
-                    Id = Id
-                });
-            }
-
-            return RedirectToAction("Error", "Home");
-        }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(DeleteRequest request)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(request);
-            }
-            var result = await _userApiClient.Delete(request);
+
+            var result = await _userApiClient.Delete(id);
             if (result.IsSuccessed)
             {
                 TempData["Result"] = "Xóa thành công";
-                return RedirectToAction("Index", "User");
+                return Ok();
+
             }
             ModelState.AddModelError("", result.Message);
-            return View(request);
+            return BadRequest();
         }
 
         [HttpGet]

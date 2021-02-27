@@ -23,7 +23,7 @@ namespace EshopSolution.AdminApp.Controllers
                 Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
-                LanguageId = GetLanguageId(),
+                LanguageId = GetLanguageId()
             };
 
             ViewBag.Keyword = keyword;
@@ -104,38 +104,19 @@ namespace EshopSolution.AdminApp.Controllers
             return View(request);
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(id);
-            }
-            var category = await _categoryApiCilent.GetById(id, GetLanguageId());
-            if (category != null)
-            {
-                return View(new CategoryDeleteRequest(id));
-            }
-            return RedirectToAction("Error", "Home");
-        }
 
-        [HttpPost]
-        public async Task<IActionResult> Delete(CategoryDeleteRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(request);
-            }
-            var result = await _categoryApiCilent.Delete(request.Id);
-
+            var result = await _categoryApiCilent.Delete(id);
             if (result.IsSuccessed)
             {
                 TempData["Result"] = "Xóa thành công";
-                return RedirectToAction("Index", "Category");
-            }
+                return Ok();
 
+            }
             ModelState.AddModelError("", result.Message);
-            return View(request);
+            return BadRequest();
         }
-    }
+     }
 }

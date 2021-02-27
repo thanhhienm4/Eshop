@@ -4,9 +4,12 @@
     ViewData["Title"] = "Chi tiết";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<br />
+<div class="d-flex justify-content-center">
+    <h3>Chi tiết người dùng</h3>
+</div>
 
-<h1>Chi tiết @Model.UserName</h1>
-
+<a href="/User/Index">Quay lại danh sách</a>
 <div>
     <hr />
     <dl class="row">
@@ -48,7 +51,7 @@
         </dd>
     </dl>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    <a asp-action="Index">Trở về danh sách</a>
+<div class="d-flex justify-content-center" >
+    @Html.ActionLink("Chỉnh sửa thông tin người dùng", "Edit", new { id = Model.Id }) 
+   
 </div>

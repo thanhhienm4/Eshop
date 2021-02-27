@@ -27,32 +27,37 @@
     <title>Dashboard - SB Admin</title>
     <link href="css/styles.css" rel="stylesheet" />
 </head>
-<body class="sb-nav-fixed">
-
-    <div class="card-body">
-        <h1>Danh sách User</h1>
+<body >
+    <div>
+        <div class="d-flex justify-content-center">
+            <h3>Danh sách người dùng</h3>
+        </div>
         <div class="card-header">
-            <div class="row">
-                <div class="col-md-8 col-xs-12">
+            <div class="d-flex">
+                <div class="p-2">
                     <a class="btn btn-success" asp-action="Create" asp-controller="User">Tạo mới</a>
                 </div>
-                <div class="col-md-4 col-xs-12">
+                <div class="ml-auto p-2">
                     <form asp-action="Index" method="get">
                         <div class="row">
-                            <div class="col-md-6">
+
+                            <div>
                                 <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
                             </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary">Tìm</button>
+                            <div>
+                                &nbsp;
                             </div>
-                            <div class="col-md-2">
+                            <div>
+                                <button type="submit" class="btn btn-primary">Tìm</button>
                                 <button type="button" onclick="window.location.href='/User/Index'" class="btn btn-dark">Reset</button>
                             </div>
+
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+      
         <div>
             @if (ViewBag.SuccessMsg != null)
             {
@@ -73,10 +78,10 @@
                             Họ
                         </th>
                         <th>
-                            Tên đăng nhập
+                            UserName
                         </th>
                         <th>
-                            Số điện thoại
+                            SĐT
                         </th>
                         <th>
                             Email
@@ -113,7 +118,7 @@
                             <td>
                                 @Html.ActionLink("Chỉnh sửa", "Edit", new { id = item.Id }) |
                                 @Html.ActionLink("Chi tiết", "Details", new { id = item.Id }) |
-                                @Html.ActionLink("Xóa", "Delete", new { id = item.Id }) |
+                                <a href="" data-toggle="modal" data-name="@item.UserName" data-target="#deleteUserUser" onclick="holdData(this)" data-id="@item.Id">Xóa</a>&nbsp;|&nbsp;
                                 @Html.ActionLink("Cấp quyền", "RoleAssign", new { id = item.Id })
                             </td>
                         </tr>
@@ -123,5 +128,64 @@
             @await Component.InvokeAsync("Pager", Model)
         </div>
     </div>
+
+    <input id="nameUser" hidden />
+    <input id="idUser" hidden />
+    <!--model delete-->
+    <div class="modal fade" id="deleteUserUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="d-flex justify-content-center">
+                        <h5 id="ModalLabel">Thông báo</h5>
+                    </div>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="deleteMeg"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteUser()">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function holdData(item) {
+            var name = $(item).attr("data-name");
+            var id = $(item).attr("data-id");
+            $("#nameUser").val(name);
+            $("#idUser").val(id);
+            $("#deleteMeg").text("Bạn muốn xóa " + name);
+
+        }
+        $(function () {
+
+            $("#deleteUserUser").on('show.bs.modal', function () {
+                name = $("#nameUser").val();
+
+            });
+
+
+        });
+        function deleteUser() {
+            var userId = $("#idUser").val();
+            $.ajax({
+                type: "POST",
+                url: "/User/Delete",
+                data: { id: userId },
+                success: function () {
+                    location.reload();
+                }
+            })
+        }
+
+    </script>
 </body>
+
 </html>

@@ -230,7 +230,10 @@ namespace EshopSolution.Application.Cacalog.Products
             if (category == null)
                 return new ApiErrorResult<bool>();
 
-            _context.Categories.Remove(category);
+            if(_context.ProductInCategories.Where(x => x.CategoryId == id).First()==null)
+                _context.Categories.Remove(category);
+            else
+                category.Status = Status.InActive;
 
             if (await _context.SaveChangesAsync() > 0)
                 return new ApiSuccessResult<bool>();

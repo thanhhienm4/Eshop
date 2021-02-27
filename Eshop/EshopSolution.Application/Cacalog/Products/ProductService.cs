@@ -313,8 +313,12 @@ namespace EshopSolution.Application.Cacalog.Products
                 throw new EshopException($"Can't find ProductImage with Id {imageId}");
             else
             {
+                if(_context.Products.Where(x => x.ThumnailId==imageId).FirstOrDefault()!=null)
+                    return new ApiErrorResult<bool>("Không thể xóa Thumnail của sản phẩm");
+
                 _context.ProductImages.Remove(image);
                 await _storageService.DeleteFileAsync(image.ImagePath);
+
                 if (_context.SaveChanges() == 0)
                     return new ApiErrorResult<bool>();
                 return new ApiSuccessResult<bool>();

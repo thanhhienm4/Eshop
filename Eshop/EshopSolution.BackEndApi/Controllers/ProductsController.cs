@@ -58,10 +58,7 @@ namespace EshopSolution.BackEndApi.Controllers
                 return BadRequest();
             }
             var result = await _productService.Create(request);
-            if (result.IsSuccessed == false)
-            {
-                return BadRequest(result);
-            }
+         
             return Ok(result);
         }
 
@@ -74,10 +71,7 @@ namespace EshopSolution.BackEndApi.Controllers
                 return BadRequest();
             }
             var result = await _productService.Update(request);
-            if (result.IsSuccessed == false)
-            {
-                return BadRequest(result);
-            }
+           
             return Ok(result);
         }
 
@@ -86,10 +80,7 @@ namespace EshopSolution.BackEndApi.Controllers
         public async Task<IActionResult> Delete(int productId)
         {
             var result = await _productService.Delete(productId);
-            if (result.IsSuccessed == false)
-            {
-                return BadRequest(result);
-            }
+            
             return Ok(result);
         }
 
@@ -98,10 +89,7 @@ namespace EshopSolution.BackEndApi.Controllers
         public async Task<IActionResult> UpdatePrice(int productId, decimal newPrice)
         {
             var result = await _productService.UpdatePrice(productId, newPrice);
-            if (result.IsSuccessed == false)
-            {
-                return BadRequest(result);
-            }
+            
             return Ok(result);
         }
 
@@ -114,11 +102,7 @@ namespace EshopSolution.BackEndApi.Controllers
                 return BadRequest();
             }
             var result = await _productService.AddImages( request);
-            if (result.IsSuccessed == false)
-            {
-                return BadRequest("Can't add image to product");
-            }
-
+           
             //var product = _productService.GetById(productId, request.LanguageId);
             return Ok(result);
         }
@@ -132,11 +116,7 @@ namespace EshopSolution.BackEndApi.Controllers
                 return BadRequest();
             }
             var result = await _productService.UpdateImages(request);
-            if (result.IsSuccessed == false)
-            {
-                return BadRequest(result);
-            }
-
+            
             return Ok(result);
         }
 
@@ -144,11 +124,7 @@ namespace EshopSolution.BackEndApi.Controllers
         [Authorize(Policy = "Edit")]
         public async Task<IActionResult> DeleteImage( int imageId)
         {
-            var result = await _productService.DeleteImages(imageId);
-            if (result.IsSuccessed == false)
-            {
-                return BadRequest(result);
-            }
+            var result = await _productService.DeleteImages(imageId);          
             return Ok(result);
         }
 
@@ -157,10 +133,7 @@ namespace EshopSolution.BackEndApi.Controllers
         public async Task<IActionResult> GetImageById(int imageId)
         {
             var result = await _productService.GetImageById(imageId);
-            if (result.IsSuccessed == false)
-            {
-                return BadRequest(result);
-            }
+           
             return Ok(result);
         }
 
@@ -168,11 +141,7 @@ namespace EshopSolution.BackEndApi.Controllers
         [Authorize(Policy = "Edit")]
         public async Task<IActionResult> CategoryAssign(int productId, [FromBody] CategoryAssignRequest request)
         {
-            var result = await _productService.CategoryAssign(request);
-            if (result.IsSuccessed == true)
-            {
-                return Ok(result);
-            }
+            var result = await _productService.CategoryAssign(request);            
             return BadRequest(result);
         }
 
@@ -181,10 +150,7 @@ namespace EshopSolution.BackEndApi.Controllers
         public async Task<IActionResult> GetFeaturedProducts(string languageId, int take)
         {
             var result = await _productService.GetFeaturedProducts(languageId, take);
-            if (result.IsSuccessed == false)
-            {
-                return BadRequest("Can't find product");
-            }
+            
             return Ok(result);
         }
         [HttpGet("latest/{languageId}/{take}")]
@@ -192,10 +158,7 @@ namespace EshopSolution.BackEndApi.Controllers
         public async Task<IActionResult> GetLatestProducts(string languageId, int take)
         {
             var result = await _productService.GetLatestProducts(languageId, take);
-            if (result.IsSuccessed == false)
-            {
-                return BadRequest("Can't find product");
-            }
+          
             return Ok(result);
         }
         [HttpGet("detail/{languageId}/{id}")]
@@ -203,11 +166,7 @@ namespace EshopSolution.BackEndApi.Controllers
         public async Task<IActionResult> GetDetailProduct(string languageId, int id)
         {
             var result = await _productService.GetProductDetail(languageId, id);
-            if (result.IsSuccessed == false)
-            {
-                return BadRequest("Can't find product");
-
-            }
+           
             return Ok(result);
         }
         [HttpGet("{id}/images")]
@@ -215,10 +174,7 @@ namespace EshopSolution.BackEndApi.Controllers
         public async Task<IActionResult> GetImages(int id)
         {
             var result = await _productService.GetListImages(id);
-            if(result.IsSuccessed == false)
-            {
-                return BadRequest("Can't find product");
-            }
+           
             return Ok(result);
         }
         [HttpGet("images/{imageId}")]
@@ -226,10 +182,7 @@ namespace EshopSolution.BackEndApi.Controllers
         public async Task<IActionResult> GetImage(int imageId)
         {
             var result = await _productService.GetImageById(imageId);
-            if(result.IsSuccessed == false)
-            {
-                return BadRequest("Can't find image");
-            }
+           
             return Ok(result);
 
         }
@@ -238,8 +191,7 @@ namespace EshopSolution.BackEndApi.Controllers
         public async Task<IActionResult> UpdateThumnail(int productId, int imageId)
         {
             var result = await _productService.UpdateThumnail(productId, imageId);
-            if (result.IsSuccessed == false)
-                return BadRequest(result.Message);
+           
             return Ok(result);
         }
 

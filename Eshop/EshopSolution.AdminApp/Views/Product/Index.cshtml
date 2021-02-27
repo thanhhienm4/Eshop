@@ -39,31 +39,31 @@
         </div>
 
         <div class="card-header">
-            <div class="row">
-                <div class="col-md-6 col-xs-12">
-                    <a class="btn btn-success" asp-action="Create" asp-controller="Product">Tạo mới</a>
-                </div>
-                <div class="col-md-6 col-xs-12">
-                    <form asp-action="Index" method="get">
-                        <div class="row">
+            <form asp-action="Index" method="get">
+                <div class="row d-flex">
+                    <div class="p-2">
+                        <a class="btn btn-success" asp-action="Create" asp-controller="Product">Tạo mới</a>
+                    </div>
+                    <div class="ml-auto p2">
+                        <div class="d-flex justify-content-end">
+                            <select name="categoryId" onchange="this.form.submit()" asp-items="@ViewBag.Categories" class="form-control">
 
-                            <div class="col-md-4">
-                                <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
-                            </div>
-                            <div class="col-md-4">
-                                <select name="categoryId" onchange="this.form.submit()" asp-items="@ViewBag.Categories" class="form-control">
-                                    <option>--Chọn danh mục--</option>
-                                </select>
-                            </div>
-                            <div class="cold-md-3">
-                                <button type="submit" class="btn btn-primary">Tìm</button>
-                                <button type="button" onclick="window.location.href='/Product/Index'" class="btn btn-dark">Reset</button>
-                            </div>
+                                <option>--Chọn danh mục--</option>
+                            </select> &nbsp;
+                            <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" /> &nbsp;
+
+                            <button type="submit" class="btn btn-primary">Tìm</button> &nbsp;
+                            <button type="button" onclick="window.location.href='/Product/Index'" class="btn btn-dark">Reset</button>
+
 
                         </div>
-                    </form>
+                        
+
+                    </div>
                 </div>
-            </div>
+                        
+            </form>
+            
         </div>
         <div>
             @if (ViewBag.SuccessMsg != null)

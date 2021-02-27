@@ -166,7 +166,7 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 TempData["Result"] = "Xóa thành công";
                 return Ok();
-                //return RedirectToAction("Index", "Product");
+                
             }
             ModelState.AddModelError("", result.Message);
             return BadRequest();
@@ -247,13 +247,10 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> DeleteImage(int imageId)
+        public async Task<ApiResult<bool>> DeleteImage(int imageId)
         {
-            var result = await _productApiClient.DeleteImage(imageId);
-            if (result.IsSuccessed == true)
-                return true;
-            else
-                return false;
+            return await _productApiClient.DeleteImage(imageId);
+            
         }
         [HttpPost]
         public async Task<ProductImageViewModel> GetImageById(int id)

@@ -10,6 +10,7 @@ namespace EshopSolution.Data.Entities
 
         public string LastName { get; set; }
         public string? Avatar { get; set; }
+        public Status Status { get; set; }
 
         public DateTime Dob { get; set; }
 

@@ -143,11 +143,19 @@
 </div>
 
 <script>
-
+    var notification = $("#notification");
     id = $("#firstImage").val();
     var imageET = document.getElementById(id);
     extend(imageET);
 
+    function setDangerNoti(){
+        notification.removeClass("alert-success");
+        notification.addClass("alert-danger");
+    }
+    function setSuccessNoti() {
+        notification.removeClass("alert-danger");
+        notification.addClass("alert-sucess");
+    }
     function extend(img) {
         var expandImg = document.getElementById("expandImg");
         expandImg.src = img.src;
@@ -183,8 +191,8 @@
                 imageId: imageId
             },
             success: function () {
-                $("#notification").html("Cập nhật thành công");
-                $("#notification").fadeIn();
+                setSuccessNoti();
+                notification.fadeIn();
                 hideNotification();
             }
         })
@@ -237,9 +245,8 @@
                 imageId: imageId
             },
             success: function () {
-
-                $("#notification").html("Cập nhật thành công");
-                $("#notification").fadeIn();
+                setSuccessNoti();
+                notification.fadeIn();
                 hideNotification();
             }
         });
@@ -253,8 +260,16 @@
                 data: {
                     imageId: imageId
                 },
-                success: function () {
-                    location.reload();
+                success: function (res) {
+                    if (!res.isSuccessed) {
+                       
+                        notification.removeClass("alert-success");
+                        notification.addClass("alert-danger");
+                        notification.html(res.message);
+                        $("#notification").fadeIn();
+                        hideNotification();
+                    }else
+                        location.reload();
                 }
 
             });
