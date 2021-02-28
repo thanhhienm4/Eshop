@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EshopSolution.Data.Entities;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace EshopSolution.ViewModels.Catalog.Products
@@ -25,6 +26,9 @@ namespace EshopSolution.ViewModels.Catalog.Products
 
         [Display(Name = "Giá gốc")]
         public decimal OriginalPrice { set; get; }
+
+        [Display(Name = "Khả dụng")]
+        public Status Status { get; set; }
 
         public string SeoDescription { set; get; }
         public string SeoTitle { set; get; }

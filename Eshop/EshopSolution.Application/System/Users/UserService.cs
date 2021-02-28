@@ -94,7 +94,8 @@ namespace EshopSolution.Application.System.Users
                     UserName = x.UserName,
                     Dob = x.Dob,
                     Email = x.Email,
-                    PhoneNumber = x.PhoneNumber
+                    PhoneNumber = x.PhoneNumber,
+                    Status = x.Status
                 }).ToListAsync();
 
             //4.Select and Projection
@@ -155,6 +156,7 @@ namespace EshopSolution.Application.System.Users
             user.PhoneNumber = request.PhoneNumber;
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
+            user.Status = request.Status;
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -183,7 +185,8 @@ namespace EshopSolution.Application.System.Users
                 Dob = user.Dob,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                Roles = roles
+                Roles = roles,
+                Status = user.Status
             };
 
             return new ApiSuccessResult<UserViewModel>(data);

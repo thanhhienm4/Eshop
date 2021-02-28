@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EshopSolution.Data.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 
@@ -21,6 +22,7 @@ namespace EshopSolution.ViewModels.Catalog.Products
         public string SeoAlias { get; set; }
         public string ThumbnailImage { get; set; }
         public bool IsFeatured { get; set; }
+        public Status Status { get; set; }
 
         public List<String> Categories { get; set; } = new List<string>();
     }

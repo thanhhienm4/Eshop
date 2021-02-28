@@ -33,6 +33,7 @@ namespace EshopSolution.Application.Cacalog.Products
             query = query.Skip((request.PageIndex - 1) * request.PageSize);
             var data = query.Select(x => new CategoryViewModel()
             {
+                
                 Id = x.c.Id,
                 Name = x.ct.Name,
                 IsShowOnHome = x.c.IsShowOnHome,
@@ -228,7 +229,7 @@ namespace EshopSolution.Application.Cacalog.Products
         {
             Category category = _context.Categories.Where(x => x.Id == id).FirstOrDefault();
             if (category == null)
-                return new ApiErrorResult<bool>();
+                return new ApiErrorResult<bool>(true);
 
             if(_context.ProductInCategories.Where(x => x.CategoryId == id).First()==null)
                 _context.Categories.Remove(category);

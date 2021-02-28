@@ -150,9 +150,22 @@ namespace EshopSolution.Application.Cacalog.Products
             return new ApiSuccessResult<bool>();
         }
 
-        public async Task<ApiResult<bool>> Delete(int ProductId)
+        public async Task<ApiResult<bool>> Delete(int productId)
         {
-            var product = await _context.Products.FindAsync(ProductId);
+          
+            var product = await _context.Products.FindAsync(productId);
+            if(product == null)
+            {
+                return new ApiErrorResult<bool>(true);
+            }
+
+            if (_context.OrderDetails.Where(x => x.ProductId == productId) != null )
+            {
+                product.Status = Status.InActive;
+                await _context.SaveChangesAsync();
+                return new ApiErrorResult<bool>("Sản phẩm đã bị vô hóa");
+            }
+
             product.ThumnailId = null;
             _context.Products.Update(product);
 
@@ -166,8 +179,6 @@ namespace EshopSolution.Application.Cacalog.Products
 
             
             _context.Products.Remove(product);
-            
-
             if (_context.SaveChanges() == 0)
             {
                 return new ApiErrorResult<bool>("không thể xóa");
@@ -245,6 +256,7 @@ namespace EshopSolution.Application.Cacalog.Products
                 .Take(request.PageSize)
                 .Select(x => new ProductViewModel()
                 {
+                    Status = x.p.Status,
                     ProductId = x.p.Id,
                     Name = string.IsNullOrEmpty(x.pt.Name) ? SystemConstants.NotAvailable : x.pt.Name,
                     Description = string.IsNullOrEmpty(x.pt.Description) ? SystemConstants.NotAvailable : x.pt.Description,
@@ -354,6 +366,7 @@ namespace EshopSolution.Application.Cacalog.Products
            
             var productViewModel = new ProductViewModel()
             {
+                Status = product.Status,
                 ProductId = product.Id,
                 Price = product.Price,
                 OriginalPrice = product.OriginalPrice,

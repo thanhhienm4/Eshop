@@ -2,7 +2,8 @@
 {
     public class ApiErrorResult<T> : ApiResult<T>
     {
-        public string[] ValidationErrors;
+        public string[] ValidationErrors { get; set; }
+        public bool Trouble { get; set; }
 
         public ApiErrorResult()
         {
@@ -13,7 +14,12 @@
             Message = message;
             IsSuccessed = false;
         }
-
+        public ApiErrorResult(bool trouble)
+        {
+          
+            IsSuccessed = false;
+            Trouble = trouble;
+        }
         public ApiErrorResult(string[] validationErrors)
         {
             ValidationErrors = validationErrors;

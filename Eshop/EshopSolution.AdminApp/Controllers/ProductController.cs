@@ -74,7 +74,7 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(request);
             }
-            //request.LanguageId = GetLanguageId();
+            request.LanguageId = GetLanguageId();
             var result = await _productApiClient.Create(request);
             if (result.IsSuccessed)
             {

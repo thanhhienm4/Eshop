@@ -10,10 +10,12 @@ namespace EshopSolution.AdminApp.Controllers
     public class CategoryController : BaseController
     {
         private readonly ICategoryApiClient _categoryApiCilent;
+        private readonly ILanguageApiClient _languageApiClient;
 
-        public CategoryController(ICategoryApiClient categoryApiClient)
+        public CategoryController(ICategoryApiClient categoryApiClient, ILanguageApiClient languageApiClient)
         {
             _categoryApiCilent = categoryApiClient;
+            _languageApiClient = languageApiClient;
         }
 
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 5)
@@ -37,8 +39,9 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
+            ViewBag.Languages = (await _languageApiClient.GetAll()).ResultObj;
             return View();
         }
 
@@ -118,5 +121,20 @@ namespace EshopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return BadRequest();
         }
-     }
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _categoryApiCilent.GetById(id, GetLanguageId());
+
+            if (result.IsSuccessed)
+            {
+                return View(result.ResultObj);
+            }
+            return View();
+        }
+    }
 }

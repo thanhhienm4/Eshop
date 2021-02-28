@@ -95,22 +95,23 @@
                 <td>
                     @item.Quantity
                 </td>
-                <td>
+                <td style="text-align:right">
                     @item.Price
                 </td>
-                <td>
+                <td style="text-align:right">
                     @{var num = (item.Quantity * (int)item.Price);
                         total += num;}
                     @num
 
                 </td>
             </tr>
-            <tr>
-                <td colspan="4"><strong>Tổng tiền</strong></td>
-                <td colspan="5">@total</td>
-            </tr>
+
 
 
         }
+        <tr>
+            <td colspan="4"><strong >Tổng tiền</strong></td>
+            <td colspan="5" style="text-align:right">@total</td>
+        </tr>
     }
 </table>
