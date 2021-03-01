@@ -98,7 +98,7 @@ namespace EshopSolution.ApiIntergate
         {
             return await GetAsync<ApiResult<PageResult<ProductViewModel>>>($"/api/Products/{request.CategoryId}/paging?PageIndex=" +
                $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&" +
-               $"LanguageId={request.LanguageId}");
+               $"LanguageId={request.LanguageId}&"+$"Status={request.Status}");
         }
         public async Task<List<ProductViewModel>> GetFeaturedProducts(string languageId,int take)
         {

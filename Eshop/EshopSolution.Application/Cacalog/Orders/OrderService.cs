@@ -1,5 +1,6 @@
 ﻿using EshopSolution.Data.EF;
 using EshopSolution.Data.Entities;
+using EshopSolution.Data.Enums;
 using EshopSolution.Utilities.Exceptions;
 using EshopSolution.ViewModels.Common;
 using EshopSolution.ViewModels.Sale;
@@ -136,7 +137,10 @@ namespace EshopSolution.Application.Cacalog.Orders
                                                 || x.ShipName.Contains(request.Keyword)
                                                 || x.ShipEmail.Contains(request.Keyword)
                                                 || x.ShipAddress.Contains(request.Keyword)).ToList();
-
+            if(request.Status!=null)
+            {
+                orders = orders.Where(x => x.Status == request.Status).ToList();
+            }
             if (request.FromDate != null)
                 orders = orders.Where(x => x.OrderDate.Date >= request.FromDate.Date).ToList();
 

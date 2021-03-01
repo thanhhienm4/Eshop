@@ -12,5 +12,11 @@
             IsSuccessed = true;
             ResultObj = resultObj;
         }
+        public ApiSuccessResult(string message, T resultObj)
+        {
+            IsSuccessed = true;
+            ResultObj = resultObj;
+            Message = message;
+        }
     }
 }

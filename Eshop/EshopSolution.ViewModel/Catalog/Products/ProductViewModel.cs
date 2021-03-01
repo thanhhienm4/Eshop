@@ -1,4 +1,5 @@
 ﻿using EshopSolution.Data.Entities;
+using EshopSolution.Data.Enums;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

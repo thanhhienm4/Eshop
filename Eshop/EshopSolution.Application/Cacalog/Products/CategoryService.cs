@@ -1,4 +1,5 @@
 ﻿using EshopSolution.Data.EF;
+using EshopSolution.Data.Enums;
 using EshopSolution.Data.Entities;
 using EshopSolution.ViewModels.Catalog.Categories;
 using EshopSolution.ViewModels.Common;
@@ -66,6 +67,9 @@ namespace EshopSolution.Application.Cacalog.Products
             //2.filer by languageid
             query = query.Where(x => x.ct.LanguageId == request.LanguageId);
 
+            //filter by status
+            if(request.Status!=null)
+            query = query.Where(x => x.c.Status == request.Status);
             //3/filter by keyword
             if (!String.IsNullOrWhiteSpace(request.Keyword))
                 query = query.Where(x => x.ct.Name.Contains(request.Keyword)
@@ -231,15 +235,20 @@ namespace EshopSolution.Application.Cacalog.Products
             if (category == null)
                 return new ApiErrorResult<bool>(true);
 
-            if(_context.ProductInCategories.Where(x => x.CategoryId == id).First()==null)
+            if (_context.ProductInCategories.Where(x => x.CategoryId == id).First() == null)
+            {
                 _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+                return new ApiSuccessResult<bool>("Xóa thành công", true);
+            }
             else
+            {
                 category.Status = Status.InActive;
+                await _context.SaveChangesAsync();
+                return new ApiSuccessResult<bool>("Danh mục đã được vô hiệu hóa", true);
+            }
+              
 
-            if (await _context.SaveChangesAsync() > 0)
-                return new ApiSuccessResult<bool>();
-            else
-                return new ApiErrorResult<bool>();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EshopSolution.Data.Entities;
+using EshopSolution.Data.Enums;
 
 namespace EshopSolution.ViewModels.Catalog.Categories
 {

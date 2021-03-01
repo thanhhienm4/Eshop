@@ -1,4 +1,5 @@
-﻿using EshopSolution.Data.Entities;
+﻿using EshopSolution.Data.EF;
+using EshopSolution.Data.Entities;
 using EshopSolution.ViewModels.Common;
 using EshopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
@@ -20,16 +21,18 @@ namespace EshopSolution.Application.System.Users
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly RoleManager<AppRole> _roleManager;
+        //private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly EshopDbContext _context;
 
         public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
-                             IConfiguration configuration)
+                             IConfiguration configuration, EshopDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             //_roleManager = roleManager;
             _configuration = configuration;
+            _context = context;
         }
 
         public async Task<ApiResult<string>> Authenticate(LoginRequest request)
@@ -80,6 +83,10 @@ namespace EshopSolution.Application.System.Users
                                       || x.LastName.Contains(request.Keyword)
                                       || x.Email.Contains(request.Keyword)
                                       || x.Dob.ToString().Contains(request.Keyword));
+            }
+            if(request.Status!=null)
+            {
+                query = query.Where(x => x.Status == request.Status);
             }
 
             //3.Paging
@@ -199,12 +206,21 @@ namespace EshopSolution.Application.System.Users
             {
                 return new ApiErrorResult<bool>("Người dùng không tồn tại !");
             }
-            var result = await _userManager.DeleteAsync(user);
-            if (result.Succeeded)
+            if (_context.Orders.Where(x => x.UserId == Id).FirstOrDefault() == null)
             {
-                return new ApiSuccessResult<bool>();
+                await _userManager.DeleteAsync(user);
+                return new ApiSuccessResult<bool>("Xóa thành công",true);
+            }else
+            {
+                user.Status = Data.Enums.Status.InActive;
+                user.PhoneNumber = "";
+                user.Email = "";
+                user.FirstName = "";
+                user.LastName = "";
+                _context.SaveChanges();
+                return new ApiSuccessResult<bool>("Xóa thành công dữ liệu người dùng", true);
             }
-            return new ApiErrorResult<bool>("Xóa không thành công");
+            
         }
 
         public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)

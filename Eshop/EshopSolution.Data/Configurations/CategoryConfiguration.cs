@@ -1,6 +1,7 @@
 ﻿using EshopSolution.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using EshopSolution.Data.Enums;
 
 namespace EshopSolution.Data.Configurations
 {

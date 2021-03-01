@@ -1,4 +1,5 @@
 ﻿using EshopSolution.Data.Entities;
+using EshopSolution.Data.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;

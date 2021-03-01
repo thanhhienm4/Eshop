@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using EshopSolution.Data.Enums;
 
 namespace EshopSolution.ViewModels.Utilities.Slides
 {

@@ -1,4 +1,5 @@
 ﻿using EshopSolution.ApiIntergate;
+using EshopSolution.Data.Enums;
 using EshopSolution.ViewModels.Catalog.Categories;
 using EshopSolution.ViewModels.Catalog.ProductImages;
 using EshopSolution.ViewModels.Catalog.Products;
@@ -6,6 +7,7 @@ using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,7 +29,7 @@ namespace EshopSolution.AdminApp.Controllers
             _languageApiClient = languageApiClient;
         }
 
-        public async Task<IActionResult> Index(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string keyword, int? categoryId,Status? status, int pageIndex = 1, int pageSize = 5)
         {
             var request = new ProductPagingRequest()
             {
@@ -35,12 +37,22 @@ namespace EshopSolution.AdminApp.Controllers
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 LanguageId = GetLanguageId(),
+                Status = status
             };
 
             if (categoryId != null)
                 request.CategoryId = (int)categoryId;
             ViewBag.Keyword = keyword;
+            ViewBag.Status = status;
             List<CategoryViewModel> categories = await _categoryApiClient.GetAll(GetLanguageId());
+            ViewBag.Statuss = Enum.GetValues(typeof(Status)).Cast<Status>()
+                .Select(x => new SelectListItem()
+                {
+                    Text = x.ToString(),
+                    Value = ((int)x).ToString(),
+                    Selected = status.HasValue && status.ToString() == x.ToString()
+                }).ToList();
+
             ViewBag.Categories = categories.Select(x => new SelectListItem()
             {
                 Text = x.Name,
@@ -108,7 +120,8 @@ namespace EshopSolution.AdminApp.Controllers
                     SeoAlias = result.ResultObj.SeoAlias,
                     isFeatured = result.ResultObj.IsFeatured,
                     Price = result.ResultObj.Price,
-                    OriginalPrice = result.ResultObj.Price
+                    OriginalPrice = result.ResultObj.Price,
+                    Status = result.ResultObj.Status
                 };
                 //updateRequest.ThumbnailImage. = result.ResultObj.ThumbnailImage;
 
@@ -125,8 +138,7 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(request);
             }
-            if (request.LanguageId == null)
-                request.LanguageId = GetLanguageId();
+            request.LanguageId = GetLanguageId();
             var result = await _productApiClient.Update(request.Id, request);
 
             if (result.IsSuccessed)
@@ -158,18 +170,16 @@ namespace EshopSolution.AdminApp.Controllers
        
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ApiResult<bool>> Delete(int id)
         {
             
             var result = await _productApiClient.Delete(id);
             if (result.IsSuccessed)
             {
-                TempData["Result"] = "Xóa thành công";
-                return Ok();
+                TempData["Result"] = result.Message;              
                 
             }
-            ModelState.AddModelError("", result.Message);
-            return BadRequest();
+            return result;
         }
 
         [HttpGet]

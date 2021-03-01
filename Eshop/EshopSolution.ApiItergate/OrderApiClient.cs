@@ -36,7 +36,7 @@ namespace EshopSolution.ApiIntergate
         {
             return (await GetAsync<ApiResult<PageResult<OrderViewModel>>>($"/api/Orders/GetAllPaging?PageIndex=" +
                $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&" +
-               $"FromDate={request.FromDate}&ToDate={request.ToDate}"));
+               $"FromDate={request.FromDate}&ToDate={request.ToDate}&Status={request.Status}"));
         }
 
         public async Task<ApiResult<bool>> UpdateStatus(int orderId,int status)

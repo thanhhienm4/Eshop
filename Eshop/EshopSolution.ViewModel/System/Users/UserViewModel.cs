@@ -1,4 +1,5 @@
 ﻿using EshopSolution.Data.Entities;
+using EshopSolution.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

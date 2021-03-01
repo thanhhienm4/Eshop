@@ -1,13 +1,14 @@
 ﻿@using  EshopSolution.ViewModels.Sale;
 @using  EshopSolution.ViewModels.Common;
 @using  EshopSolution.Data.Entities;
+@using EshopSolution.Data.Enums;
 @model PageResult<OrderViewModel>;
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<br />
+
 <div class="d-flex justify-content-center">
     <h3>Danh sách đơn hàng</h3>
 </div>
@@ -28,17 +29,26 @@
     <form asp-action="Index" method="get">
         <div class=" row d-flex">
             <div class="p-2">
-                <label>Từ ngày</label>
-                <input type="date" name="fromDate" id="fromDate" value="@ViewBag.FromDate.Date.ToString("yyyy-MM-dd")" />
-                <label>Đến ngày</label>
-                <input type="date" name="toDate" id="toDate" value="@ViewBag.ToDate.Date.ToString("yyyy-MM-dd")" />
+                <label>Từ</label>
+                <input type="date" name="fromDate" id="fromDate" value="@ViewBag.FromDate.Date.ToString("yyyy-MM-dd")"/>
+                <label>Đến</label>
+                <input type="date" name="toDate" id="toDate" value="@ViewBag.ToDate.Date.ToString("yyyy-MM-dd")"/>
                
             </div>
 
             <div class="ml-auto p-2">
-                <input type="text" name="keyword" value="@ViewBag.keyWord" />
-                <button type="submit" class="btn btn-primary">Tìm</button>
-                <button type="button" onclick="window.location.href='/Order/Index'" class="btn btn-dark">Reset</button>
+                <div class="d-flex justify-content-end">
+                    <div>
+                        <select name="status" onchange="this.form.submit()" asp-items="@ViewBag.Statuss" class="form-control">
+                            <option>--Trạng thái--</option>
+                        </select>
+                    </div>
+
+                    <input type="text" name="keyword" value="@ViewBag.keyWord" />
+                    <button type="submit" class="btn btn-primary">Tìm</button>
+                    <button type="button" onclick="window.location.href='/Order/Index'" class="btn btn-dark">Reset</button>
+                </div>
+                
             </div>
         </div>
 

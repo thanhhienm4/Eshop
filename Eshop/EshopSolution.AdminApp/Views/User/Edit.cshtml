@@ -1,4 +1,5 @@
-﻿@model EshopSolution.ViewModels.System.Users.UpdateRequest
+﻿@using EshopSolution.Data.Enums
+@model EshopSolution.ViewModels.System.Users.UpdateRequest
 
 @{
     ViewData["Title"] = "Cập nhật thông tin";
@@ -38,21 +39,32 @@
             </div>
         </div>
         <div class="col-md">
-             <div class="form-group">
+            <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
         </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Dob" class="control-label"></label>
-        <input asp-for="Dob" class="form-control" />
-        <span asp-validation-for="Dob" class="text-danger"></span>
+    <div class="form-row">
+        <div class="col-md">
+            <div class="form-group">
+                <label asp-for="Dob" class="control-label"></label>
+                <input asp-for="Dob" class="form-control" />
+                <span asp-validation-for="Dob" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-group">
+                 <label asp-for="Status"></label>
+                <select class="form-control" asp-for="Status" asp-items="Html.GetEnumSelectList<Status>()">
+                </select>
+            </div>
+        </div>
     </div>
-   
-   
+    
+  
+
     <div class="form-group d-flex justify-content-center ">
         <input type="submit" value="Cập nhật thông tin" class="btn btn-primary" />
     </div>

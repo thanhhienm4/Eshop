@@ -24,7 +24,7 @@ namespace EshopSolution.ApiIntergate
         public async Task<ApiResult<PageResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request)
         {
             return await GetAsync<ApiResult<PageResult<UserViewModel>>>($"/api/Users/paging?PageIndex=" +
-                $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}");
+                $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&Status={request.Status}");
         }
 
         public async Task<ApiResult<bool>> Register(RegisterRequest request)

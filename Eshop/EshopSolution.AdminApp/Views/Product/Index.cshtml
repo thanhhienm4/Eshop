@@ -1,5 +1,6 @@
 ﻿@using EshopSolution.ViewModels.Common
 @using EshopSolution.ViewModels.Catalog.Products
+@using EshopSolution.Data.Enums 
 @model PageResult<ProductViewModel>
 
 @{
@@ -33,11 +34,11 @@
     <link href="css/styles.css" rel="stylesheet" />
 </head>
 <body class="sb-nav-fixed">
-    <div class="card-body">
+    <div>
         <div class="d-flex justify-content-center">
             <h3>Danh sách sản phẩm </h3>
         </div>
-
+        <a href="/">Trang chủ</a>
         <div class="card-header">
             <form asp-action="Index" method="get">
                 <div class="row d-flex">
@@ -46,8 +47,11 @@
                     </div>
                     <div class="ml-auto p2">
                         <div class="d-flex justify-content-end">
-                            <select name="categoryId" onchange="this.form.submit()" asp-items="@ViewBag.Categories" class="form-control">
 
+                            <select name="status" onchange="this.form.submit()" asp-items="@ViewBag.Statuss" class="form-control">
+                                <option>--Trạng thái--</option>
+                            </select>
+                            <select name="categoryId" onchange="this.form.submit()" asp-items="@ViewBag.Categories" class="form-control">
                                 <option>--Chọn danh mục--</option>
                             </select> &nbsp;
                             <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" /> &nbsp;
@@ -57,13 +61,13 @@
 
 
                         </div>
-                        
+
 
                     </div>
                 </div>
-                        
+
             </form>
-            
+
         </div>
         <div>
             @if (ViewBag.SuccessMsg != null)
@@ -83,6 +87,9 @@
                         </th>
                         <th>
                             Tên sản phẩm
+                        </th>
+                        <th>
+                            Trạng thái
                         </th>
                         <th>
                             Giá nhập
@@ -107,6 +114,9 @@
                             <td id="name_@item.ProductId">
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
+                            <td class="status">
+                                @item.Status
+                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.OriginalPrice)
                             </td>
@@ -123,7 +133,7 @@
                                     @Html.ActionLink("Chi tiết", "Details", new { id = item.ProductId }) &nbsp;|&nbsp;
                                     <a href="" data-toggle="modal" data-name="@item.Name" data-target="#deleteProductModal" onclick="holdData(this)" data-id="@item.ProductId">Xóa</a>&nbsp;|&nbsp;
                                     @Html.ActionLink("Gán danh mục", "CategoryAssign", new { id = item.ProductId })
-                                </div>                              
+                                </div>
                             </td>
                         </tr>
                     }
@@ -183,11 +193,22 @@
                 type: "POST",
                 url: "/Product/Delete",
                 data: { id: productId },
-                success: function(){
+                success: function(res){
                     location.reload();
                 }
             })
-        }
+        };
+        $(document).ready(function () {
+            var statuss = document.getElementsByClassName('status');
+            for (var i = 0; i < statuss.length; i++) {
+                console.log(statuss[i].innerHTML);
+                if (statuss[i].innerText == "Active")
+                    statuss[i].style.color = "#28a745";
+                else
+                    statuss[i].style.color = "#dc3545";
+            }
+        });
+
 
     </script>
 </body>

@@ -1,8 +1,14 @@
 ﻿using EshopSolution.ApiIntergate;
+using EshopSolution.Data.Enums;
 using EshopSolution.ViewModels.Catalog.Categories;
+using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace EshopSolution.AdminApp.Controllers
 {
@@ -18,16 +24,23 @@ namespace EshopSolution.AdminApp.Controllers
             _languageApiClient = languageApiClient;
         }
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string keyword,Status? status, int pageIndex = 1, int pageSize = 5)
         {
             var request = new GetManageCategoryPagingRequest()
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
-                LanguageId = GetLanguageId()
+                LanguageId = GetLanguageId(),
+                Status = status
             };
-
+            ViewBag.Statuss = Enum.GetValues(typeof(Status)).Cast<Status>()
+                .Select(x => new SelectListItem()
+                {
+                    Text = x.ToString(),
+                    Value = ((int)x).ToString(),
+                    Selected = status.HasValue && status.ToString() == x.ToString()
+                }).ToList();
             ViewBag.Keyword = keyword;
 
             if (TempData["Result"] != null)
@@ -108,18 +121,16 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ApiResult<bool>> Delete(int id)
         {
 
             var result = await _categoryApiCilent.Delete(id);
             if (result.IsSuccessed)
             {
-                TempData["Result"] = "Xóa thành công";
-                return Ok();
-
+                TempData["Result"] = result.Message;
+               
             }
-            ModelState.AddModelError("", result.Message);
-            return BadRequest();
+            return result;
         }
         [HttpGet]
         public async Task<IActionResult> Details(int id)

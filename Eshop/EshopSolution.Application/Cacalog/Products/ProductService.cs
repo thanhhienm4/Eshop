@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using EshopSolution.Data.Enums;
 
 namespace EshopSolution.Application.Cacalog.Products
 {
@@ -122,7 +123,7 @@ namespace EshopSolution.Application.Cacalog.Products
                 SeoTitle = request.SeoTitle,
                 SeoDescription = request.SeoDescription,
                 LanguageId = request.LanguageId,
-                
+               
                 };
                 await _context.ProductTranslations.AddAsync(productTranslation);
                
@@ -140,7 +141,8 @@ namespace EshopSolution.Application.Cacalog.Products
             product.IsFeatured = request.isFeatured;
             product.Price = request.Price;
             product.OriginalPrice = request.Price;
-
+            product.Status = request.Status;
+            _context.Products.Update(product);
             //3.Save
             
             if (_context.SaveChanges() == 0)
@@ -163,7 +165,7 @@ namespace EshopSolution.Application.Cacalog.Products
             {
                 product.Status = Status.InActive;
                 await _context.SaveChangesAsync();
-                return new ApiErrorResult<bool>("Sản phẩm đã bị vô hóa");
+                return new ApiSuccessResult<bool>("Sản phẩm đã bị vô hóa",true);
             }
 
             product.ThumnailId = null;
@@ -183,7 +185,7 @@ namespace EshopSolution.Application.Cacalog.Products
             {
                 return new ApiErrorResult<bool>("không thể xóa");
             }
-            return new ApiSuccessResult<bool>();
+            return new ApiSuccessResult<bool>("Xoá thành công",true);
         }
 
         public async Task<ApiResult<bool>> UpdatePrice(int productId, decimal newPrice)
@@ -237,7 +239,11 @@ namespace EshopSolution.Application.Cacalog.Products
             //find whit category
             if (request.CategoryId != 0)
                 query = query.Where(x => x.pic.CategoryId == request.CategoryId);
-
+            //find whit status
+            if(request.Status!=null)
+            {
+                query = query.Where(x => x.p.Status == request.Status);
+            }
             //find whit languageId
             query = query.Where(x => x.pt.LanguageId == request.LanguageId || x.pt == null);
 

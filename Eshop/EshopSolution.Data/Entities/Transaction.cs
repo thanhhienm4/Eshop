@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EshopSolution.Data.Enums;
+using System;
 
 namespace EshopSolution.Data.Entities
 {

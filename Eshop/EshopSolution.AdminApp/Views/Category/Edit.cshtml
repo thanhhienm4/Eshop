@@ -1,4 +1,5 @@
-﻿@model EshopSolution.ViewModels.Catalog.Categories.CategoryUpdateRequest
+﻿@using EshopSolution.Data.Enums 
+@model EshopSolution.ViewModels.Catalog.Categories.CategoryUpdateRequest
 
 @{
     ViewData["Title"] = "Edit";
@@ -94,7 +95,10 @@
                     </div>
                 </div>
                 <div class="col-md">
-
+                    <div class="form-group">
+                        <select class="form-control" asp-for="Status" asp-items="Html.GetEnumSelectList<Status>()">
+                        </select>
+                    </div>
                 </div>
             </div>
            
@@ -103,4 +107,7 @@
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
+<script >
+   
+</script>
 

@@ -1,7 +1,9 @@
 ﻿using EshopSolution.ApiIntergate;
+using EshopSolution.Data.Enums;
 using EshopSolution.ViewModels.Sale;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +20,8 @@ namespace EshopSolution.AdminApp.Controllers
             _orderApiClient = orderApiClient;
         }
         [HttpGet]
-        public async Task<IActionResult> Index(string keyword, DateTime fromDate, DateTime toDate , int pageSize = 5,int pageIndex = 1)
+        public async Task<IActionResult> Index(string keyword, DateTime fromDate, DateTime toDate ,OrderStatus? status
+            , int pageSize = 5,int pageIndex = 1)
         {
             if (toDate == DateTime.MinValue)
                 toDate = DateTime.Now;
@@ -28,9 +31,17 @@ namespace EshopSolution.AdminApp.Controllers
                 Keyword = keyword,
                 ToDate = toDate,
                 PageIndex = pageIndex,
-                PageSize =pageSize
+                PageSize =pageSize,
+                Status = status
 
             };
+            ViewBag.Statuss = Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>()
+                .Select(x => new SelectListItem()
+                {
+                    Text = x.ToString(),
+                    Value = ((int)x).ToString(),
+                    Selected = status.HasValue && status.ToString() == x.ToString()
+                }).ToList();
             var orders = (await _orderApiClient.GetAllPaging(request)).ResultObj;
             ViewBag.FromDate = fromDate;
             ViewBag.ToDate = toDate;

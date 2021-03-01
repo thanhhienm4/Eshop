@@ -1,4 +1,6 @@
-﻿@model EshopSolution.ViewModels.Catalog.Products.ProductUpdateRequest
+﻿@using EshopSolution.Data.Enums
+@model EshopSolution.ViewModels.Catalog.Products.ProductUpdateRequest
+
 
 @{
     ViewData["Title"] = "Edit";
@@ -104,7 +106,8 @@
 
 
     <div class="form-group">
-        <select class="form-control" asp-for="LanguageId" asp-items="new @SelectList(ViewBag.Languages,"Id","Name")">
+        <label asp-for="Status"></label>
+        <select class="form-control" asp-for="Status" asp-items="Html.GetEnumSelectList<Status>()">
         </select>
     </div>
 
