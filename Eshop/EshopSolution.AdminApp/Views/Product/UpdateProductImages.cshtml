@@ -209,7 +209,7 @@
         var caption = document.getElementById("captionImage").value;
         var file = document.getElementById("inputImage").files[0];
         var request = new FormData;
-        request.append("ImageFile", file);
+        request.append("ImageFile", file );
         request.append("ProductId", @ViewBag.ProductId);
         request.append("Caption", caption);
         request.append("SortOrder", 0);

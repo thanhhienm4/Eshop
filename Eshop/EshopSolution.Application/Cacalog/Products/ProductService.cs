@@ -109,7 +109,8 @@ namespace EshopSolution.Application.Cacalog.Products
             var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == request.Id
             && x.LanguageId == request.LanguageId);
             if (product == null && productTranslation == null)
-                throw new EshopException($"Không thể thìm thấy sản phẩm có id {request.Id}");
+                return new ApiErrorResult<bool>($"Không thể thìm thấy sản phẩm");
+
 
             //2.Update producttranslation
             if (productTranslation == null)              
@@ -192,7 +193,7 @@ namespace EshopSolution.Application.Cacalog.Products
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
-                throw new EshopException($"Can't find product with id {productId}");
+                return new ApiErrorResult<bool>($"Không thể thìm thấy sản phẩm");
             product.Price = newPrice;
             if (_context.SaveChanges() == 0)
             {
@@ -305,7 +306,7 @@ namespace EshopSolution.Application.Cacalog.Products
         {
             var product = await _context.Products.FindAsync(request.ProductId);
             if (product == null)
-                throw new EshopException($"Can't find Product with Id {request.ProductId}");
+                return new ApiErrorResult<bool>($"Không thể thìm thấy sản phẩm");
             var productImage = new ProductImage()
             {
                 Caption = request.Caption,
@@ -328,7 +329,7 @@ namespace EshopSolution.Application.Cacalog.Products
         {
             var image = await _context.ProductImages.FindAsync(imageId);
             if (image == null)
-                throw new EshopException($"Can't find ProductImage with Id {imageId}");
+                return new ApiErrorResult<bool>($"Không thể thìm thấy hình ảnh");
             else
             {
                 if(_context.Products.Where(x => x.ThumnailId==imageId).FirstOrDefault()!=null)
@@ -347,7 +348,7 @@ namespace EshopSolution.Application.Cacalog.Products
         {
             var productImage = await _context.ProductImages.FindAsync(request.imageId);
             if (productImage == null)
-                throw new EshopException($"Can't find ProductImage with Id {request.imageId}");
+                return new ApiErrorResult<bool>($"Không thể thìm thấy hình ảnh");
             else
             {
                 productImage.Caption = request.Caption;
@@ -368,8 +369,9 @@ namespace EshopSolution.Application.Cacalog.Products
             var product = await _context.Products.FindAsync(productId);
             var proudctTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(pt => pt.ProductId == productId && pt.LanguageId == languageId);
             if (product == null)
-                throw new EshopException($"Can't find product with id {productId}");
-           
+                return new ApiErrorResult<ProductViewModel>($"Không thể thìm thấy sản phẩm");
+
+            var thumnail = _context.ProductImages.Where(x => x.Id == product.ThumnailId).First().ImagePath;
             var productViewModel = new ProductViewModel()
             {
                 Status = product.Status,
@@ -389,7 +391,7 @@ namespace EshopSolution.Application.Cacalog.Products
                 LanguageId = proudctTranslation == null ? "" : proudctTranslation.LanguageId,
                 Categories = await GetCategoryOfProductId(productId, languageId),
                 ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
-                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{product.ThumnailId}"
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{thumnail}"
             };
             return new ApiSuccessResult<ProductViewModel>(productViewModel);
         }
@@ -398,7 +400,7 @@ namespace EshopSolution.Application.Cacalog.Products
         {
             var productImage = await _context.ProductImages.FindAsync(imageId);
             if (productImage == null)
-                throw new EshopException($"Can't find Image with ImageId {imageId}");
+                return new ApiErrorResult<ProductImageViewModel>($"Không thể thìm thấy hình ảnh");
             var pIVM = new ProductImageViewModel()
             {
                 Id = productImage.Id,
@@ -519,9 +521,10 @@ namespace EshopSolution.Application.Cacalog.Products
             //1.Select
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
-                        
-                        select new { p, pt };
+                        join pi in _context.ProductImages on p.ThumnailId equals pi.Id  into ppi
+                        from pi in ppi.DefaultIfEmpty()
+                        where pt.LanguageId == languageId 
+                        select new { p, pt, pi };
 
             var data = await query.OrderBy(x => x.p.ViewCount)
                 .Select(x => new ProductViewModel()
@@ -540,7 +543,7 @@ namespace EshopSolution.Application.Cacalog.Products
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
                     ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
-                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.p.ThumnailId}"
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.pi.ImagePath}"
 
                 }).Distinct().Take(number).ToListAsync();
 
@@ -551,9 +554,10 @@ namespace EshopSolution.Application.Cacalog.Products
             //1.Select
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
-            
-                        select new { p, pt };
+                        join pi in _context.ProductImages on p.ThumnailId equals pi.Id into ppi
+                        from pi in ppi.DefaultIfEmpty()
+                        where pt.LanguageId == languageId
+                        select new { p, pt,pi};
 
             var data = await query.OrderBy(x => x.p.DateCreated)
                 .Select(x => new ProductViewModel()
@@ -572,7 +576,7 @@ namespace EshopSolution.Application.Cacalog.Products
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
                     ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
-                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.p.ThumnailId}"
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.pi.ImagePath}"
 
                 }).Distinct().Take(number).ToListAsync();
 
@@ -583,12 +587,11 @@ namespace EshopSolution.Application.Cacalog.Products
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId into ppt
                         from pt in ppt.DefaultIfEmpty()
-                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId 
-                        where pic.ProductId == productId
-                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
+                        join pi in _context.ProductImages on p.ThumnailId equals pi.Id into  ppi
+                        from pi in ppi.DefaultIfEmpty()
                         
 
-                        select new { p, pt, pic };
+                        select new { p, pt, pi };
 
             List<ProductViewModel> result = await query.Take(SystemConstants.ProductSettings.NumberOfRelatedProducts).OrderBy(x => x.p.ViewCount)
                 .Select(x => new ProductViewModel()
@@ -607,7 +610,7 @@ namespace EshopSolution.Application.Cacalog.Products
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
                     ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
-                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.p.ThumnailId}"
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.pi.ImagePath}"
                 }).Distinct().ToListAsync();
             return result == null ? new List<ProductViewModel>() : result;
 
