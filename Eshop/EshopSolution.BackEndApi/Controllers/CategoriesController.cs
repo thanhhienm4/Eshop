@@ -21,7 +21,7 @@ namespace EshopSolution.BackEndApi.Controllers
 
         [HttpGet("Paging")]
         [AllowAnonymous]
-        public async Task<IActionResult> getAllPaging([FromQuery] GetManageCategoryPagingRequest request)
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetManageCategoryPagingRequest request)
         {
             var data = await _categoryService.GetAllPaging(request);
             return Ok(data);

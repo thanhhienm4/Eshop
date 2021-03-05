@@ -31,5 +31,24 @@ namespace EshopSolution.ApiIntergate
         {
             return await DeleteAsync<ApiResult<bool>>($"/api/Orders/Delete/{id}");
         }
+
+        public async Task<ApiResult<PageResult<OrderViewModel>>>GetAllPaging(OrderPagingRequest request)
+        {
+            return (await GetAsync<ApiResult<PageResult<OrderViewModel>>>($"/api/Orders/GetAllPaging?PageIndex=" +
+               $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&" +
+               $"FromDate={request.FromDate}&ToDate={request.ToDate}&Status={request.Status}"));
+        }
+
+        public async Task<ApiResult<bool>> UpdateStatus(int orderId,int status)
+        {
+            return await PutAsync<ApiResult<bool>>($"/api/Orders/UpdateStatus/{orderId}/{status}", null);
+        }
+
+        public async Task<ApiResult<OrderViewModel>> GetById(int orderId, string languageId)
+        {
+            return await PostAsync<ApiResult<OrderViewModel>>($"/api/Orders/{orderId}/{languageId}", null);
+        }
+
+
     }
 }

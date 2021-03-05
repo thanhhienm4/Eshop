@@ -1,8 +1,14 @@
 ﻿using EshopSolution.ApiIntergate;
+using EshopSolution.Data.Enums;
 using EshopSolution.ViewModels.Catalog.Categories;
+using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace EshopSolution.AdminApp.Controllers
 {
@@ -10,13 +16,15 @@ namespace EshopSolution.AdminApp.Controllers
     public class CategoryController : BaseController
     {
         private readonly ICategoryApiClient _categoryApiCilent;
+        private readonly ILanguageApiClient _languageApiClient;
 
-        public CategoryController(ICategoryApiClient categoryApiClient)
+        public CategoryController(ICategoryApiClient categoryApiClient, ILanguageApiClient languageApiClient)
         {
             _categoryApiCilent = categoryApiClient;
+            _languageApiClient = languageApiClient;
         }
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string keyword,Status? status, int pageIndex = 1, int pageSize = 5)
         {
             var request = new GetManageCategoryPagingRequest()
             {
@@ -24,8 +32,15 @@ namespace EshopSolution.AdminApp.Controllers
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 LanguageId = GetLanguageId(),
+                Status = status
             };
-
+            ViewBag.Statuss = Enum.GetValues(typeof(Status)).Cast<Status>()
+                .Select(x => new SelectListItem()
+                {
+                    Text = x.ToString(),
+                    Value = ((int)x).ToString(),
+                    Selected = status.HasValue && status.ToString() == x.ToString()
+                }).ToList();
             ViewBag.Keyword = keyword;
 
             if (TempData["Result"] != null)
@@ -37,8 +52,9 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
+            ViewBag.Languages = (await _languageApiClient.GetAll()).ResultObj;
             return View();
         }
 
@@ -104,38 +120,32 @@ namespace EshopSolution.AdminApp.Controllers
             return View(request);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(id);
-            }
-            var category = await _categoryApiCilent.GetById(id, GetLanguageId());
-            if (category != null)
-            {
-                return View(new CategoryDeleteRequest(id));
-            }
-            return RedirectToAction("Error", "Home");
-        }
-
         [HttpPost]
-        public async Task<IActionResult> Delete(CategoryDeleteRequest request)
+        public async Task<ApiResult<bool>> Delete(int id)
+        {
+
+            var result = await _categoryApiCilent.Delete(id);
+            if (result.IsSuccessed)
+            {
+                TempData["Result"] = result.Message;
+               
+            }
+            return result;
+        }
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
         {
             if (!ModelState.IsValid)
             {
-                return View(request);
+                return View();
             }
-            var result = await _categoryApiCilent.Delete(request.Id);
+            var result = await _categoryApiCilent.GetById(id, GetLanguageId());
 
             if (result.IsSuccessed)
             {
-                TempData["Result"] = "Xóa thành công";
-                return RedirectToAction("Index", "Category");
+                return View(result.ResultObj);
             }
-
-            ModelState.AddModelError("", result.Message);
-            return View(request);
+            return View();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace EshopSolution.Data.Entities
+﻿using EshopSolution.Data.Enums;
+
+namespace EshopSolution.Data.Entities
 {
     public class Contact
     {

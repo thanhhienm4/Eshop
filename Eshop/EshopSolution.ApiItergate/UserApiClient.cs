@@ -24,7 +24,7 @@ namespace EshopSolution.ApiIntergate
         public async Task<ApiResult<PageResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request)
         {
             return await GetAsync<ApiResult<PageResult<UserViewModel>>>($"/api/Users/paging?PageIndex=" +
-                $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}");
+                $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&Status={request.Status}");
         }
 
         public async Task<ApiResult<bool>> Register(RegisterRequest request)
@@ -42,9 +42,9 @@ namespace EshopSolution.ApiIntergate
             return await GetAsync<ApiResult<UserViewModel>>($"/api/Users/{id}/getbyid");
         }
 
-        public async Task<ApiResult<bool>> Delete(DeleteRequest request)
+        public async Task<ApiResult<bool>> Delete(Guid userId)
         {
-            return await DeleteAsync<ApiResult<bool>>($"/api/Users/{request.Id}");
+            return await DeleteAsync<ApiResult<bool>>($"/api/Users/{userId}");
         }
 
         public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)

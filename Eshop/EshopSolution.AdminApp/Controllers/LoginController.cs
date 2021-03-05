@@ -33,7 +33,7 @@ namespace EshopSolution.AdminApp.Controllers
         
         public async Task<IActionResult> Index()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            //   await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
 
@@ -54,9 +54,12 @@ namespace EshopSolution.AdminApp.Controllers
             var authProperties = new AuthenticationProperties()
             {
                 ExpiresUtc = DateTimeOffset.Now.AddMonths(1),
-                IsPersistent = true
+                IsPersistent = request.RememberMe ,
+                
             };
+
             HttpContext.Session.SetString(SystemConstants.AppSettings.Token, respond.ResultObj);
+            Response.Cookies.Append(SystemConstants.AppSettings.Bearer, respond.ResultObj,new CookieOptions() {Expires = DateTimeOffset.Now.AddMonths(1)});
             await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         userPrincipal,

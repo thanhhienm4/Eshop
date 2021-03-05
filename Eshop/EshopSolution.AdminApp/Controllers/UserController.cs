@@ -1,4 +1,5 @@
 ﻿using EshopSolution.ApiIntergate;
+using EshopSolution.Data.Enums;
 using EshopSolution.Utilities.Constants;
 using EshopSolution.ViewModels.Common;
 using EshopSolution.ViewModels.System.Users;
@@ -7,11 +8,13 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,20 +36,28 @@ namespace EshopSolution.AdminApp.Controllers
         }
 
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 3)
+        public async Task<IActionResult> Index(string keyword,Status? status, int pageIndex = 1, int pageSize = 3)
         {
             if (!ModelState.IsValid)
             {
                 return View(ModelState);
             }
-            var session = HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
+           
             var request = new GetUserPagingRequest()
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,
-                PageSize = pageSize
+                PageSize = pageSize,
+                Status = status
             };
             ViewBag.Keyword = keyword;
+            ViewBag.Statuss = Enum.GetValues(typeof(Status)).Cast<Status>()
+                .Select(x => new SelectListItem()
+                {
+                    Text = x.ToString(),
+                    Value = ((int)x).ToString(),
+                    Selected = status.HasValue && status.ToString() == x.ToString()
+                }).ToList();
             if (TempData["Result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["Result"];
@@ -61,6 +72,10 @@ namespace EshopSolution.AdminApp.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Remove(SystemConstants.AppSettings.Token);
+            if(Request.Cookies[SystemConstants.AppSettings.Bearer]!=null)
+            {
+                Response.Cookies.Delete(SystemConstants.AppSettings.Bearer);
+            }
             return RedirectToAction("Index", "Login");
         }
 
@@ -105,7 +120,8 @@ namespace EshopSolution.AdminApp.Controllers
                     Email = result.ResultObj.Email,
                     FirstName = result.ResultObj.FirstName,
                     PhoneNumber = result.ResultObj.PhoneNumber,
-                    LastName = result.ResultObj.LastName
+                    LastName = result.ResultObj.LastName,
+                    Status = result.ResultObj.Status
                 };
                 return View(updateRequest);
             }
@@ -145,41 +161,20 @@ namespace EshopSolution.AdminApp.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(Guid Id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-            var result = await _userApiClient.GetById(Id);
 
-            if (result.IsSuccessed)
-            {
-                return View(new DeleteRequest()
-                {
-                    Id = Id
-                });
-            }
-
-            return RedirectToAction("Error", "Home");
-        }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(DeleteRequest request)
+        public async Task<ApiResult<bool>> Delete(Guid id)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(request);
-            }
-            var result = await _userApiClient.Delete(request);
+
+            var result = await _userApiClient.Delete(id);
             if (result.IsSuccessed)
             {
-                TempData["Result"] = "Xóa thành công";
-                return RedirectToAction("Index", "User");
+                TempData["Result"] = result.Message;
+                
+
             }
-            ModelState.AddModelError("", result.Message);
-            return View(request);
+            return result;
         }
 
         [HttpGet]

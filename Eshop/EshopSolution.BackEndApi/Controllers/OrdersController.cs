@@ -18,9 +18,9 @@ namespace EshopSolution.BackEndApi.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrderSevice _orderSevice;
+        private readonly IOrderService _orderSevice;
         private readonly IUserService _userService;
-        public OrdersController(IOrderSevice orderSevice,IUserService userService)
+        public OrdersController(IOrderService orderSevice,IUserService userService)
         {
             _orderSevice = orderSevice;
             _userService = userService;
@@ -47,7 +47,7 @@ namespace EshopSolution.BackEndApi.Controllers
         }
         [HttpDelete("Delete/{id}")]
         [Authorize(Policy = "Access")]
-        //[Authorize(Policy = "Customer")]
+        
         public async Task<IActionResult> Delete(int id)
         {
             if (!ModelState.IsValid)
@@ -78,6 +78,40 @@ namespace EshopSolution.BackEndApi.Controllers
             return BadRequest();
 
         }
-       
+        [HttpGet("GetAllPaging")]
+        [Authorize(Policy = "Edit")]
+        public async Task<IActionResult> GetAllPaging([FromQuery]OrderPagingRequest request)
+        {
+            var result = await _orderSevice.GetAllPaging(request);
+            if (result.IsSuccessed)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
+        }
+
+        [HttpPut("UpdateStatus/{orderId}/{status}")]
+        [Authorize(Policy ="Edit")]
+        public async Task<IActionResult> UpdateStatus(int orderId,int status)
+        {
+            var result = await _orderSevice.UpdateStatus(orderId,status);
+            if (result.IsSuccessed)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
+        }
+
+        [HttpPost("{orderId}/{languageId}")]
+        [Authorize(Policy = "Access")]
+        public async Task<IActionResult> GetById(int orderId, string languageId)
+        {
+            var result = await _orderSevice.GetById(orderId, languageId);
+            if (!result.IsSuccessed)
+                return BadRequest();
+            else
+                return Ok(result);
+        }
+
     }
 }

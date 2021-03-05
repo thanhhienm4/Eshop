@@ -27,15 +27,7 @@ namespace EshopSolution.ApiIntergate
         // http get data form Api
         protected async Task<TResponse> GetAsync<TResponse>(string url)
         {
-            var sessions = _httpContextAccessor
-                .HttpContext
-                .Session
-                .GetString(SystemConstants.AppSettings.Token);
-
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(SystemConstants.ServerSettings.ServerBackEnd);
-            client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, sessions);
+            HttpClient client = GetHttpClient();
             var response = await client.GetAsync(url);
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -51,16 +43,10 @@ namespace EshopSolution.ApiIntergate
         // post data to Api
         protected async Task<TResponse> PostAsync<TResponse>(string url, object obj)
         {
-            var sessions = _httpContextAccessor
-                .HttpContext
-                .Session
-                .GetString(SystemConstants.AppSettings.Token);
+            HttpClient client = GetHttpClient();
             var json = JsonConvert.SerializeObject(obj);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(SystemConstants.ServerSettings.ServerBackEnd);
-            client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, sessions);
+           
             var response = await client.PostAsync(url, httpContent);
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -76,10 +62,7 @@ namespace EshopSolution.ApiIntergate
         // send delete request to API
         protected async Task<TResponse> DeleteAsync<TResponse>(string url)
         {
-            var BearerToken = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
-            var client = _httpClientFactory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, BearerToken);
-            client.BaseAddress = new Uri(SystemConstants.ServerSettings.ServerBackEnd);
+            HttpClient client = GetHttpClient();
             var respond = await client.DeleteAsync(url);
             var body = await respond.Content.ReadAsStringAsync();
             if (respond.IsSuccessStatusCode)
@@ -95,12 +78,9 @@ namespace EshopSolution.ApiIntergate
         // send update request to Api
         protected async Task<TResponse> PutAsync<TResponse>(string url, object obj)
         {
-            var BearerToken = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
+            HttpClient client = GetHttpClient();
             var json = JsonConvert.SerializeObject(obj);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var client = _httpClientFactory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, BearerToken);
-            client.BaseAddress = new Uri(SystemConstants.ServerSettings.ServerBackEnd);
             var respond = await client.PutAsync(url, httpContent);
             var body = await respond.Content.ReadAsStringAsync();
             if (respond.IsSuccessStatusCode)
@@ -110,6 +90,19 @@ namespace EshopSolution.ApiIntergate
                 return myDeserializedObjList;
             }
             return JsonConvert.DeserializeObject<TResponse>(body);
+        }
+        public HttpClient GetHttpClient()
+        {
+            var BearerToken = _httpContextAccessor
+                .HttpContext
+                .Session
+                .GetString(SystemConstants.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(SystemConstants.ServerSettings.ServerBackEnd);
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, BearerToken);
+
+            return client;
         }
     }
 }

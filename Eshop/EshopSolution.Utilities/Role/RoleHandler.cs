@@ -11,7 +11,7 @@ namespace EshopSolution.Utilities.Role
     public class RoleHandler : AuthorizationHandler<RoleRequirement>
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, RoleRequirement requirement)
-        {
+         {
            
             if (!context.User.HasClaim(c => c.Type == ClaimTypes.Role && c.Issuer == SystemConstants.Token.Issuer))
             {

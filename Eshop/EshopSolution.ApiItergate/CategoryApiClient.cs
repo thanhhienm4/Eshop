@@ -45,7 +45,7 @@ namespace EshopSolution.ApiIntergate
         {
             return await GetAsync<ApiResult<PageResult<CategoryViewModel>>>($"/api/Categories/Paging?PageIndex=" +
                $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&" +
-               $"LanguageId={request.LanguageId}");
+               $"LanguageId={request.LanguageId}&Status={request.Status}");
         }
     }
 }

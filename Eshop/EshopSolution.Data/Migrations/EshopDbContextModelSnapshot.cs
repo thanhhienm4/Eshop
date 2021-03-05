@@ -78,7 +78,7 @@ namespace EshopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "b5d7b1f7-9a76-4fcc-a8af-71c90ae5ecd0",
+                            ConcurrencyStamp = "40fb310e-4ded-4ed5-ae1d-dd77dc961131",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -93,6 +93,9 @@ namespace EshopSolution.Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
@@ -140,6 +143,9 @@ namespace EshopSolution.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -165,10 +171,11 @@ namespace EshopSolution.Data.Migrations
                             LockoutEnd = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             NormalizedEmail = "Mistakem4@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIITlz37XZk2raeRqxiuTz6gk5fEu17KlnBubzxiEex1IXiSqCHA+D4m3Jnu8aYCzQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBbEKC2kbMSKXNevi/RZFDKLrNXagzutW/XIV7ZbJorGUrIPmXaLspjJJxli55yUdw==",
                             PhoneNumber = "0912413908",
                             PhoneNumberConfirmed = true,
                             SecurityStamp = "",
+                            Status = 0,
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -481,7 +488,13 @@ namespace EshopSolution.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,4)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ThumnailId")
                         .HasColumnType("int");
 
                     b.Property<int>("ViewCount")
@@ -491,16 +504,21 @@ namespace EshopSolution.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ThumnailId")
+                        .IsUnique()
+                        .HasFilter("[ThumnailId] IS NOT NULL");
+
                     b.ToTable("Products");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2021, 1, 25, 19, 13, 15, 976, DateTimeKind.Local).AddTicks(728),
+                            DateCreated = new DateTime(2021, 2, 27, 14, 19, 1, 48, DateTimeKind.Local).AddTicks(2726),
                             IsFeatured = false,
                             OriginalPrice = 100000m,
                             Price = 200000m,
+                            Status = 0,
                             Stock = 0,
                             ViewCount = 0
                         });
@@ -527,9 +545,6 @@ namespace EshopSolution.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("bit");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -937,6 +952,13 @@ namespace EshopSolution.Data.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EshopSolution.Data.Entities.Product", b =>
+                {
+                    b.HasOne("EshopSolution.Data.Entities.ProductImage", "Thumnail")
+                        .WithOne("ProductThumnail")
+                        .HasForeignKey("EshopSolution.Data.Entities.Product", "ThumnailId");
                 });
 
             modelBuilder.Entity("EshopSolution.Data.Entities.ProductImage", b =>

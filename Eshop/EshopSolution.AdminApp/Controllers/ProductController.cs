@@ -1,10 +1,13 @@
 ﻿using EshopSolution.ApiIntergate;
+using EshopSolution.Data.Enums;
 using EshopSolution.ViewModels.Catalog.Categories;
+using EshopSolution.ViewModels.Catalog.ProductImages;
 using EshopSolution.ViewModels.Catalog.Products;
 using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +29,7 @@ namespace EshopSolution.AdminApp.Controllers
             _languageApiClient = languageApiClient;
         }
 
-        public async Task<IActionResult> Index(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string keyword, int? categoryId,Status? status, int pageIndex = 1, int pageSize = 5)
         {
             var request = new ProductPagingRequest()
             {
@@ -34,12 +37,22 @@ namespace EshopSolution.AdminApp.Controllers
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 LanguageId = GetLanguageId(),
+                Status = status
             };
 
             if (categoryId != null)
                 request.CategoryId = (int)categoryId;
             ViewBag.Keyword = keyword;
+            ViewBag.Status = status;
             List<CategoryViewModel> categories = await _categoryApiClient.GetAll(GetLanguageId());
+            ViewBag.Statuss = Enum.GetValues(typeof(Status)).Cast<Status>()
+                .Select(x => new SelectListItem()
+                {
+                    Text = x.ToString(),
+                    Value = ((int)x).ToString(),
+                    Selected = status.HasValue && status.ToString() == x.ToString()
+                }).ToList();
+
             ViewBag.Categories = categories.Select(x => new SelectListItem()
             {
                 Text = x.Name,
@@ -73,7 +86,7 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(request);
             }
-            //request.LanguageId = GetLanguageId();
+            request.LanguageId = GetLanguageId();
             var result = await _productApiClient.Create(request);
             if (result.IsSuccessed)
             {
@@ -105,7 +118,10 @@ namespace EshopSolution.AdminApp.Controllers
                     SeoTitle = result.ResultObj.SeoTitle,
                     LanguageId = result.ResultObj.LanguageId,
                     SeoAlias = result.ResultObj.SeoAlias,
-                    isFeatured = result.ResultObj.IsFeatured
+                    isFeatured = result.ResultObj.IsFeatured,
+                    Price = result.ResultObj.Price,
+                    OriginalPrice = result.ResultObj.Price,
+                    Status = result.ResultObj.Status
                 };
                 //updateRequest.ThumbnailImage. = result.ResultObj.ThumbnailImage;
 
@@ -122,8 +138,7 @@ namespace EshopSolution.AdminApp.Controllers
             {
                 return View(request);
             }
-            if (request.LanguageId == null)
-                request.LanguageId = GetLanguageId();
+            request.LanguageId = GetLanguageId();
             var result = await _productApiClient.Update(request.Id, request);
 
             if (result.IsSuccessed)
@@ -151,38 +166,20 @@ namespace EshopSolution.AdminApp.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(int Id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-            var result = await _productApiClient.GetById(Id, GetLanguageId());
-
-            if (result.IsSuccessed)
-            {
-                return View(new ProductDeleteRequest(Id));
-            }
-
-            return RedirectToAction("Error", "Home");
-        }
+       
+       
 
         [HttpPost]
-        public async Task<IActionResult> Delete(ProductDeleteRequest request)
+        public async Task<ApiResult<bool>> Delete(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(request.Id);
-            }
-            var result = await _productApiClient.Delete(request.Id);
+            
+            var result = await _productApiClient.Delete(id);
             if (result.IsSuccessed)
             {
-                TempData["Result"] = "Xóa thành công";
-                return RedirectToAction("Index", "Product");
+                TempData["Result"] = result.Message;              
+                
             }
-            ModelState.AddModelError("", result.Message);
-            return View(request.Id);
+            return result;
         }
 
         [HttpGet]
@@ -233,5 +230,49 @@ namespace EshopSolution.AdminApp.Controllers
             return categoryAssignRequest;
         }
 
+        public async Task<IActionResult> UpdateProductImages (int id)
+        {
+            var listImages =await _productApiClient.GetproductImages(id);
+            ViewBag.ProductId = id;
+            return View(listImages);
+        }
+        [HttpPost]
+        public async Task<bool> AddImage(ProductImageCreateRequest request)
+        {
+            var result = await _productApiClient.AddImage(request);
+            if (result.IsSuccessed == true)
+                return true;
+            else
+                return false;
+        }
+
+        [HttpPost]
+        public async Task<bool> UpdateImage (ProductImageUpdateRequest request)
+        {
+            var result = await _productApiClient.UpdateImage(request);
+            if (result.IsSuccessed == true)
+                return true;
+            else
+                return false;
+        }
+
+        [HttpPost]
+        public async Task<ApiResult<bool>> DeleteImage(int imageId)
+        {
+            return await _productApiClient.DeleteImage(imageId);
+            
+        }
+        [HttpPost]
+        public async Task<ProductImageViewModel> GetImageById(int id)
+        {
+            var result = await _productApiClient.GetProductImage(id);
+            return result;
+        }
+        [HttpPost]
+        public async Task<bool> UpdateThumnail(int productId,int imageId)
+        {
+            var result = await _productApiClient.UpdateThumnail(productId, imageId);
+            return result;
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace EshopSolution.ApiIntergate
 
         Task<ApiResult<UserViewModel>> GetById(Guid id);
 
-        Task<ApiResult<bool>> Delete(DeleteRequest request);
+        Task<ApiResult<bool>> Delete(Guid userId);
 
         Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
 

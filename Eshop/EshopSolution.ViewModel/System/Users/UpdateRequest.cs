@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EshopSolution.Data.Entities;
+using EshopSolution.Data.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace EshopSolution.ViewModels.System.Users
@@ -19,6 +21,9 @@ namespace EshopSolution.ViewModels.System.Users
 
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Display(Name = "Khả dụng")]
+        public Status Status { get; set; }
 
         [Display(Name = "Số điện thoại")]
         public string PhoneNumber { get; set; }

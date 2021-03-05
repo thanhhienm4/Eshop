@@ -35,6 +35,7 @@ namespace EshopSolution.AdminApp
                         options.LoginPath = "/Login/Index";
                         options.AccessDeniedPath = "/User/Forbident";
                         options.LogoutPath = "/User/Logout";
+
                     });
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddTransient<IRoleApiClient, RoleApiClient>();
@@ -42,6 +43,8 @@ namespace EshopSolution.AdminApp
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddSingleton<IAuthorizationHandler, RoleHandler>();
+            services.AddTransient<IOrderApiClient, OrderApiClient>();
+            services.AddTransient<IStatisticApiClient, StatisticApiClient>();
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);

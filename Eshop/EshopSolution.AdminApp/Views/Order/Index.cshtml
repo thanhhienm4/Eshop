@@ -1,0 +1,138 @@
+﻿@using  EshopSolution.ViewModels.Sale;
+@using  EshopSolution.ViewModels.Common;
+@using  EshopSolution.Data.Entities;
+@using EshopSolution.Data.Enums;
+@model PageResult<OrderViewModel>;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="d-flex justify-content-center">
+    <h3>Danh sách đơn hàng</h3>
+</div>
+<style>
+    .dot {
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        display: inline-block;
+        color: red;
+    }
+
+   
+</style>
+
+<a href="/">Trang chủ</a>
+<div class="card-header">
+    <form asp-action="Index" method="get">
+        <div class=" row d-flex">
+            <div class="p-2">
+                <label>Từ</label>
+                <input type="date" name="fromDate" id="fromDate" value="@ViewBag.FromDate.Date.ToString("yyyy-MM-dd")"/>
+                <label>Đến</label>
+                <input type="date" name="toDate" id="toDate" value="@ViewBag.ToDate.Date.ToString("yyyy-MM-dd")"/>
+               
+            </div>
+
+            <div class="ml-auto p-2">
+                <div class="d-flex justify-content-end">
+                    <div>
+                        <select name="status" onchange="this.form.submit()" asp-items="@ViewBag.Statuss" class="form-control">
+                            <option>--Trạng thái--</option>
+                        </select>
+                    </div>
+
+                    <input type="text" name="keyword" value="@ViewBag.keyWord" />
+                    <button type="submit" class="btn btn-primary">Tìm</button>
+                    <button type="button" onclick="window.location.href='/Order/Index'" class="btn btn-dark">Reset</button>
+                </div>
+                
+            </div>
+        </div>
+
+
+    </form>
+</div>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+
+            <th>
+                ID
+            </th>
+            <th>
+                Ngày mua
+            </th>
+            <th>
+                Tên người nhận
+            </th>
+            <th>
+                Địa chỉ
+            </th>
+            <th>
+                Mail
+            </th>
+            <th>
+                Số điện thoại
+            </th>
+            <th>
+                Trạng thái
+            </th>
+            <th>
+                Chi tiết
+
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Item)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderId)
+                </td>
+                <td>
+                    @item.OrderDate.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShipName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShipAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShipEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShipPhoneNumber)
+                </td>
+                <td>
+                    <div class="row">
+                        <div class="col-2">
+                            <span class="dot" data-id="@item.OrderId" id="dot-@item.OrderId"></span>
+                        </div>
+                        <div class="col">
+                            <select id="status-@item.OrderId"  data-id="@item.OrderId" class="custom-select" asp-for="@item.Status" asp-items="Html.GetEnumSelectList<OrderStatus>()" onchange="updateStatus(this) "></select>
+                        </div>
+                    </div>
+                </td>
+                <td>
+
+                    @Html.ActionLink("Chi tiết", "Detail", new { orderId = item.OrderId })
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="~/js/Order.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        initPaint();
+    });
+</script>
+
+@await Component.InvokeAsync("Pager", Model)

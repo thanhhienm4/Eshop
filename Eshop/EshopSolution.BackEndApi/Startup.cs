@@ -1,5 +1,6 @@
 using eShopSolution.Application.Common;
 using EshopSolution.Application;
+using EshopSolution.Application.Cacalog.Charts;
 using EshopSolution.Application.Cacalog.Orders;
 using EshopSolution.Application.Cacalog.Products;
 using EshopSolution.Application.System.Languages;
@@ -74,13 +75,14 @@ namespace EshopSolution.BackEndApi
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ILanguageService, LanguageService>();
             services.AddTransient<ICategoryService, CategoryService>();
-            services.AddTransient<IOrderSevice, OrderService>();
+            services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddTransient<IValidator<UpdateRequest>, UpdateRequestValidator>();
             services.AddTransient<IValidator<ProductCreateRequest>, ProductCreateRequestValidator>();
             services.AddTransient<IValidator<ProductUpdateRequest>, ProductUpdateRequestValidator>();
             services.AddTransient<IValidator<OrderCreateRequest>, OrderCreateRequestValidator>();
+            services.AddTransient<IStatisicService, StatisticService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop Solution", Version = "v1" });

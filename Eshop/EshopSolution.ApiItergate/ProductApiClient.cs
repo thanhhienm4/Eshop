@@ -1,4 +1,5 @@
 ﻿using EshopSolution.Utilities.Constants;
+using EshopSolution.ViewModels.Catalog.ProductImages;
 using EshopSolution.ViewModels.Catalog.Products;
 using EshopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
@@ -33,14 +34,7 @@ namespace EshopSolution.ApiIntergate
 
         public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
         {
-            var sessions = _httpContextAccessor
-                .HttpContext
-                .Session
-                .GetString(SystemConstants.AppSettings.Token);
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(SystemConstants.ServerSettings.ServerBackEnd);
-            client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue(SystemConstants.AppSettings.Bearer, sessions);
+            HttpClient client = GetHttpClient();
 
             var requestContent = new MultipartFormDataContent();
 
@@ -104,7 +98,7 @@ namespace EshopSolution.ApiIntergate
         {
             return await GetAsync<ApiResult<PageResult<ProductViewModel>>>($"/api/Products/{request.CategoryId}/paging?PageIndex=" +
                $"{request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&" +
-               $"LanguageId={request.LanguageId}");
+               $"LanguageId={request.LanguageId}&"+$"Status={request.Status}");
         }
         public async Task<List<ProductViewModel>> GetFeaturedProducts(string languageId,int take)
         {
@@ -118,7 +112,63 @@ namespace EshopSolution.ApiIntergate
         {
             return (await GetAsync<ApiResult<ProductDetailViewModel>>($"/api/Products/Detail/{languageId}/{id}")).ResultObj;
         }
+        public async Task<List<ImageViewModel>> GetproductImages(int id)
+        {
+            return (await GetAsync<ApiResult<List<ImageViewModel>>>($"api/products/{id}/images")).ResultObj;
+        }
 
+        public async Task<ApiResult<bool>> AddImage(ProductImageCreateRequest request)
+        {
+            HttpClient client = GetHttpClient();
+            var requestContent = new MultipartFormDataContent();
+            if(request.ImageFile!=null)
+            {
+                byte[] data;
+                var br = new BinaryReader(request.ImageFile.OpenReadStream());
+                data = br.ReadBytes((int)request.ImageFile.OpenReadStream().Length);
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                
 
+                requestContent.Add(bytes, "ImageFile",request.ImageFile.FileName);
+                if (string.IsNullOrWhiteSpace(request.Caption))
+                    request.Caption = "";
+
+                requestContent.Add(new StringContent(request.Caption),"Caption");
+              
+
+                requestContent.Add(new StringContent(request.ProductId.ToString()), "ProductId");
+
+                requestContent.Add(new StringContent(request.SortOrder.ToString()), "SortOrder");
+
+                var response = await client.PostAsync($"/api/products/addImage", requestContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiSuccessResult<bool>(response.IsSuccessStatusCode);
+                }
+                return new ApiErrorResult<bool>();
+
+            }
+            return new ApiErrorResult<bool>();
+
+        }
+
+        public async Task<ApiResult<bool>> UpdateImage(ProductImageUpdateRequest request)
+        {
+            return await PutAsync<ApiResult<bool>>($"/api/Products/updateImage", request);
+        }
+
+        public async Task<ApiResult<bool>> DeleteImage(int imageId)
+        {
+            return await DeleteAsync<ApiResult<bool>> ($"/api/Products/deleteimage/{imageId}");
+        }
+        public async Task<ProductImageViewModel> GetProductImage(int imageId)
+        {
+            return (await GetAsync<ApiResult<ProductImageViewModel>>($"api/products/images/{imageId}")).ResultObj;
+        }
+        public async Task<bool> UpdateThumnail(int productId,int imageId)
+        {
+            return (await PutAsync<ApiResult<bool>>($"api/products/{productId}/updatethumnail/{imageId}",null)).ResultObj;
+        }
     }
 }

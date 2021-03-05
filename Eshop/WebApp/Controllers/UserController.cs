@@ -115,20 +115,20 @@ namespace EshopSolution.WebApp.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Delete(DeleteRequest request)
+        public async Task<IActionResult> Delete(Guid id)
         {
             if (!ModelState.IsValid)
             {
-                return View(request);
+                return View(id);
             }
-            var result = await _userApiClient.Delete(request);
+            var result = await _userApiClient.Delete(id);
             if (result.IsSuccessed)
             {
                 TempData["Result"] = "Xóa thành công";
                 return RedirectToAction("Index", "Home");
             }
             ModelState.AddModelError("", result.Message);
-            return View(request);
+            return View(id);
         }
         [HttpGet]
         [AllowAnonymous]

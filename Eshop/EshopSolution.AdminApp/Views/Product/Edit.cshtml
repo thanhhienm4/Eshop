@@ -1,70 +1,127 @@
-﻿@model EshopSolution.ViewModels.Catalog.Products.ProductUpdateRequest
+﻿@using EshopSolution.Data.Enums
+@model EshopSolution.ViewModels.Catalog.Products.ProductUpdateRequest
+
 
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<br />
 
-<h1>Edit</h1>
+<div class="d-flex justify-content-center">
+    <h3>Thông tin sản phẩm</h3>
+</div> 
 
-<h4>ProductUpdateRequest</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div>
+    <a asp-action="Index">Quay về danh sách</a>
+</div>
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-row">
+        <div class="col-md">
             <div class="form-group">
                 <label asp-for="Id" class="control-label"></label>
                 <input asp-for="Id" class="form-control" disabled />
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md">
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" placeholder="N/A" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+        </div>
+
+    </div>
+    <div class="form-row">
+        <div class="col-md">
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control"  />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-group">
+                <label asp-for="OriginalPrice" class="control-label"></label>
+                <input asp-for="OriginalPrice" class="form-control" placeholder="N/A" />
+                <span asp-validation-for="OriginalPrice" class="text-danger"></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="form-row">
+        <div class="col-md">
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" placeholder="N/A" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isFeatured" /> @Html.DisplayNameFor(model => model.isFeatured)
-                </label>
-            </div>
+        </div>
+        <div class="col-md">
             <div class="form-group">
                 <label asp-for="Details" class="control-label"></label>
                 <input asp-for="Details" class="form-control" placeholder="N/A" />
                 <span asp-validation-for="Details" class="text-danger"></span>
             </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md">
             <div class="form-group">
                 <label asp-for="SeoDescription" class="control-label"></label>
                 <input asp-for="SeoDescription" class="form-control" placeholder="N/A" />
                 <span asp-validation-for="SeoDescription" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md">
             <div class="form-group">
                 <label asp-for="SeoTitle" class="control-label"></label>
                 <input asp-for="SeoTitle" class="form-control" placeholder="N/A" />
                 <span asp-validation-for="SeoTitle" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <select class="form-control" asp-for="LanguageId" asp-items="new @SelectList(ViewBag.Languages,"Id","Name")">
-                </select>
-            </div>
-           
+
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col-md">
             <div class="form-group">
                 <label asp-for="SeoAlias" class="control-label"></label>
                 <input asp-for="SeoAlias" class="form-control" placeholder="N/A" />
                 <span asp-validation-for="SeoAlias" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+        <div class="col-md">
+            <br />
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="isFeatured" /> @Html.DisplayNameFor(model => model.isFeatured)
+                </label>
             </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <select class="form-control" asp-for="Status" asp-items="Html.GetEnumSelectList<Status>()">
+        </select>
+    </div>
+
+    <div class="form-group">
+        <div class="d-flex justify-content-center">
+            <input type="submit" value="Cập nhật thông tin sản phẩm " class="btn btn-primary" />
+        </div>
+
+    </div>
+    <div class="form-group">
+        <div class="d-flex justify-content-center">
+            <a href="/Product/UpdateProductImages/@Model.Id">Cập nhật hình ảnh sản phẩm </a>
+        </div>
+    </div>
+</form>
+  
+

@@ -1,4 +1,4 @@
-﻿namespace EshopSolution.Data.Entities
+﻿namespace EshopSolution.Data.Enums
 {
     public enum TransactionStatus
     {
