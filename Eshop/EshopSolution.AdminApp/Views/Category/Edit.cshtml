@@ -43,8 +43,9 @@
                 <div class="col-md">
                     <div class="form-group">
                         <label asp-for="ParentId" class="control-label"></label>
-                        <input asp-for="ParentId" class="form-control" />
-                        <span asp-validation-for="ParentId" class="text-danger"></span>
+                        <select asp-for="ParentId" asp-items="new @SelectList(ViewBag.Categories,"Id","Name")" class="form-control">
+                            <option>--Trống --</option>
+                        </select>
                     </div>
                 </div>
             </div>

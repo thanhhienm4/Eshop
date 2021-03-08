@@ -54,7 +54,8 @@ namespace EshopSolution.AdminApp.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateAsync()
         {
-            ViewBag.Languages = (await _languageApiClient.GetAll()).ResultObj;
+          
+            ViewBag.Categories =(await _categoryApiCilent.GetAll(GetLanguageId()));
             return View();
         }
 
@@ -73,6 +74,7 @@ namespace EshopSolution.AdminApp.Controllers
                 return RedirectToAction("Index", "Category");
             }
             ModelState.AddModelError("", result.Message);
+            ViewBag.Categories = (await _categoryApiCilent.GetAll(GetLanguageId()));
             return View(request);
         }
 
@@ -80,6 +82,7 @@ namespace EshopSolution.AdminApp.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var result = await _categoryApiCilent.GetById(id, GetLanguageId());
+            ViewBag.Categories = (await _categoryApiCilent.GetAll(GetLanguageId()));
             if (result.IsSuccessed)
             {
                 var request = new CategoryUpdateRequest()
@@ -117,6 +120,7 @@ namespace EshopSolution.AdminApp.Controllers
                 return RedirectToAction("Index", "Category");
             }
             ModelState.AddModelError("", result.Message);
+            ViewBag.Categories = (await _categoryApiCilent.GetAll(GetLanguageId()));
             return View(request);
         }
 

@@ -41,7 +41,7 @@ namespace EshopSolution.WebApp.Controllers
         {
 
             List<OrderDetailViewModel> listCart = null;
-            string json = HttpContext.Session.GetString(SystemConstants.AppSettings.CartSession);
+            string json = Request.Cookies[SystemConstants.AppSettings.CartCookies];
             if (json != null)
                 listCart = JsonConvert.DeserializeObject<List<OrderDetailViewModel>>(json);
             if (listCart == null)
@@ -73,7 +73,7 @@ namespace EshopSolution.WebApp.Controllers
                 RedirectToAction("Error", "Home");
             }
             List<OrderDetailViewModel> listCart = null;
-            string json = HttpContext.Session.GetString(SystemConstants.AppSettings.CartSession);
+            string json = Request.Cookies[SystemConstants.AppSettings.CartCookies]; ;
             if(json != null)
                 listCart= JsonConvert.DeserializeObject<List<OrderDetailViewModel>>(json);
             if(listCart == null)
@@ -91,12 +91,12 @@ namespace EshopSolution.WebApp.Controllers
                     Quantity = 1,
                     Image = product.ThumbnailImage,
                     Price = product.Price
-                }) ;
+                });
 
             }
 
-            HttpContext.Session.SetString(SystemConstants.AppSettings.CartSession,
-                JsonConvert.SerializeObject(listCart));
+
+            WriteCookies(listCart);
 
             return Ok(listCart);
 
@@ -105,7 +105,7 @@ namespace EshopSolution.WebApp.Controllers
         public IActionResult RemoveCart(int id)
         {
             List<OrderDetailViewModel> listCart = null;
-            string json = HttpContext.Session.GetString(SystemConstants.AppSettings.CartSession);
+            string json = Request.Cookies[SystemConstants.AppSettings.CartCookies]; 
             if (json != null)
                 listCart = JsonConvert.DeserializeObject<List<OrderDetailViewModel>>(json);
             if (listCart == null)
@@ -120,8 +120,7 @@ namespace EshopSolution.WebApp.Controllers
                 }
                     
             }
-            HttpContext.Session.SetString(SystemConstants.AppSettings.CartSession,
-                JsonConvert.SerializeObject(listCart));
+            WriteCookies(listCart);
 
             return Ok(listCart);
         }
@@ -132,7 +131,7 @@ namespace EshopSolution.WebApp.Controllers
                 return RemoveCart(id);
             }
             List<OrderDetailViewModel> listCart = null;
-            string json = HttpContext.Session.GetString(SystemConstants.AppSettings.CartSession);
+            string json = Request.Cookies[SystemConstants.AppSettings.CartCookies];
             if (json != null)
                 listCart = JsonConvert.DeserializeObject<List<OrderDetailViewModel>>(json);
             if (listCart == null)
@@ -142,10 +141,8 @@ namespace EshopSolution.WebApp.Controllers
             {
                 listCart.Where(cart => cart.ProductId == id).FirstOrDefault().Quantity = quantity;
             }
-            
 
-            HttpContext.Session.SetString(SystemConstants.AppSettings.CartSession,
-                JsonConvert.SerializeObject(listCart));
+            WriteCookies(listCart);
 
             return Ok(listCart);
 
@@ -182,7 +179,6 @@ namespace EshopSolution.WebApp.Controllers
             }
             TempData["SuccessMsg"] = "Order puschased successful";
             return View(request);
-            
 
 
         }
@@ -201,6 +197,15 @@ namespace EshopSolution.WebApp.Controllers
             string culture = CultureInfo.CurrentCulture.Name;
             var result = (await _orderApiClient.GetListActiveModel(culture)).ResultObj;
             return View(result);
+        }
+        private void WriteCookies(List<OrderDetailViewModel> listCart)
+        {
+
+            var jsonValue = JsonConvert.SerializeObject(listCart);
+            Response.Cookies.Append(SystemConstants.AppSettings.CartCookies, jsonValue, new CookieOptions()
+            {
+                Expires = DateTime.Now.AddMonths(1)
+            });
         }
     }
 }

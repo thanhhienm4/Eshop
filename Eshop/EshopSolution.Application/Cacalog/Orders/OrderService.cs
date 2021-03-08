@@ -24,17 +24,42 @@ namespace EshopSolution.Application.Cacalog.Orders
         }
         public async Task<ApiResult<bool>> Create(OrderCreateRequest request)
         {
+            var orderDetails = request.ListCart.Select(x => new OrderDetail()
+            {
+                ProductId = x.ProductId,
+                Quantity = x.Quantity,
+                Price = x.Price
+            }).ToList();
 
+            foreach(var item in orderDetails)
+            {
+                var product =await _context.Products.FindAsync(item.ProductId);
+                if (product == null)
+                    return new ApiErrorResult<bool>("Sản phẩm không tồn tại");
+                else
+                {
+                   if(product.Status == Status.InActive)
+                        return new ApiErrorResult<bool>("Ngừng kinh doanh");
+
+                   if (product.Stock < item.Quantity)
+                        return new ApiErrorResult<bool>($"Không đủ số lượng");
+                   else
+                    {
+                        product.Stock -= item.Quantity;
+                        if (product.Stock == 0)
+                            product.Status = Status.InActive;
+                    }
+                }
+                
+            }
+                
+
+            
             Order order = new Order()
             {
                 OrderDate = DateTime.UtcNow,
                 UserId = request.UserId,
-                OrderDetails = request.ListCart.Select(x => new OrderDetail()
-                {
-                    ProductId = x.ProductId,
-                    Quantity = x.Quantity,
-                    Price = x.Price
-                }).ToList(),
+                OrderDetails = orderDetails,
                 ShipAddress = request.ShipAddress,
                 ShipEmail = request.ShipEmail,
                 ShipName = request.ShipName,

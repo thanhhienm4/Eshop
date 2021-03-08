@@ -57,22 +57,7 @@
         });
     }
     function RegisterEvent() {
-        $('body').on('click', '.btn-add-cart', function (e) {
-            e.preventDefault();
-            var id = $(this).data("id");
-            var culture = $('#culture').val();
-            $.ajax({
-                type: "POST",
-                url: '/' + culture+ '/Cart/AddToCart',
-                data: {
-                    id: id
-                },
-                success: function (res) {
-                    $("#number-items").text(res.length);
-                }
-
-            });
-        });
+       
         $('body').on('change', '.input-quantity', function (e) {
             e.preventDefault();
             var id = $(this).data("id");

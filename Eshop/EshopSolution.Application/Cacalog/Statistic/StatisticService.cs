@@ -23,22 +23,22 @@ namespace EshopSolution.Application.Cacalog.Charts
         public ChartData CalRevenuePerMonth()
         {
             Dictionary<string, decimal> revenue = new Dictionary<string, decimal>();
-            DateTime start = DateTime.Now.AddYears(-1);
-            DateTime end = DateTime.Now;
+            DateTime now = DateTime.Now;
+            DateTime start = new DateTime(now.Year, now.Month, 1).AddMonths(1).AddYears(-1);
+            DateTime end = new DateTime(now.Year, now.Month, 1).AddMonths(1).AddDays(-1);
             DateTime temp = start;
-            while(!(temp.Month==end.Month && temp.Year==end.Year))
+            do
             {
                 revenue.Add(temp.Month.ToString(), 0);
                 temp = temp.AddMonths(1);
-            }
+            } while (temp.Date <= end.Date);
 
-            var orders = _context.Orders.ToList();
+                var orders = _context.Orders.ToList();
 
             if(orders !=null)
                 foreach(var order in orders)
                 {
-                    if(order.OrderDate.Date >= new DateTime(start.Year,start.Month,1) &&
-                      order.OrderDate.Date <= new DateTime(DateTime.Now.Year,DateTime.Now.Month,1).AddDays(-1))
+                    if(order.OrderDate.Date >= start &&  order.OrderDate.Date <= end)
                     {
                         revenue[order.OrderDate.Month.ToString()] += _orderService.CalTotalPrice(order.Id);
                     }

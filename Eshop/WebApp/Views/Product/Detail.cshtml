@@ -58,7 +58,7 @@
                     <label class="control-label"><span>@Model.Product.Price</span></label>
                     <div class="controls">
                         <input type="number" class="span1" placeholder="Qty." />
-                        <button type="submit" class="btn btn-large btn-primary pull-right"><localize>Add to cart</localize>  <i class=" icon-shopping-cart"></i></button>
+                        <button data-id="@Model.Product.ProductId" class ="btn btn-add-cart"><localize>Add to cart</localize>  <i class=" icon-shopping-cart"></i></button>
                     </div>
                 </div>
             </form>

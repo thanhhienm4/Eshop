@@ -14,13 +14,13 @@
             {
                 <li class="span3">
                     <div class="thumbnail">
-                        <a href="product_details.html"><img src="@item.ThumbnailImage" alt=""></a>
+                        <a href="product_details.html"><img src="@item.ThumbnailImage" alt="iamge"></a>
                         <div class="caption">
                             <h5>@item.Name</h5>
                             <p>
                                 @item.Description
                             </p>
-                            <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#"><localize>Add to</localize> <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">@((int)item.Price)</a></h4>
+                            <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn btn-add-cart" data-id="@item.ProductId" href="#"><localize>Add to</localize> <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">@((int)item.Price)</a></h4>
                         </div>
                     </div>
                 </li>

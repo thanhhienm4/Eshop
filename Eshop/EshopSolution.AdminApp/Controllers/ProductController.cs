@@ -72,6 +72,7 @@ namespace EshopSolution.AdminApp.Controllers
         public async Task<IActionResult> CreateAsync()
         {
             ViewBag.Languages = (await _languageApiClient.GetAll()).ResultObj;
+           
             var productCreateRequest = new ProductCreateRequest()
             {
                 LanguageId = GetLanguageId()
@@ -93,7 +94,9 @@ namespace EshopSolution.AdminApp.Controllers
                 TempData["Result"] = "Tạo mới thành công";
                 return RedirectToAction("Index", "Product");
             }
+
             ModelState.AddModelError("", result.Message);
+            
             return View(request);
         }
 
@@ -128,6 +131,7 @@ namespace EshopSolution.AdminApp.Controllers
                 ViewBag.Languages =(await _languageApiClient.GetAll()).ResultObj;
                 return View(updateRequest);
             }
+           
             return RedirectToAction("Error", "Home");
         }
 

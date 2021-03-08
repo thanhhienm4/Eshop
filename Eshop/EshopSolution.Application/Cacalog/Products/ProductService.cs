@@ -230,10 +230,11 @@ namespace EshopSolution.Application.Cacalog.Products
                         from pt in ppt.DefaultIfEmpty()
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
                         from pic in ppic.DefaultIfEmpty()
-                      
-                        where pt.LanguageId == request.LanguageId
+                        join pi in _context.ProductImages on p.ThumnailId equals pi.Id into ppici
+                        from pi in ppici.DefaultIfEmpty()
+                        where pt.LanguageId == request.LanguageId 
 
-                        select new { p, pt, pic  };
+                        select new { p, pt, pic ,pi };
 
 
             //2.Filter
@@ -278,7 +279,7 @@ namespace EshopSolution.Application.Cacalog.Products
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated,
                     ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
-                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.p.ThumnailId}"
+                    $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.pi.ImagePath}"
                 }).Distinct().ToListAsync();
 
             //4.Select and Projection
@@ -367,9 +368,10 @@ namespace EshopSolution.Application.Cacalog.Products
         public async Task<ApiResult<ProductViewModel>> GetById(int productId, string languageId)
         {
             var product = await _context.Products.FindAsync(productId);
-            var proudctTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(pt => pt.ProductId == productId && pt.LanguageId == languageId);
             if (product == null)
                 return new ApiErrorResult<ProductViewModel>($"Không thể thìm thấy sản phẩm");
+            var proudctTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(pt => pt.ProductId == product.Id && pt.LanguageId == languageId);
+           
 
             var thumnail = _context.ProductImages.Where(x => x.Id == product.ThumnailId).First().ImagePath;
             var productViewModel = new ProductViewModel()
@@ -523,7 +525,7 @@ namespace EshopSolution.Application.Cacalog.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pi in _context.ProductImages on p.ThumnailId equals pi.Id  into ppi
                         from pi in ppi.DefaultIfEmpty()
-                        where pt.LanguageId == languageId 
+                        where pt.LanguageId == languageId && p.Status == Status.Active
                         select new { p, pt, pi };
 
             var data = await query.OrderBy(x => x.p.ViewCount)
@@ -556,7 +558,7 @@ namespace EshopSolution.Application.Cacalog.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pi in _context.ProductImages on p.ThumnailId equals pi.Id into ppi
                         from pi in ppi.DefaultIfEmpty()
-                        where pt.LanguageId == languageId
+                        where pt.LanguageId == languageId && p.Status == Status.Active
                         select new { p, pt,pi};
 
             var data = await query.OrderBy(x => x.p.DateCreated)
@@ -589,6 +591,8 @@ namespace EshopSolution.Application.Cacalog.Products
                         from pt in ppt.DefaultIfEmpty()
                         join pi in _context.ProductImages on p.ThumnailId equals pi.Id into  ppi
                         from pi in ppi.DefaultIfEmpty()
+                        where p.Status == Status.Active
+                      
                         
 
                         select new { p, pt, pi };
