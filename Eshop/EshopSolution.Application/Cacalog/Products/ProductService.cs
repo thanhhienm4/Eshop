@@ -586,18 +586,21 @@ namespace EshopSolution.Application.Cacalog.Products
         }
         public async Task<List<ProductViewModel>> GetRelatedProducts(string languageId,int productId)
         {
+            var categories = _context.ProductInCategories.Where(x => x.ProductId == productId);
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId into ppt
                         from pt in ppt.DefaultIfEmpty()
                         join pi in _context.ProductImages on p.ThumnailId equals pi.Id into  ppi
                         from pi in ppi.DefaultIfEmpty()
-                        where p.Status == Status.Active
-                      
-                        
+                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId
+                        join ca in categories on pic.CategoryId equals ca.CategoryId 
+                        where p.Status == Status.Active && languageId == pt.LanguageId && p.Id != productId
+                        select new { p, pt, pi, pic };
 
-                        select new { p, pt, pi };
+            
+             
 
-            List<ProductViewModel> result = await query.Take(SystemConstants.ProductSettings.NumberOfRelatedProducts).OrderBy(x => x.p.ViewCount)
+            List<ProductViewModel> result = await query
                 .Select(x => new ProductViewModel()
                 {
                     ProductId = x.p.Id,
@@ -615,7 +618,7 @@ namespace EshopSolution.Application.Cacalog.Products
                     DateCreated = x.p.DateCreated,
                     ThumbnailImage = $"{SystemConstants.ServerSettings.ServerBackEnd}/" +
                     $"{FileStorageService.USER_CONTENT_FOLDER_NAME}/{x.pi.ImagePath}"
-                }).Distinct().ToListAsync();
+                }).OrderBy(x => x.ViewCount).Distinct().Take(SystemConstants.ProductSettings.NumberOfRelatedProducts).ToListAsync();
             return result == null ? new List<ProductViewModel>() : result;
 
 

@@ -17,7 +17,7 @@
         {
             public const int NumberOfFeaturedProducts = 4;
             public const int NumberOfLastestProducts = 6;
-            public const int NumberOfRelatedProducts = 6;
+            public const int NumberOfRelatedProducts = 4;
         }
         public static class ServerSettings
         {

@@ -25,6 +25,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/themes/images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="/themes/images/ico/apple-touch-icon-57-precomposed.png">
     <style type="text/css" id="enject"></style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         /* Chrome, Safari, Edge, Opera */
         input::-webkit-outer-spin-button,
@@ -40,7 +41,7 @@
     </style>
 </head>
 <body>
-    
+
     <div id="header">
         <div class="container">
             <div id="welcomeLine" class="row">
@@ -115,6 +116,11 @@
             </div>
         </div>
     </div>
+    <script src="/js/site.js"></script>
+    <script>
+        var site = new SiteController();
+        site.initialize();
+    </script>
     <!-- Header End====================================================================== -->
     @RenderSection("slider", required: false)
     <div id="mainBody">
@@ -173,10 +179,7 @@
     <script src="/themes/js/bootshop.js"></script>
     <script src="/themes/js/jquery.lightbox-0.5.js"></script>
     <script src="/js/site.js"></script>
-    <script>
-        var site = new SiteController();
-        site.initialize();
-    </script>
+
     @RenderSection("scripts", required: false);
 
 

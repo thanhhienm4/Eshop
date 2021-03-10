@@ -3,28 +3,40 @@
 @{
     ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var culture = CultureInfo.CurrentCulture.Name;
+}
+@if (User.Identity.IsAuthenticated == false)
+{
+   <script>
+       $(function myFunction() {
+           location.replace("/" + "@culture" + "/user/login");
+       });
+   </script>
 }
 
-<h1>Checkout</h1>
 <div class="span9">
-    <form asp-action="Checkout" class="form-horizontal">
-        <hr />
-        <div class="well">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Description</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Discount</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{ int total = 0;}
-                    @{
-                        if(Model.ListCart!=null)
+    <ul class="breadcrumb">
+        <li><a href="/"><localize>Home</localize></a> <span class="divider">/</span></li>
+        <li class="active"><localize> Checkout</localize></li>
+    </ul>
+
+    <hr />
+    <div class="well">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Discount</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int total = 0;}
+                @{
+                    if (Model.ListCart != null)
                         for (int i = 0; i < Model.ListCart.Count; i++)
                         {
                             <tr>
@@ -32,92 +44,85 @@
 
                                 <td> <img width="60" src="@Model.ListCart[i].Image" alt="" /></td>
                                 <td>@Model.ListCart[i].Description</td>
-                                <td>
+                                <td class="price">
                                     @Model.ListCart[i].Quantity
                                 </td>
-                                <td>@Model.ListCart[i].Price</td>
+                                <td class="price">@((int)Model.ListCart[i].Price)</td>
                                 <td>--</td>
                                 @{var price = Model.ListCart[i].Quantity * ((int)Model.ListCart[i].Price);}
-                                <td>@price</td>
+                                <td class="price">@((int)price)</td>
 
 
 
                             </tr>
                             total += Model.ListCart[i].Quantity * (int)Model.ListCart[i].Price;
                         }
-                    }
+                }
 
 
 
 
-                    <tr>
-                        <td colspan="5" style="text-align:right">Total Price:	</td>
-                        <td>@total</td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" style="text-align:right">Total Discount:	</td>
+                <tr>
+                    <td colspan="5" style="text-align:right">Total Price:	</td>
+                    <td class="price">@((int)total)</td>
+                </tr>
+                <tr>
+                    <td colspan="5" style="text-align:right">Total Discount:	</td>
+                    <td colspan="6" class="label label-important price" style="display:block;text-align:right"> <strong> @((int)total) </strong></td>
+                </tr>
 
-                    </tr>
-                    <tr>
-                        <td colspan="5" class="label label-important" style="display:block;text-align:right"> <strong> @total </strong></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="row">
-                <form  class="form-horizontal">
+            </tbody>
+        </table>
+        <h3>Information</h3>
+        <form asp-action="Checkout" class="container-fluid">
 
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="control-group">
-                        <label asp-for="ShipName" class="control-label"></label>
-                        <div class="controls">
-                            <input asp-for="ShipName" class="form-control" />
-                        </div>
-                        <span asp-validation-for="ShipName" class="text-danger"></span>
-                    </div>
-                    <div class="control-group">
-                        <label asp-for="ShipAddress" class="control-label"></label>
-                        <div class="controls">
-                            <input asp-for="ShipAddress" class="form-control" />
-                        </div>
-
-                        <span asp-validation-for="ShipAddress" class="text-danger"></span>
-                    </div>
-                    <div class="control-group">
-                        <label asp-for="ShipEmail" class="control-label"></label>
-                        <div class="controls">
-                            <input asp-for="ShipEmail" class="form-control" />
-                        </div>
-                        <span asp-validation-for="ShipEmail" class="text-danger"></span>
-                    </div>
-                    <div class="control-group">
-                        <label asp-for="ShipPhoneNumber" class="control-label"></label>
-                        <div class="controls">
-                            <input asp-for="ShipPhoneNumber" class="form-control" />
-                        </div>
-
-                        <span asp-validation-for="ShipPhoneNumber" class="text-danger"></span>
-                    </div>
-                    <div class="control-group">
-                        <label asp-for="Status" class="control-label"></label>
-                        <div class="controls">
-                            <input asp-for="Status" class="form-control" />
-                        </div>
-
-                        <span asp-validation-for="Status" class="text-danger"></span>
-                    </div>
-                    <div class="control-group">
-                        <input type="submit" value="Create" class="btn btn-primary" />
-                    </div>
-                </form>
-
-
-
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="control-group">
+                <label class="control-label"><localize>Name</localize></label>
+                <div class="controls">
+                    <input asp-for="ShipName" class="form-control" />
+                </div>
+                <span asp-validation-for="ShipName" class="text-danger"></span>
             </div>
-
-            <div>
-                <a asp-action="Index">Back to List</a>
+            <div class="control-group">
+                <label class="control-label"><localize>Address</localize></label>
+                <div class="controls">
+                    <input asp-for="ShipAddress" class="form-control" />
+                </div>
+                <span asp-validation-for="ShipAddress" class="text-danger"></span>
             </div>
-        </div>
+            <div class="control-group">
+                <label class="control-label"><localize>Email</localize></label>
+                <div class="controls">
+                    <input asp-for="ShipEmail" class="form-control" />
+                </div>
+                <span asp-validation-for="ShipEmail" class="text-danger"></span>
+            </div>
+            <div class="control-group">
+                <label class="control-label"><localize>Phone number</localize></label>
+                <div class="controls">
+                    <input asp-for="ShipPhoneNumber" class="form-control" />
+                </div>
+
+                <span asp-validation-for="ShipPhoneNumber" class="text-danger"></span>
+            </div>
+            <ac class="d-flex justify-content-center">
+
+                <button type="submit" class="btn btn-primary"><localize>Buy</localize></button>
+
+
+            </ac>
+
         </form>
+
+
+
+
+
+        <div>
+            <a asp-action="Index"><localize>Back to List</localize></a>
+        </div>
+    </div>
+
 </div>
 

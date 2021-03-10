@@ -94,9 +94,9 @@
 <br />
 <div class="row">
     <div class="col-md col-lg">
-        <img id="expandImg" class="img-fluid" width="500" style="border-radius:8px" />
+        <img id="expandImg" class="img-fluid" width="400" style="border-radius:8px" />
 
-        <div class="row">
+        <div class="container">
             @{
                 if (Model != null && Model.Count != 0)
                     foreach (var image in Model)
@@ -110,19 +110,7 @@
 
 
         </div>
-        <div class="d-flex justify-content-center">
-           
-            <label class="btn btn-primary btn-upload" for="upload_image" title="Upload image file">
-                Thêm ảnh
-                <input type="file" class="sr-only" id="upload_image" name="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff">
-                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Import image with Blob URLs">
-                    <span class="fa fa-upload"></span>
-                </span>
-
-            </label>
-
-
-        </div>
+       
 
 
     </div>
@@ -141,12 +129,27 @@
         <div class="d-flex justify-content-center">
             <button class="btn btn-primary" onclick="setThumnail()">Đặt làm ảnh đại diện</button>
         </div>
+
         <br />
         <div class="d-flex justify-content-center">
 
             <button class="btn btn-primary" onclick="updateImage() "> Cập nhật</button>
             &nbsp;
             <button type="button" class="btn btn-secondary" onclick="deleteImage()">Xóa</button>
+        </div>
+        <br />
+        <div class="d-flex justify-content-center">
+
+            <label class="btn btn-primary btn-upload" for="upload_image" title="Upload image file">
+                Thêm ảnh
+                <input type="file" class="sr-only" id="upload_image" name="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff">
+                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Import image with Blob URLs">
+                    <span class="fa fa-upload"></span>
+                </span>
+
+            </label>
+
+
         </div>
         <br />
         <div class="d-flex justify-content-center">

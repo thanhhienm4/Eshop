@@ -165,6 +165,10 @@
     <value>Tiếp tục</value>
     <comment>Home/Index</comment>
   </data>
+  <data name="Information" xml:space="preserve">
+    <value>Thông tin </value>
+    <comment>View/cart/checkout</comment>
+  </data>
   <data name="Items in your cart" xml:space="preserve">
     <value>Sản phẩm trong giỏ hàng</value>
     <comment>Home/Index</comment>
@@ -197,9 +201,17 @@
     <value>Thông tin cá nhân</value>
     <comment>View/Layout</comment>
   </data>
+  <data name="Price" xml:space="preserve">
+    <value>Giá</value>
+    <comment>View/Product/Detail</comment>
+  </data>
   <data name="Product name" xml:space="preserve">
     <value>Tên sản phẩm</value>
     <comment>Home/Index</comment>
+  </data>
+  <data name="Related Product" xml:space="preserve">
+    <value>Sản phẩm liên quan </value>
+    <comment>View/Product/Detail</comment>
   </data>
   <data name="Sign in" xml:space="preserve">
     <value>Đăng nhập</value>
@@ -208,6 +220,10 @@
   <data name="Specials Offer" xml:space="preserve">
     <value>Khuyến mãi</value>
     <comment>Home/Index</comment>
+  </data>
+  <data name="Stock" xml:space="preserve">
+    <value>Kho</value>
+    <comment>View/Product/Detail</comment>
   </data>
   <data name="VIEW" xml:space="preserve">
     <value>CHI TIẾT</value>

@@ -7,6 +7,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
+</script>
 @section slider{
     <div id="carouselBlk">
         <div id="myCarousel" class="carousel slide">
@@ -32,44 +35,82 @@
 
 <div class="span9">
     <div class="well well-small">
-        <h4><localize>Featured Products</localize><small class="pull-right">200+ featured products</small></h4>
+        <h4><localize>Latest Products</localize><small class="pull-right">@Model.LatestProducts.Count <localize>Latest Products</localize> </small></h4>
         <div class="row-fluid">
-            <div id="featured" class="carousel slide">
+            <div id="featured" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     @{
-                        List<List<ProductViewModel>> listOfFeaturedProduct = new List<List<ProductViewModel>>();
+                        List<List<ProductViewModel>> listOfLatestProduct = new List<List<ProductViewModel>>();
                         List<ProductViewModel> productViewModels = new List<ProductViewModel>();
                     }
 
-                    @for (int index = 0; index < Model.FeaturedProducts.Count; index++)
+                    @for (int index = 0; index < Model.LatestProducts.Count; index++)
                     {
-                        productViewModels.Add(Model.FeaturedProducts[index]);
-                        if (index % 4 == 3 || index == Model.FeaturedProducts.Count - 1)
+                        productViewModels.Add(Model.LatestProducts[index]);
+                        if (index % 4 == 3 || index == Model.LatestProducts.Count - 1)
                         {
-                            listOfFeaturedProduct.Add(productViewModels);
+                            listOfLatestProduct.Add(productViewModels);
                             productViewModels = new List<ProductViewModel>();
                         }
                     }
-                    @foreach (List<ProductViewModel> list in listOfFeaturedProduct)
+                    @for (int i = 0; i < listOfLatestProduct.Count; i++)
                     {
-                        <div class="item active">
-                            <ul class="thumbnails">
-                                @foreach (ProductViewModel item in list)
-                                {
-                                    <li class="span3">
-                                        <div class="thumbnail">
-                                            <i class="tag"></i>
-                                            <a href="/@culture/@_loc["detail"]/@item.ProductId"><img src="@item.ThumbnailImage" alt="@item.Name"></a>
-                                            <div class="caption">
-                                                <h5>@item.Name</h5>
-                                                <h4><a class="btn btn-primary" href="/@culture/@_loc["detail"]/@item.ProductId"><localize>VIEW</localize></a> <span class="pull-right">@((int)item.Price)</span></h4>
-                                            </div>
-                                        </div>
-                                    </li>
-                                }
+                        if (i == 0)
+                        {
+                            <div class="item active">
+                                <ul class="thumbnails">
+                                    @foreach (ProductViewModel item in listOfLatestProduct[i])
+                                    {
+                                        <li class="span3">
+                                            <div class="thumbnail">
+                                                <i class="tag"></i>
+                                                <a href="/@culture/@_loc["detail"]/@item.ProductId"><img src="@item.ThumbnailImage" alt="@item.Name"></a>
+                                                <div class="caption">
+                                                    <h5>@item.Name</h5>
 
-                            </ul>
-                        </div>
+                                                </div>
+                                                <a class="btn btn-primary  ">
+                                                    <div class="price">
+                                                        @((int)item.Price)
+                                                    </div>
+
+                                                </a>
+                                                
+                                            </div>
+                                        </li>
+                                    }
+
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="item">
+                                <ul class="thumbnails">
+                                    @foreach (ProductViewModel item in listOfLatestProduct[i])
+                                    {
+                                        <li class="span3">
+                                            <div class="thumbnail">
+                                                <i class="tag"></i>
+                                                <a href="/@culture/@_loc["detail"]/@item.ProductId"><img src="@item.ThumbnailImage" alt="@item.Name"></a>
+                                                <div class="caption">
+                                                    <h5>@item.Name</h5>
+
+                                                </div>
+                                                <button class="btn btn-primary">
+                                                    <div class="price">
+                                                        @((int)item.Price)
+                                                    </div>
+
+                                                </button>
+                                            </div>
+                                        </li>
+                                    }
+
+                                </ul>
+                            </div>
+                        }
+
                     }
 
 
@@ -79,9 +120,9 @@
             </div>
         </div>
     </div>
-    <h4><localize>Latest Products</localize> </h4>
+    <h4><localize>Featured Products</localize> </h4>
     <ul class="thumbnails">
-        @foreach (ProductViewModel item in Model.LatestProducts)
+        @foreach (ProductViewModel item in Model.FeaturedProducts)
         {
             <li class="span3">
                 <div class="thumbnail">
@@ -99,7 +140,12 @@
                                 <localize>Add to</localize>
                                 <i class="icon-shopping-cart"></i>
                             </a>
-                            <a class="btn btn-primary" >@((int)item.Price)</a>
+                            <a class="btn btn-primary">
+                                <div class="price">
+                                    @((int)item.Price)
+                                </div>
+                                
+                            </a>
                         </h4>
                     </div>
                 </div>

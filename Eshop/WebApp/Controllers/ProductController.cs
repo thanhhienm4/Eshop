@@ -33,6 +33,7 @@ namespace EshopSolution.WebApp.Controllers
         public async Task<IActionResult> Detail(string culture,int id)
         {
             ProductDetailViewModel productDetailViewModel = await _productApiClient.GetProductDetail(culture,id);
+            ViewBag.Images = await _productApiClient.GetproductImages(id);
             return View(productDetailViewModel);
         }
     }

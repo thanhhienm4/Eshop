@@ -169,6 +169,10 @@
     <value>Go</value>
     <comment>Home/Index</comment>
   </data>
+  <data name="Information" xml:space="preserve">
+    <value>Information</value>
+    <comment>View/Crart/Checkout</comment>
+  </data>
   <data name="Items in your cart" xml:space="preserve">
     <value>Items in your cart</value>
     <comment>Home/Index</comment>
@@ -197,9 +201,17 @@
     <value>PERSONAL INFORMATION</value>
     <comment>View/Layout</comment>
   </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
+    <comment>View/Product/Detail</comment>
+  </data>
   <data name="Product name" xml:space="preserve">
     <value>Product name</value>
     <comment>Home/Index</comment>
+  </data>
+  <data name="Related Product" xml:space="preserve">
+    <value>Related Product</value>
+    <comment>View/Product/Detail</comment>
   </data>
   <data name="Sign in" xml:space="preserve">
     <value>Sign in</value>
@@ -208,6 +220,10 @@
   <data name="Specials Offer" xml:space="preserve">
     <value>Specials Offer</value>
     <comment>Home/Index</comment>
+  </data>
+  <data name="Stock" xml:space="preserve">
+    <value>Stock</value>
+    <comment>View/Product/Detail</comment>
   </data>
   <data name="String" xml:space="preserve">
     <value>String</value>

@@ -1,25 +1,9 @@
 ﻿var SiteController = function () {
     this.initialize = function () {
         regsiterEvents();
-        loadCart();
+     
     }
-    function loadCart() {
-        const culture = $('#culture').val();
-        $.ajax({
-            type: "GET",
-            url: "/" + culture + '/Cart/GetListCart',
-            data: {
-                languageId : culture
-            },
-            success: function (res) {
-                console.log(res);
-                $("#number-items").text(res.length);
-
-               
-              
-            }
-        });
-    }
+    
     
     function regsiterEvents() {
         // Write your JavaScript code.
@@ -39,9 +23,32 @@
             });
         });
     }
+    
 }
+$(document).ready(function () {
+    const culture = $('#culture').val();
+    $.ajax({
+        type: "GET",
+        url: "/" + culture + '/Cart/GetListCart',
+        data: {
+            languageId: culture
+        },
+        success: function (res) {
+            console.log(res);
+            $("#number-items").text(res.length);
 
 
+
+        }
+    });
+});
+$(document).ready(function () {
+    var priceItems = document.getElementsByClassName("price");
+    for (var i = 0; i < priceItems.length; i++) {
+        priceItems[i].textContent = numberWithCommas(priceItems[i].textContent);
+        priceItems[i].style.textAlign = "right";
+    }
+});
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
